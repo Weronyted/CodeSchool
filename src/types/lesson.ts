@@ -53,14 +53,40 @@ export interface LessonData {
 
 // ─── New bilingual format ────────────────────────────────────────────────────
 
+import type { DemoStep } from '@/types/glossary'
+
 export type LessonCategory = 'BASICS' | 'HTML' | 'CSS' | 'JS'
 export type CodeLang = 'html' | 'css' | 'javascript'
-export type SlideType = 'title' | 'concept' | 'code' | 'analogy' | 'tip' | 'practice-cta'
+export type SlideType =
+  | 'title' | 'concept' | 'code' | 'analogy' | 'tip' | 'practice-cta'
+  | 'code-anim' | 'illustration' | 'compare'
 
 export interface BilingualSection {
   id: string
   title_ru: string
   title_en: string
+}
+
+export interface SlideBullet {
+  text_ru: string
+  text_en: string
+}
+
+export interface SlideVisual {
+  kind: 'svg' | 'emoji' | 'image'
+  svg?: string
+  emojis?: string[]
+  imageUrl?: string
+  caption_ru?: string
+  caption_en?: string
+}
+
+export interface SlideCompareColumn {
+  label_ru: string
+  label_en: string
+  items_ru: string[]
+  items_en: string[]
+  color?: 'green' | 'red' | 'blue' | 'amber'
 }
 
 export interface Slide {
@@ -72,6 +98,13 @@ export interface Slide {
   body_en: string
   code?: string
   codeLang?: CodeLang
+  // new optional enrichment fields
+  bullets?: SlideBullet[]
+  visual?: SlideVisual
+  animSteps?: DemoStep[]
+  animMode?: 'console' | 'preview'
+  compareLeft?: SlideCompareColumn
+  compareRight?: SlideCompareColumn
 }
 
 export interface ContentBlock {

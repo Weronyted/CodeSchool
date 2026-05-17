@@ -1,13 +1,17 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, X, Lightbulb, Code2, BookOpen, Zap, Sparkles } from 'lucide-react'
+import {
+  ChevronLeft, ChevronRight, X,
+  Lightbulb, Code2, BookOpen, Zap, Sparkles, Terminal, Columns, Image as ImageIcon,
+} from 'lucide-react'
 import CodeMirror from '@uiw/react-codemirror'
 import { html as htmlLang } from '@codemirror/lang-html'
 import { css as cssLang } from '@codemirror/lang-css'
 import { javascript as jsLang } from '@codemirror/lang-javascript'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { useLanguageStore } from '@/store/useLanguageStore'
-import type { Slide } from '@/types/lesson'
+import TerminalAnim from '@/components/glossary/TerminalAnim'
+import type { Slide, SlideVisual, SlideCompareColumn } from '@/types/lesson'
 
 interface SlideModeProps {
   slides: Slide[]
@@ -23,6 +27,9 @@ const SLIDE_ICONS: Record<string, React.ElementType> = {
   code: Code2,
   tip: Lightbulb,
   'practice-cta': Sparkles,
+  'code-anim': Terminal,
+  illustration: ImageIcon,
+  compare: Columns,
 }
 
 const SLIDE_ACCENT: Record<string, string> = {
@@ -32,7 +39,24 @@ const SLIDE_ACCENT: Record<string, string> = {
   code: 'from-slate-600 to-slate-800',
   tip: 'from-amber-400 to-yellow-500',
   'practice-cta': 'from-green-500 to-emerald-600',
+  'code-anim': 'from-violet-600 to-purple-700',
+  illustration: 'from-teal-500 to-cyan-600',
+  compare: 'from-rose-500 to-pink-600',
 }
+
+const TYPE_LABELS: Record<string, { ru: string; en: string }> = {
+  'practice-cta': { ru: 'Практика',   en: 'Practice' },
+  analogy:        { ru: 'Аналогия',   en: 'Analogy' },
+  tip:            { ru: 'Интересно',  en: 'Tip' },
+  code:           { ru: 'Код',        en: 'Code' },
+  title:          { ru: 'Урок',       en: 'Lesson' },
+  concept:        { ru: 'Концепция',  en: 'Concept' },
+  'code-anim':    { ru: 'Анимация',   en: 'Animation' },
+  illustration:   { ru: 'Схема',      en: 'Diagram' },
+  compare:        { ru: 'Сравнение',  en: 'Compare' },
+}
+
+// ─── Sub-components ──────────────────────────────────────────────────────────
 
 function CodeBlock({ code, lang = 'html' }: { code: string; lang?: 'html' | 'css' | 'javascript' }) {
   const ext = lang === 'css' ? [cssLang()] : lang === 'javascript' ? [jsLang()] : [htmlLang()]
@@ -48,6 +72,85 @@ function CodeBlock({ code, lang = 'html' }: { code: string; lang?: 'html' | 'css
     </div>
   )
 }
+
+function VisualBlock({ visual, lang }: { visual: SlideVisual; lang: string }) {
+  if (visual.kind === 'emoji') {
+    return (
+      <div className="flex items-center justify-center gap-4 py-6">
+        {visual.emojis?.map((e, i) => (
+          <span key={i} className="text-6xl select-none">{e}</span>
+        ))}
+        {(visual.caption_ru || visual.caption_en) && (
+          <p className="w-full text-center text-white/40 text-sm mt-2">
+            {lang === 'ru' ? visual.caption_ru : visual.caption_en}
+          </p>
+        )}
+      </div>
+    )
+  }
+  if (visual.kind === 'svg' && visual.svg) {
+    return (
+      <div className="mt-4">
+        <div
+          className="flex items-center justify-center"
+          dangerouslySetInnerHTML={{ __html: visual.svg }}
+        />
+        {(visual.caption_ru || visual.caption_en) && (
+          <p className="text-center text-white/40 text-sm mt-2">
+            {lang === 'ru' ? visual.caption_ru : visual.caption_en}
+          </p>
+        )}
+      </div>
+    )
+  }
+  if (visual.kind === 'image' && visual.imageUrl) {
+    return (
+      <div className="mt-4">
+        <img
+          src={visual.imageUrl}
+          alt={lang === 'ru' ? (visual.caption_ru ?? '') : (visual.caption_en ?? '')}
+          className="w-full rounded-xl"
+        />
+        {(visual.caption_ru || visual.caption_en) && (
+          <p className="text-center text-white/40 text-sm mt-2">
+            {lang === 'ru' ? visual.caption_ru : visual.caption_en}
+          </p>
+        )}
+      </div>
+    )
+  }
+  return null
+}
+
+const COMPARE_COLORS: Record<string, string> = {
+  green: 'border-green-500/40 bg-green-900/20',
+  red:   'border-red-500/40 bg-red-900/20',
+  blue:  'border-blue-500/40 bg-blue-900/20',
+  amber: 'border-amber-500/40 bg-amber-900/20',
+}
+
+function CompareCol({ col, lang }: { col: SlideCompareColumn; lang: string }) {
+  const label = lang === 'ru' ? col.label_ru : col.label_en
+  const items = lang === 'ru' ? col.items_ru : col.items_en
+  const colClass = col.color ? (COMPARE_COLORS[col.color] ?? 'border-white/10 bg-white/5') : 'border-white/10 bg-white/5'
+  const bullet = col.color === 'green' ? '✓' : col.color === 'red' ? '✗' : '•'
+
+  return (
+    <div className={`rounded-xl p-4 border ${colClass}`}>
+      <p className="text-xs font-bold text-white/50 mb-3 uppercase tracking-widest">{label}</p>
+      <ul className="space-y-2">
+        {items.map((item, i) => (
+          <li key={i} className="flex items-start gap-2 text-white/75 text-sm">
+            <span className="shrink-0 mt-0.5">{bullet}</span>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+// ─── Main component ───────────────────────────────────────────────────────────
 
 export function SlideMode({ slides, lessonTitle, onClose, onGoToPractice }: SlideModeProps) {
   const [current, setCurrent] = useState(0)
@@ -77,14 +180,17 @@ export function SlideMode({ slides, lessonTitle, onClose, onGoToPractice }: Slid
 
   const SlideIcon = SLIDE_ICONS[slide.type] ?? Zap
   const accent = SLIDE_ACCENT[slide.type] ?? 'from-primary-600 to-secondary-600'
+  const typeLabel = TYPE_LABELS[slide.type] ?? TYPE_LABELS.concept
+  const typeLabelText = language === 'ru' ? typeLabel.ru : typeLabel.en
 
   const title = language === 'ru' ? slide.title_ru : slide.title_en
-  const body = language === 'ru' ? slide.body_ru : slide.body_en
+  const body  = language === 'ru' ? slide.body_ru  : slide.body_en
+  const lang  = language === 'ru' ? 'ru' : 'en'
 
   const variants = {
-    enter: (dir: number) => ({ x: dir > 0 ? '60%' : '-60%', opacity: 0 }),
+    enter:  (dir: number) => ({ x: dir > 0 ? '60%' : '-60%', opacity: 0 }),
     center: { x: 0, opacity: 1 },
-    exit: (dir: number) => ({ x: dir > 0 ? '-60%' : '60%', opacity: 0 }),
+    exit:   (dir: number) => ({ x: dir > 0 ? '-60%' : '60%', opacity: 0 }),
   }
 
   return (
@@ -123,8 +229,8 @@ export function SlideMode({ slides, lessonTitle, onClose, onGoToPractice }: Slid
         </div>
       </div>
 
-      {/* Slide area */}
-      <div className="flex-1 overflow-hidden relative flex items-center justify-center px-6 py-8">
+      {/* Slide area — overflow-y-auto so tall slides (code-anim, compare) are scrollable */}
+      <div className="flex-1 overflow-y-auto relative flex items-center justify-center px-6 py-8">
         <AnimatePresence custom={direction} mode="wait">
           <motion.div
             key={current}
@@ -148,17 +254,7 @@ export function SlideMode({ slides, lessonTitle, onClose, onGoToPractice }: Slid
                     <SlideIcon size={18} className="text-white" />
                   </div>
                   <span className="text-xs font-semibold text-white/40 uppercase tracking-widest">
-                    {slide.type === 'practice-cta'
-                      ? (language === 'ru' ? 'Практика' : 'Practice')
-                      : slide.type === 'analogy'
-                        ? (language === 'ru' ? 'Аналогия' : 'Analogy')
-                        : slide.type === 'tip'
-                          ? (language === 'ru' ? 'Интересно' : 'Tip')
-                          : slide.type === 'code'
-                            ? (language === 'ru' ? 'Код' : 'Code')
-                            : slide.type === 'title'
-                              ? (language === 'ru' ? 'Урок' : 'Lesson')
-                              : (language === 'ru' ? 'Концепция' : 'Concept')}
+                    {typeLabelText}
                   </span>
                 </div>
 
@@ -168,16 +264,62 @@ export function SlideMode({ slides, lessonTitle, onClose, onGoToPractice }: Slid
                 </h2>
 
                 {/* Body */}
-                <p className="text-white/75 text-base sm:text-lg leading-relaxed">
-                  {body}
-                </p>
+                {body && (
+                  <p className="text-white/75 text-base sm:text-lg leading-relaxed">
+                    {body}
+                  </p>
+                )}
 
-                {/* Code block */}
-                {slide.code && (
+                {/* ── Bullets (any slide type) ─────────────────────────────── */}
+                {slide.bullets && slide.bullets.length > 0 && (
+                  <ul className="mt-4 space-y-2">
+                    {slide.bullets.map((b, i) => (
+                      <li key={i} className="flex items-start gap-2 text-white/75 text-base leading-relaxed">
+                        <span className="text-white/30 mt-1 shrink-0">•</span>
+                        {language === 'ru' ? b.text_ru : b.text_en}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {/* ── Existing code block (type 'code') ───────────────────── */}
+                {slide.code && slide.type !== 'illustration' && (
                   <CodeBlock code={slide.code} lang={slide.codeLang ?? 'html'} />
                 )}
 
-                {/* CTA button */}
+                {/* ── Visual for non-illustration types ───────────────────── */}
+                {slide.visual && slide.type !== 'illustration' && (
+                  <VisualBlock visual={slide.visual} lang={lang} />
+                )}
+
+                {/* ── ILLUSTRATION: prominent visual ───────────────────────── */}
+                {slide.type === 'illustration' && slide.visual && (
+                  <VisualBlock visual={slide.visual} lang={lang} />
+                )}
+                {slide.type === 'illustration' && slide.code && (
+                  <CodeBlock code={slide.code} lang={slide.codeLang ?? 'html'} />
+                )}
+
+                {/* ── CODE-ANIM: terminal animation ────────────────────────── */}
+                {slide.type === 'code-anim' && slide.animSteps && (
+                  <div className="mt-4" style={{ height: '280px' }}>
+                    <TerminalAnim
+                      steps={slide.animSteps}
+                      demoMode={slide.animMode ?? 'console'}
+                      lang={lang}
+                    />
+                  </div>
+                )}
+
+                {/* ── COMPARE: two-column layout ───────────────────────────── */}
+                {slide.type === 'compare' && (slide.compareLeft || slide.compareRight) && (
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    {slide.compareLeft  && <CompareCol col={slide.compareLeft}  lang={lang} />}
+                    {slide.compareRight && <CompareCol col={slide.compareRight} lang={lang} />}
+                  </div>
+                )}
+
+                {/* ── CTA button ───────────────────────────────────────────── */}
                 {isCta && (
                   <motion.button
                     initial={{ opacity: 0, y: 12 }}
