@@ -24,6 +24,9 @@
       "subtitle": "Interactive lessons on HTML, CSS and JavaScript. Write real code, see instant results — right in your browser.",
       "cta": "Start for Free",
       "ctaSecondary": "All Topics",
+      "stat1": "Lessons",
+      "stat2": "Exercises",
+      "stat3": "Free",
       "stats": {
         "lessons": "12 lessons",
         "lessonsDesc": "Structured topics",
@@ -56,6 +59,7 @@
       "title": "12 topics — from zero to your first website",
       "subtitle": "Start with HTML basics and work your way up to interactive JavaScript pages."
     },
+    "lesson": "Lesson",
     "cta": {
       "title": "Ready to start coding?",
       "subtitle": "Join thousands of learners already building their first websites.",

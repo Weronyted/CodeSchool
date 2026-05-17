@@ -61,7 +61,7 @@ export default function App() {
   }, [])
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-slate-900 font-body text-slate-900 dark:text-slate-100">
+    <div className="min-h-screen flex flex-col bg-cream-50 dark:bg-gray-950 font-body text-slate-900 dark:text-slate-100">
       <Navbar onSearchOpen={() => setSearchOpen(true)} onSignInOpen={() => setAuthOpen(true)} />
 
       <main className="flex-1">
