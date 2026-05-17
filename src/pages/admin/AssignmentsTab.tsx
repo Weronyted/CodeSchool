@@ -73,7 +73,9 @@ export default function AssignmentsTab() {
           <select
             value={form.lessonSlug}
             onChange={(e) => setForm((f) => ({ ...f, lessonSlug: e.target.value }))}
-            className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900 dark:text-white"
+            size={5}
+            className="px-3 py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900 dark:text-white text-sm overflow-y-auto"
+            style={{ maxHeight: '130px' }}
           >
             <option value="">{t('admin.pickLesson', 'Выбери урок (необязательно)')}</option>
             {LESSON_SLUGS.map((s) => (

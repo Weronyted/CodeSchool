@@ -28,10 +28,15 @@ export default function Dashboard() {
   const totalCount = LESSON_SLUGS.length
   const overallPct = Math.round((completedCount / totalCount) * 100)
 
-  const radarData = LESSON_SLUGS.map((slug) => ({
-    subject: LESSON_META[slug].icon + ' ' + LESSON_META[slug].title.split(' ')[0],
-    score: progress[slug]?.quizScore ?? 0,
-  }))
+  const radarData = LESSON_SLUGS.map((slug) => {
+    const meta = LESSON_META[slug]
+    const words = meta.title_en.split(' ')
+    const keyWord = words.length >= 3 ? words.slice(-2).join(' ') : words[words.length - 1]
+    return {
+      subject: meta.icon + ' ' + keyWord,
+      score: progress[slug]?.quizScore ?? 0,
+    }
+  })
 
   const earnedBadges = BADGES.filter((b) => progress[LESSON_SLUGS[b.slugIndex]]?.completed)
 

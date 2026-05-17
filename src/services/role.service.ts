@@ -16,7 +16,13 @@ export async function getUserRole(uid: string): Promise<UserRole> {
 }
 
 export async function ensureUserRole(uid: string, displayName: string, email: string): Promise<UserRole> {
-  if (isOwnerUid(uid)) return 'owner'
+  if (isOwnerUid(uid)) {
+    const snap = await getDoc(doc(db, 'userRoles', uid))
+    if (!snap.exists()) {
+      await setDoc(doc(db, 'userRoles', uid), { role: 'owner' as UserRole, displayName, email })
+    }
+    return 'owner'
+  }
   const snap = await getDoc(doc(db, 'userRoles', uid))
   if (snap.exists()) return (snap.data() as UserRoleRecord).role
   const record: UserRoleRecord = { role: 'student', displayName, email }

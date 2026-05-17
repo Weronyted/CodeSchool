@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { collection, getDocs, doc, updateDoc } from 'firebase/firestore'
-import { db } from '@/services/firebase'
+import { useAuthStore } from '@/store/useAuthStore'
+import { listAllUsers, setUserRole } from '@/services/role.service'
 import type { UserRole } from '@/types/roles'
 
 interface UserRecord {
@@ -15,18 +15,20 @@ const ROLES: UserRole[] = ['student', 'teacher', 'admin', 'owner']
 
 export default function UsersTab() {
   const { t } = useTranslation()
+  const { user } = useAuthStore()
   const [users, setUsers] = useState<UserRecord[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    getDocs(collection(db, 'users')).then((snap) => {
-      setUsers(snap.docs.map((d) => ({ uid: d.id, ...d.data() } as UserRecord)))
-    }).finally(() => setLoading(false))
+    listAllUsers().then((list) =>
+      setUsers(list.map((u) => ({ uid: u.uid, email: u.email ?? '', displayName: u.displayName ?? '', role: u.role })))
+    ).finally(() => setLoading(false))
   }, [])
 
   const updateRole = async (uid: string, role: UserRole) => {
-    await updateDoc(doc(db, 'users', uid), { role })
+    if (!user) return
+    await setUserRole(uid, role, user.uid)
     setUsers((prev) => prev.map((u) => u.uid === uid ? { ...u, role } : u))
   }
 
@@ -48,7 +50,9 @@ export default function UsersTab() {
       </div>
 
       {loading ? (
-        <div className="py-12 text-center text-gray-400">Загрузка...</div>
+        <div className="py-12 text-center text-gray-400">{t('common.loading', 'Загрузка...')}</div>
+      ) : filtered.length === 0 ? (
+        <div className="py-12 text-center text-gray-400">{t('admin.noUsers', 'Пользователи не найдены')}</div>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -63,7 +67,7 @@ export default function UsersTab() {
               {filtered.map((u) => (
                 <tr key={u.uid}>
                   <td className="py-3 font-medium text-gray-900 dark:text-white">{u.displayName || '—'}</td>
-                  <td className="py-3 text-gray-500 dark:text-gray-400">{u.email}</td>
+                  <td className="py-3 text-gray-500 dark:text-gray-400">{u.email || '—'}</td>
                   <td className="py-3">
                     <select
                       value={u.role}
