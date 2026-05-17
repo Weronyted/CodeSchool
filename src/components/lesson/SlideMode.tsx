@@ -61,7 +61,7 @@ const TYPE_LABELS: Record<string, { ru: string; en: string }> = {
 function CodeBlock({ code, lang = 'html' }: { code: string; lang?: 'html' | 'css' | 'javascript' }) {
   const ext = lang === 'css' ? [cssLang()] : lang === 'javascript' ? [jsLang()] : [htmlLang()]
   return (
-    <div className="rounded-xl overflow-hidden border border-white/20 text-sm mt-4">
+    <div className="rounded-xl overflow-hidden border border-white/20 text-xs mt-3">
       <CodeMirror
         value={code.trim()}
         extensions={ext}
@@ -136,11 +136,11 @@ function CompareCol({ col, lang }: { col: SlideCompareColumn; lang: string }) {
   const bullet = col.color === 'green' ? '✓' : col.color === 'red' ? '✗' : '•'
 
   return (
-    <div className={`rounded-xl p-4 border ${colClass}`}>
-      <p className="text-xs font-bold text-white/50 mb-3 uppercase tracking-widest">{label}</p>
-      <ul className="space-y-2">
+    <div className={`rounded-xl p-3 border ${colClass}`}>
+      <p className="text-xs font-bold text-white/50 mb-2 uppercase tracking-widest">{label}</p>
+      <ul className="space-y-1.5">
         {items.map((item, i) => (
-          <li key={i} className="flex items-start gap-2 text-white/75 text-sm">
+          <li key={i} className="flex items-start gap-1.5 text-white/75 text-xs leading-snug">
             <span className="shrink-0 mt-0.5">{bullet}</span>
             {item}
           </li>
@@ -230,7 +230,7 @@ export function SlideMode({ slides, lessonTitle, onClose, onGoToPractice }: Slid
       </div>
 
       {/* Slide area — overflow-y-auto so tall slides (code-anim, compare) are scrollable */}
-      <div className="flex-1 overflow-y-auto relative flex items-center justify-center px-6 py-8">
+      <div className="flex-1 min-h-0 overflow-y-auto relative flex items-start justify-center px-4 py-5">
         <AnimatePresence custom={direction} mode="wait">
           <motion.div
             key={current}
@@ -240,18 +240,18 @@ export function SlideMode({ slides, lessonTitle, onClose, onGoToPractice }: Slid
             animate="center"
             exit="exit"
             transition={{ type: 'spring', stiffness: 320, damping: 32, mass: 0.8 }}
-            className="w-full max-w-2xl"
+            className="w-full max-w-2xl my-auto"
           >
             {/* Card */}
-            <div className="bg-gray-900 rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
+            <div className="bg-gray-900 rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
               {/* Colored top strip */}
-              <div className={`h-1.5 w-full bg-gradient-to-r ${accent}`} />
+              <div className={`h-1 w-full bg-gradient-to-r ${accent}`} />
 
-              <div className="p-8 sm:p-10">
+              <div className="p-5 sm:p-7">
                 {/* Icon + type label */}
-                <div className="flex items-center gap-3 mb-6">
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${accent} flex items-center justify-center flex-shrink-0`}>
-                    <SlideIcon size={18} className="text-white" />
+                <div className="flex items-center gap-3 mb-4">
+                  <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${accent} flex items-center justify-center flex-shrink-0`}>
+                    <SlideIcon size={15} className="text-white" />
                   </div>
                   <span className="text-xs font-semibold text-white/40 uppercase tracking-widest">
                     {typeLabelText}
@@ -259,23 +259,23 @@ export function SlideMode({ slides, lessonTitle, onClose, onGoToPractice }: Slid
                 </div>
 
                 {/* Title */}
-                <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-white mb-4 leading-tight">
+                <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-white mb-3 leading-tight">
                   {title}
                 </h2>
 
                 {/* Body */}
                 {body && (
-                  <p className="text-white/75 text-base sm:text-lg leading-relaxed">
+                  <p className="text-white/75 text-sm sm:text-base leading-relaxed">
                     {body}
                   </p>
                 )}
 
                 {/* ── Bullets (any slide type) ─────────────────────────────── */}
                 {slide.bullets && slide.bullets.length > 0 && (
-                  <ul className="mt-4 space-y-2">
+                  <ul className="mt-3 space-y-1.5">
                     {slide.bullets.map((b, i) => (
-                      <li key={i} className="flex items-start gap-2 text-white/75 text-base leading-relaxed">
-                        <span className="text-white/30 mt-1 shrink-0">•</span>
+                      <li key={i} className="flex items-start gap-2 text-white/75 text-sm leading-relaxed">
+                        <span className="text-white/30 mt-0.5 shrink-0">•</span>
                         {language === 'ru' ? b.text_ru : b.text_en}
                       </li>
                     ))}
@@ -302,7 +302,7 @@ export function SlideMode({ slides, lessonTitle, onClose, onGoToPractice }: Slid
 
                 {/* ── CODE-ANIM: terminal animation ────────────────────────── */}
                 {slide.type === 'code-anim' && slide.animSteps && (
-                  <div className="mt-4" style={{ height: '280px' }}>
+                  <div className="mt-3" style={{ height: '230px' }}>
                     <TerminalAnim
                       steps={slide.animSteps}
                       demoMode={slide.animMode ?? 'console'}
@@ -313,7 +313,7 @@ export function SlideMode({ slides, lessonTitle, onClose, onGoToPractice }: Slid
 
                 {/* ── COMPARE: two-column layout ───────────────────────────── */}
                 {slide.type === 'compare' && (slide.compareLeft || slide.compareRight) && (
-                  <div className="mt-4 grid grid-cols-2 gap-3">
+                  <div className="mt-3 grid grid-cols-2 gap-2">
                     {slide.compareLeft  && <CompareCol col={slide.compareLeft}  lang={lang} />}
                     {slide.compareRight && <CompareCol col={slide.compareRight} lang={lang} />}
                   </div>
@@ -326,7 +326,7 @@ export function SlideMode({ slides, lessonTitle, onClose, onGoToPractice }: Slid
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
                     onClick={onGoToPractice}
-                    className="mt-8 w-full py-4 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold text-lg hover:from-green-400 hover:to-emerald-500 transition-all shadow-lg shadow-green-900/40"
+                    className="mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold text-base hover:from-green-400 hover:to-emerald-500 transition-all shadow-lg shadow-green-900/40"
                   >
                     {language === 'ru' ? '🚀 Перейти к практике' : '🚀 Go to practice'}
                   </motion.button>
