@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer } from 'recharts'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useProgressStore } from '@/store/useProgressStore'
+import { useLanguageStore } from '@/store/useLanguageStore'
 import { LESSON_SLUGS, LESSON_META } from '@/lessons'
 import { useThemeStore } from '@/store/useThemeStore'
 
@@ -19,6 +20,7 @@ export default function Dashboard() {
   const { t } = useTranslation()
   const { user } = useAuthStore()
   const progress = useProgressStore((s) => s.progress)
+  const { language } = useLanguageStore()
   const { theme } = useThemeStore()
   const isDark = theme === 'dark'
 
@@ -39,7 +41,8 @@ export default function Dashboard() {
 
         {/* Welcome card */}
         <motion.div
-          className="bg-gradient-to-br from-primary-600 to-secondary-600 rounded-3xl p-8 text-white mb-8 relative overflow-hidden"
+          className="rounded-3xl p-8 text-white mb-8 relative overflow-hidden"
+          style={{ background: 'linear-gradient(135deg, #3B5BDB, #7950F2)' }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
@@ -99,7 +102,7 @@ export default function Dashboard() {
                       <span className="text-2xl flex-shrink-0 mt-0.5">{meta.icon}</span>
                       <div className="flex-1 min-w-0">
                         <p className="font-semibold text-sm text-gray-900 dark:text-white truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                          {meta.title}
+                          {language === 'en' ? meta.title_en : meta.title}
                         </p>
                         <div className="flex items-center gap-2 mt-1">
                           {done ? (

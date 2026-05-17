@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
+import { useLanguageStore } from '@/store/useLanguageStore'
 import { LESSON_SLUGS, LESSON_META } from '@/lessons'
 
 const SHAPES = [
@@ -27,6 +28,7 @@ const FEATURES = [
 
 export default function Landing() {
   const { t } = useTranslation()
+  const { language } = useLanguageStore()
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-amber-50 via-cream-50 to-orange-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 overflow-hidden">
@@ -41,7 +43,7 @@ export default function Landing() {
             animate={{ y: [0, -18, 0] }}
             transition={{ duration: 4 + i * 0.3, repeat: Infinity, delay: s.delay, ease: 'easeInOut' }}
           >
-            <span className="opacity-30 dark:opacity-10">{s.emoji}</span>
+            <span className="opacity-50 dark:opacity-15">{s.emoji}</span>
           </motion.div>
         ))}
       </div>
@@ -66,13 +68,14 @@ export default function Landing() {
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <button
               onClick={() => window.dispatchEvent(new Event('open-auth-modal'))}
-              className="px-8 py-4 bg-primary-600 text-white rounded-2xl font-bold text-lg hover:bg-primary-700 transition-colors shadow-xl shadow-primary-200 dark:shadow-none"
+              className="px-8 py-4 rounded-2xl font-bold text-lg transition-colors shadow-xl"
+              style={{ backgroundColor: '#3B5BDB', color: '#ffffff' }}
             >
               {t('landing.hero.cta')}
             </button>
             <Link
               to="/lessons"
-              className="px-8 py-4 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-2xl font-bold text-lg hover:border-primary-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors bg-white/60 dark:bg-transparent backdrop-blur-sm"
+              className="px-8 py-4 border-2 border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-300 rounded-2xl font-bold text-lg hover:border-primary-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors bg-white/70 dark:bg-transparent backdrop-blur-sm"
             >
               {t('landing.hero.ctaSecondary')}
             </Link>
@@ -87,12 +90,12 @@ export default function Landing() {
           transition={{ delay: 0.4, duration: 0.6 }}
         >
           {[
-            { value: '12',   label: t('landing.hero.stat1') },
+            { value: String(LESSON_SLUGS.length), label: t('landing.hero.stat1') },
             { value: '100+', label: t('landing.hero.stat2') },
             { value: '100%', label: t('landing.hero.stat3') },
           ].map((s) => (
             <div key={s.label} className="text-center">
-              <div className="text-4xl font-extrabold text-primary-600 dark:text-primary-400 font-heading">{s.value}</div>
+              <div className="text-4xl font-extrabold font-heading" style={{ color: '#3B5BDB' }}>{s.value}</div>
               <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{s.label}</div>
             </div>
           ))}
@@ -159,11 +162,15 @@ export default function Landing() {
               >
                 <span className="text-3xl flex-shrink-0">{meta.icon}</span>
                 <div>
-                  <span className="text-xs font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-wide">
+                  <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#3B5BDB' }}>
                     {t('landing.lesson')} {i + 1}
                   </span>
-                  <h3 className="font-heading font-bold text-gray-900 dark:text-white text-sm mt-0.5">{meta.title}</h3>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">{meta.description}</p>
+                  <h3 className="font-heading font-bold text-gray-900 dark:text-white text-sm mt-0.5">
+                    {language === 'en' ? meta.title_en : meta.title}
+                  </h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
+                    {language === 'en' ? meta.description_en : meta.description}
+                  </p>
                 </div>
               </motion.div>
             )
@@ -174,16 +181,18 @@ export default function Landing() {
       {/* CTA */}
       <section className="relative z-10 py-24 px-4">
         <motion.div
-          className="max-w-3xl mx-auto bg-gradient-to-br from-primary-600 to-secondary-600 rounded-3xl p-12 text-center text-white shadow-2xl"
+          className="max-w-3xl mx-auto rounded-3xl p-12 text-center text-white shadow-2xl"
+          style={{ background: 'linear-gradient(135deg, #3B5BDB, #7950F2)' }}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
           <h2 className="font-heading text-4xl font-extrabold mb-4">{t('landing.cta.title')}</h2>
-          <p className="text-primary-100 text-lg mb-8">{t('landing.cta.subtitle')}</p>
+          <p className="text-indigo-100 text-lg mb-8">{t('landing.cta.subtitle')}</p>
           <button
             onClick={() => window.dispatchEvent(new Event('open-auth-modal'))}
-            className="px-8 py-4 bg-white text-primary-700 rounded-2xl font-bold text-lg hover:bg-primary-50 transition-colors shadow-lg"
+            className="px-8 py-4 bg-white rounded-2xl font-bold text-lg hover:bg-indigo-50 transition-colors shadow-lg"
+            style={{ color: '#3B5BDB' }}
           >
             {t('landing.cta.button')}
           </button>

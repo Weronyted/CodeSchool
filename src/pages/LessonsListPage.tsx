@@ -2,11 +2,13 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useProgressStore } from '@/store/useProgressStore'
+import { useLanguageStore } from '@/store/useLanguageStore'
 import { LESSON_SLUGS, LESSON_META } from '@/lessons'
 
 export default function LessonsListPage() {
   const { t } = useTranslation()
   const progress = useProgressStore((s) => s.progress)
+  const { language } = useLanguageStore()
 
   return (
     <div className="min-h-screen bg-cream-50 dark:bg-gray-950">
@@ -49,14 +51,16 @@ export default function LessonsListPage() {
                     </span>
                   </div>
                   <h3 className="font-heading font-bold text-gray-900 dark:text-white mb-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                    {meta.title}
+                    {language === 'en' ? meta.title_en : meta.title}
                   </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-2">{meta.description}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-2">
+                    {language === 'en' ? meta.description_en : meta.description}
+                  </p>
 
                   <div className="flex items-center justify-between">
                     {done ? (
                       <span className="flex items-center gap-1 text-xs font-semibold text-green-600 dark:text-green-400">
-                        ✅ {t('lessons.done', 'Пройден')}
+                        ✅ {t('lessons.done')}
                       </span>
                     ) : (
                       <span className="flex items-center gap-1 text-xs font-semibold text-gray-400">

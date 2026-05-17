@@ -69,6 +69,7 @@
   "lessons": {
     "title": "All Lessons",
     "subtitle": "{{count}} lessons on HTML, CSS and JavaScript",
+    "done": "Passed",
     "readTime": "{{min}} min read",
     "sections": "Contents",
     "yourScore": "Your score",
@@ -120,6 +121,15 @@
     "streakDesc": "days in a row",
     "noActivity": "No activity yet. Start your first lesson!",
     "radarTitle": "Score radar",
+    "student": "Student",
+    "lessonsCompleted": "Lessons completed",
+    "yourLessons": "Lessons",
+    "notStarted": "Not started",
+    "quickActions": "Quick actions",
+    "allLessons": "All lessons",
+    "glossary": "Glossary",
+    "assignments": "Assignments",
+    "skills": "Skills",
     "status": {
       "notStarted": "Not started",
       "inProgress": "In progress",

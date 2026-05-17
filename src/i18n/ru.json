@@ -69,6 +69,7 @@
   "lessons": {
     "title": "Все уроки",
     "subtitle": "{{count}} уроков по HTML, CSS и JavaScript",
+    "done": "Пройден",
     "readTime": "{{min}} мин чтения",
     "sections": "Содержание",
     "yourScore": "Твой результат",
@@ -120,6 +121,15 @@
     "streakDesc": "дней подряд",
     "noActivity": "Нет активности. Начни первый урок!",
     "radarTitle": "Радар результатов",
+    "student": "Студент",
+    "lessonsCompleted": "Уроков пройдено",
+    "yourLessons": "Уроки",
+    "notStarted": "Не начат",
+    "quickActions": "Быстрые действия",
+    "allLessons": "Все уроки",
+    "glossary": "Словарь терминов",
+    "assignments": "Задания",
+    "skills": "Навыки",
     "status": {
       "notStarted": "Не начато",
       "inProgress": "В процессе",
