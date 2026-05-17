@@ -1,14 +1,31 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useProgressStore } from '@/store/useProgressStore'
 import { useLanguageStore } from '@/store/useLanguageStore'
 import { LESSON_SLUGS, LESSON_META } from '@/lessons'
+import type { LessonCategory } from '@/types/lesson'
+
+type FilterCategory = 'ALL' | LessonCategory
+
+const CATEGORY_LABELS: Record<FilterCategory, { ru: string; en: string }> = {
+  ALL:    { ru: 'Все',     en: 'All' },
+  BASICS: { ru: 'Основы', en: 'Basics' },
+  HTML:   { ru: 'HTML',   en: 'HTML' },
+  CSS:    { ru: 'CSS',    en: 'CSS' },
+  JS:     { ru: 'JS',     en: 'JS' },
+}
 
 export default function LessonsListPage() {
   const { t } = useTranslation()
   const progress = useProgressStore((s) => s.progress)
   const { language } = useLanguageStore()
+  const [filter, setFilter] = useState<FilterCategory>('ALL')
+
+  const visibleSlugs = filter === 'ALL'
+    ? LESSON_SLUGS
+    : LESSON_SLUGS.filter((s) => LESSON_META[s].category === filter)
 
   return (
     <div className="min-h-screen bg-cream-50 dark:bg-gray-950">
@@ -16,7 +33,7 @@ export default function LessonsListPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-10"
+          className="mb-8"
         >
           <h1 className="font-heading text-4xl font-extrabold text-gray-900 dark:text-white mb-2">
             {t('lessons.title')}
@@ -26,9 +43,27 @@ export default function LessonsListPage() {
           </p>
         </motion.div>
 
+        {/* Category filter */}
+        <div className="flex gap-2 flex-wrap mb-8">
+          {(Object.keys(CATEGORY_LABELS) as FilterCategory[]).map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setFilter(cat)}
+              className="px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors"
+              style={filter === cat
+                ? { backgroundColor: '#3B5BDB', color: '#fff', borderColor: '#3B5BDB' }
+                : { backgroundColor: 'transparent', color: '#6b7280', borderColor: '#e5e7eb' }
+              }
+            >
+              {language === 'en' ? CATEGORY_LABELS[cat].en : CATEGORY_LABELS[cat].ru}
+            </button>
+          ))}
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {LESSON_SLUGS.map((slug, i) => {
+          {visibleSlugs.map((slug) => {
             const meta = LESSON_META[slug]
+            const i = LESSON_SLUGS.indexOf(slug)
             const p = progress[slug]
             const done = p?.completed
             const score = p?.quizScore ?? 0

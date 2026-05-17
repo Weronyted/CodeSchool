@@ -28,6 +28,7 @@ type LessonSlug = typeof LESSON_SLUGS[number]
 // ─── Lesson loaders ──────────────────────────────────────────────────────────
 
 const LESSON_LOADERS: Record<LessonSlug, () => Promise<Record<string, unknown>>> = {
+  'intro-to-programming': () => import('@/lessons/intro-to-programming') as Promise<Record<string, unknown>>,
   'intro-to-html': () => import('@/lessons/intro-to-html') as Promise<Record<string, unknown>>,
   'html-tags': () => import('@/lessons/html-tags') as Promise<Record<string, unknown>>,
   'html-structure': () => import('@/lessons/html-structure') as Promise<Record<string, unknown>>,
@@ -210,10 +211,12 @@ function NewDidYouKnow({ items, lang }: { items: DidYouKnowItem[]; lang: 'ru' | 
 function EditorTask({ lesson, lang }: { lesson: Lesson; lang: 'ru' | 'en' }) {
   const { theme } = useThemeStore()
   const task = lesson.editorTask
-  const [code, setCode] = useState(task.starterCode.html ?? task.starterCode.css ?? task.starterCode.javascript ?? '')
+  const [code, setCode] = useState(task?.starterCode.html ?? task?.starterCode.css ?? task?.starterCode.javascript ?? '')
   const [preview, setPreview] = useState('')
   const [showHint, setShowHint] = useState(false)
   const [hintIndex, setHintIndex] = useState(0)
+
+  if (!task) return null
 
   const activeLang = task.activeTabs[0] ?? 'html'
   const ext = activeLang === 'css' ? [cssLang()] : activeLang === 'javascript' ? [jsLang()] : [htmlLang()]
@@ -598,19 +601,21 @@ export default function LessonPage() {
                   )}
 
                   {/* Practice / Editor task */}
-                  <motion.section
-                    ref={(el) => { practiceRef.current = el }}
-                    className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700 mb-6 scroll-mt-24"
-                    initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
-                  >
-                    <h2 className="font-heading text-xl font-bold text-gray-900 dark:text-white mb-1">
-                      ✏️ {lang === 'ru' ? newLesson.editorTask.title_ru : newLesson.editorTask.title_en}
-                    </h2>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
-                      {lang === 'ru' ? 'Попробуй написать код самостоятельно' : 'Try writing the code yourself'}
-                    </p>
-                    <EditorTask lesson={newLesson} lang={lang} />
-                  </motion.section>
+                  {newLesson.editorTask && (
+                    <motion.section
+                      ref={(el) => { practiceRef.current = el }}
+                      className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700 mb-6 scroll-mt-24"
+                      initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
+                    >
+                      <h2 className="font-heading text-xl font-bold text-gray-900 dark:text-white mb-1">
+                        ✏️ {lang === 'ru' ? newLesson.editorTask.title_ru : newLesson.editorTask.title_en}
+                      </h2>
+                      <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
+                        {lang === 'ru' ? 'Попробуй написать код самостоятельно' : 'Try writing the code yourself'}
+                      </p>
+                      <EditorTask lesson={newLesson} lang={lang} />
+                    </motion.section>
+                  )}
 
                   {/* Quiz */}
                   {newLesson.quiz.length > 0 && (

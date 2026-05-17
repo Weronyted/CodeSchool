@@ -53,7 +53,7 @@ export interface LessonData {
 
 // ─── New bilingual format ────────────────────────────────────────────────────
 
-export type LessonCategory = 'HTML' | 'CSS' | 'JS'
+export type LessonCategory = 'BASICS' | 'HTML' | 'CSS' | 'JS'
 export type CodeLang = 'html' | 'css' | 'javascript'
 export type SlideType = 'title' | 'concept' | 'code' | 'analogy' | 'tip' | 'practice-cta'
 
@@ -138,7 +138,7 @@ export interface Lesson {
   sections: BilingualSection[]
   slides: Slide[]
   content: LessonContent
-  editorTask: EditorTask
+  editorTask?: EditorTask
   keyTerms: BilingualKeyTerm[]
   didYouKnow: DidYouKnowItem[]
   quiz: QuizQuestion[]

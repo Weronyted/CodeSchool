@@ -1,4 +1,5 @@
 export const LESSON_SLUGS = [
+  'intro-to-programming',
   'intro-to-html',
   'html-tags',
   'html-structure',
@@ -23,7 +24,15 @@ export const LESSON_SLUGS = [
 
 export type LessonSlug = (typeof LESSON_SLUGS)[number]
 
-export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; description: string; description_en: string; icon: string }> = {
+export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; description: string; description_en: string; icon: string; category?: import('@/types/lesson').LessonCategory }> = {
+  'intro-to-programming': {
+    title: 'Что такое программирование',
+    title_en: 'What is Programming',
+    description: 'Узнай, что такое код, алгоритм и зачем вообще учиться программировать.',
+    description_en: 'Find out what code and algorithms are, and why learning to program matters.',
+    icon: '💡',
+    category: 'BASICS',
+  },
   'intro-to-html': {
     title: 'Что такое HTML',
     title_en: 'What is HTML',
