@@ -5,6 +5,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { AuthModal } from '@/components/auth/AuthModal'
+import { ProfileSetupModal } from '@/components/auth/ProfileSetupModal'
 import { GlobalSearch } from '@/components/ui/GlobalSearch'
 import Landing from '@/pages/Landing'
 import Dashboard from '@/pages/Dashboard'
@@ -79,6 +80,7 @@ export default function App() {
       <Footer />
 
       <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
+      <ProfileSetupModal />
       <GlobalSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
       <Toaster />
       <ConfirmDialog />

@@ -5,6 +5,7 @@ import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 import { toast } from '@/store/useToastStore'
 import { signInWithGoogle, signInWithEmail, signUpWithEmail, resetPassword } from '@/services/auth.service'
+import { useAuthStore } from '@/store/useAuthStore'
 
 interface AuthModalProps {
   open: boolean
@@ -15,6 +16,7 @@ type Mode = 'signin' | 'signup' | 'reset'
 
 export function AuthModal({ open, onClose }: AuthModalProps) {
   const { t } = useTranslation()
+  const { setNeedsProfileSetup } = useAuthStore()
   const [mode, setMode] = useState<Mode>('signin')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -24,8 +26,9 @@ export function AuthModal({ open, onClose }: AuthModalProps) {
   async function handleGoogle() {
     setLoading(true)
     try {
-      await signInWithGoogle()
+      const { isNewUser } = await signInWithGoogle()
       onClose()
+      if (isNewUser) setNeedsProfileSetup(true)
       toast.success('Добро пожаловать!')
     } catch {
       toast.error(t('errors.authFailed'))
@@ -45,6 +48,7 @@ export function AuthModal({ open, onClose }: AuthModalProps) {
       } else if (mode === 'signup') {
         await signUpWithEmail(email, password, displayName)
         onClose()
+        setNeedsProfileSetup(true)
         toast.success('Аккаунт создан!')
       } else {
         await signInWithEmail(email, password)

@@ -14,10 +14,11 @@ import { auth, db } from './firebase'
 
 const provider = new GoogleAuthProvider()
 
-export async function signInWithGoogle(): Promise<User> {
+export async function signInWithGoogle(): Promise<{ user: User; isNewUser: boolean }> {
   const result = await signInWithPopup(auth, provider)
-  try { await ensureUserProfile(result.user) } catch {}
-  return result.user
+  let isNewUser = false
+  try { isNewUser = await ensureUserProfile(result.user) } catch {}
+  return { user: result.user, isNewUser }
 }
 
 export async function signInWithEmail(email: string, password: string): Promise<User> {
@@ -44,7 +45,7 @@ export function onAuthChange(callback: (user: User | null) => void): () => void 
   return onAuthStateChanged(auth, callback)
 }
 
-export async function ensureUserProfile(user: User): Promise<void> {
+export async function ensureUserProfile(user: User): Promise<boolean> {
   const ref = doc(db, 'users', user.uid)
   const snap = await getDoc(ref)
   if (!snap.exists()) {
@@ -55,5 +56,13 @@ export async function ensureUserProfile(user: User): Promise<void> {
       photoURL: user.photoURL ?? null,
       createdAt: serverTimestamp(),
     })
+    return true
   }
+  return false
+}
+
+export async function updateDisplayName(user: User, displayName: string): Promise<void> {
+  await updateProfile(user, { displayName })
+  const ref = doc(db, 'users', user.uid)
+  await setDoc(ref, { displayName }, { merge: true })
 }

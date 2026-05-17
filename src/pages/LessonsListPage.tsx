@@ -9,7 +9,7 @@ export default function LessonsListPage() {
   const progress = useProgressStore((s) => s.progress)
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen bg-cream-50 dark:bg-gray-950">
       <div className="max-w-6xl mx-auto px-4 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -17,10 +17,10 @@ export default function LessonsListPage() {
           className="mb-10"
         >
           <h1 className="font-heading text-4xl font-extrabold text-gray-900 dark:text-white mb-2">
-            {t('lessons.title', 'Все уроки')}
+            {t('lessons.title')}
           </h1>
           <p className="text-gray-500 dark:text-gray-400">
-            {t('lessons.subtitle', '12 уроков по HTML, CSS и JavaScript')}
+            {t('lessons.subtitle', { count: LESSON_SLUGS.length })}
           </p>
         </motion.div>
 
@@ -60,7 +60,7 @@ export default function LessonsListPage() {
                       </span>
                     ) : (
                       <span className="flex items-center gap-1 text-xs font-semibold text-gray-400">
-                        📖 {t('lessons.readTime', '~{{min}} мин', { min: 8 })}
+                        📖 {t('lessons.readTime', { min: 8 })}
                       </span>
                     )}
                     {score > 0 && (

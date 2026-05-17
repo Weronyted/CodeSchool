@@ -67,6 +67,8 @@
     }
   },
   "lessons": {
+    "title": "All Lessons",
+    "subtitle": "{{count}} lessons on HTML, CSS and JavaScript",
     "readTime": "{{min}} min read",
     "sections": "Contents",
     "yourScore": "Your score",
@@ -168,7 +170,13 @@
     "attempts": "Attempts",
     "language": "Language",
     "theme": "Theme",
-    "languageLabel": "Interface language"
+    "languageLabel": "Interface language",
+    "setupTitle": "What's your name?",
+    "setupSubtitle": "Enter your first and last name to complete your registration.",
+    "setupDone": "Profile saved!",
+    "setupSkip": "Skip (you can fill it in later from your profile)",
+    "firstName": "First name",
+    "lastName": "Last name"
   },
   "auth": {
     "signInTitle": "Sign in to CodeSchool",

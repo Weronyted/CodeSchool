@@ -67,6 +67,8 @@
     }
   },
   "lessons": {
+    "title": "Все уроки",
+    "subtitle": "{{count}} уроков по HTML, CSS и JavaScript",
     "readTime": "{{min}} мин чтения",
     "sections": "Содержание",
     "yourScore": "Твой результат",
@@ -168,7 +170,13 @@
     "attempts": "Попыток",
     "language": "Язык",
     "theme": "Тема",
-    "languageLabel": "Язык интерфейса"
+    "languageLabel": "Язык интерфейса",
+    "setupTitle": "Как тебя зовут?",
+    "setupSubtitle": "Введи своё имя и фамилию, чтобы завершить регистрацию.",
+    "setupDone": "Профиль заполнен!",
+    "setupSkip": "Пропустить (можно заполнить позже в профиле)",
+    "firstName": "Имя",
+    "lastName": "Фамилия"
   },
   "auth": {
     "signInTitle": "Войди в CodeSchool",

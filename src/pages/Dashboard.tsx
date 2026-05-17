@@ -44,9 +44,8 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
         >
           <div className="relative z-10">
-            <p className="text-primary-200 mb-1">{t('dashboard.welcome', 'Добро пожаловать')},</p>
             <h1 className="font-heading text-3xl font-extrabold mb-4">
-              {user?.displayName ?? user?.email?.split('@')[0] ?? t('dashboard.student', 'Студент')} 👋
+              {t('dashboard.welcome', { name: user?.displayName ?? user?.email?.split('@')[0] ?? t('dashboard.student', 'Студент') })} 👋
             </h1>
             <div className="flex items-center gap-4 flex-wrap">
               <div>
