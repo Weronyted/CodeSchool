@@ -14,13 +14,13 @@ export function HTMLStructureSVG() {
         <text x="30" y="32" fill="#3B5BDB" fontSize="12" fontFamily="monospace">&lt;html&gt;</text>
         {box(30, 40, 320, 80, '', '#7950F2')}
         <text x="50" y="60" fill="#7950F2" fontSize="12" fontFamily="monospace">&lt;head&gt;</text>
-        {box(55, 68, 120, 40, '&lt;title&gt;', '#7950F2')}
-        {box(195, 68, 140, 40, '&lt;style&gt; &lt;link&gt;', '#7950F2')}
+        {box(55, 68, 120, 40, '<title>', '#7950F2')}
+        {box(195, 68, 140, 40, '<style> <link>', '#7950F2')}
         {box(30, 135, 320, 100, '', '#2F9E44')}
         <text x="50" y="155" fill="#2F9E44" fontSize="12" fontFamily="monospace">&lt;body&gt;</text>
-        {box(55, 162, 80, 60, '&lt;h1&gt;', '#2F9E44')}
-        {box(150, 162, 80, 60, '&lt;p&gt;', '#2F9E44')}
-        {box(245, 162, 90, 60, '&lt;div&gt;', '#2F9E44')}
+        {box(55, 162, 80, 60, '<h1>', '#2F9E44')}
+        {box(150, 162, 80, 60, '<p>', '#2F9E44')}
+        {box(245, 162, 90, 60, '<div>', '#2F9E44')}
         <text x="190" y="253" textAnchor="middle" fill="#94a3b8" fontSize="11">дерево элементов</text>
       </svg>
     </div>

@@ -39,6 +39,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Знакомимся с языком, на котором написаны все сайты в мире.',
     description_en: 'Get to know the language that powers every website in the world.',
     icon: '🏗️',
+    category: 'HTML',
   },
   'html-tags': {
     title: 'Основные теги HTML',
@@ -46,6 +47,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Заголовки, абзацы, ссылки, картинки и списки — теги, которые строят любой сайт.',
     description_en: 'Headings, paragraphs, links, images and lists — the tags that build any site.',
     icon: '🔤',
+    category: 'HTML',
   },
   'html-structure': {
     title: 'Структура HTML-документа',
@@ -53,6 +55,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Каркас любой веб-страницы: DOCTYPE, html, head, body и семантические теги.',
     description_en: 'The skeleton of any web page: DOCTYPE, html, head, body and semantic tags.',
     icon: '🏛️',
+    category: 'HTML',
   },
   'html-elements': {
     title: 'Элементы HTML',
@@ -60,6 +63,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Заголовки, абзацы, списки, ссылки и изображения',
     description_en: 'Headings, paragraphs, lists, links and images',
     icon: '🔤',
+    category: 'HTML',
   },
   'intro-to-css': {
     title: 'Что такое CSS',
@@ -67,6 +71,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Добавляем цвета, шрифты и красоту — учимся одевать HTML-скелет.',
     description_en: 'Adding colors, fonts and beauty — learning to style the HTML skeleton.',
     icon: '🎨',
+    category: 'CSS',
   },
   'css-styling': {
     title: 'Стили CSS: цвета, шрифты, фон',
@@ -74,6 +79,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Раскрашиваем страницу: работаем с цветами, шрифтами, фоном и рамками.',
     description_en: 'Styling the page: working with colors, fonts, backgrounds and borders.',
     icon: '🖌️',
+    category: 'CSS',
   },
   'css-layout': {
     title: 'Раскладка CSS: блочная модель и Flexbox',
@@ -81,6 +87,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Учимся расставлять элементы: блочная модель, margin, padding и Flexbox.',
     description_en: 'Arranging elements: box model, margin, padding and Flexbox.',
     icon: '📐',
+    category: 'CSS',
   },
   'css-basics': {
     title: 'Основы CSS',
@@ -88,6 +95,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Что такое CSS, селекторы, свойства и значения',
     description_en: 'What is CSS, selectors, properties and values',
     icon: '🎨',
+    category: 'CSS',
   },
   'css-box-model': {
     title: 'Блочная модель CSS',
@@ -95,6 +103,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Margin, padding, border — как устроено пространство',
     description_en: 'Margin, padding, border — how spacing works',
     icon: '📦',
+    category: 'CSS',
   },
   'css-flexbox': {
     title: 'Flexbox',
@@ -102,6 +111,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Выравнивание и расположение элементов с Flexbox',
     description_en: 'Aligning and positioning elements with Flexbox',
     icon: '↔️',
+    category: 'CSS',
   },
   'intro-to-js': {
     title: 'Введение в JavaScript',
@@ -109,6 +119,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Переменные, типы данных и первые шаги в программировании на JS.',
     description_en: 'Variables, data types and first steps in JS programming.',
     icon: '⚡',
+    category: 'JS',
   },
   'js-logic': {
     title: 'Условия и циклы',
@@ -116,6 +127,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'if/else, операторы сравнения и циклы — учим JavaScript принимать решения.',
     description_en: 'if/else, comparison operators and loops — teaching JavaScript to make decisions.',
     icon: '🔀',
+    category: 'JS',
   },
   'js-dom': {
     title: 'Работа с DOM',
@@ -123,6 +135,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Находи элементы, меняй содержимое и реагируй на действия пользователя.',
     description_en: 'Find elements, change content and respond to user actions.',
     icon: '🖱️',
+    category: 'JS',
   },
   'intro-to-javascript': {
     title: 'Введение в JavaScript',
@@ -130,6 +143,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Переменные, типы данных, console.log',
     description_en: 'Variables, data types, console.log',
     icon: '⚡',
+    category: 'JS',
   },
   'javascript-functions': {
     title: 'Функции JavaScript',
@@ -137,6 +151,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Создание функций, параметры и возврат значения',
     description_en: 'Creating functions, parameters and return values',
     icon: '🔧',
+    category: 'JS',
   },
   'javascript-conditions': {
     title: 'Условия в JavaScript',
@@ -144,6 +159,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'if/else, операторы сравнения, логические операторы',
     description_en: 'if/else, comparison operators, logical operators',
     icon: '🔀',
+    category: 'JS',
   },
   'javascript-loops': {
     title: 'Циклы в JavaScript',
@@ -151,6 +167,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'for, while — повторяем действия автоматически',
     description_en: 'for, while — repeating actions automatically',
     icon: '🔁',
+    category: 'JS',
   },
   'javascript-arrays': {
     title: 'Массивы JavaScript',
@@ -158,6 +175,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Создание массивов, методы push/pop/map/filter',
     description_en: 'Creating arrays, push/pop/map/filter methods',
     icon: '📋',
+    category: 'JS',
   },
   'dom-manipulation': {
     title: 'Работа с DOM',
@@ -165,6 +183,7 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Находим элементы, меняем содержимое, обрабатываем события',
     description_en: 'Finding elements, changing content, handling events',
     icon: '🖱️',
+    category: 'JS',
   },
   'build-your-webpage': {
     title: 'Создай свою страницу',
@@ -172,5 +191,6 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Итоговый проект: собираем полноценную веб-страницу',
     description_en: 'Final project: creating a complete web page',
     icon: '🚀',
+    category: 'JS',
   },
 }

@@ -340,6 +340,7 @@ export default function LessonPage() {
 
   useEffect(() => {
     if (!slug || !isValidSlug(slug)) { navigate('/lessons'); return }
+    window.scrollTo(0, 0)
     LESSON_LOADERS[slug]().then((mod) => {
       const key = Object.keys(mod).find((k) => k !== 'default')
       if (key) setLesson(mod[key] as Record<string, unknown>)
