@@ -51,7 +51,7 @@ export default function TermModal({ term, lang, onClose }: Props) {
             className="relative z-10 w-full max-w-5xl rounded-2xl overflow-hidden shadow-2xl
                        bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700
                        flex flex-col"
-            style={{ maxHeight: 'calc(100vh - 48px)' }}
+            style={{ height: 'calc(100vh - 48px)', maxHeight: '860px' }}
           >
             {/* ── Mobile header ────────────────────────────────────────────── */}
             <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200 dark:border-gray-700 shrink-0 sm:hidden">
@@ -75,8 +75,8 @@ export default function TermModal({ term, lang, onClose }: Props) {
             <div className="flex flex-col sm:flex-row flex-1 min-h-0 overflow-hidden">
 
               {/* LEFT: Terminal animation */}
-              <div className="sm:w-[48%] shrink-0 sm:border-r border-b sm:border-b-0 border-gray-200 dark:border-gray-700"
-                   style={{ minHeight: '260px', height: '340px', maxHeight: '340px' }}
+              <div className="sm:w-[52%] shrink-0 sm:border-r border-b sm:border-b-0 border-gray-200 dark:border-gray-700 flex flex-col"
+                   style={{ minHeight: '320px' }}
               >
                 <TerminalAnim
                   key={term.id}
