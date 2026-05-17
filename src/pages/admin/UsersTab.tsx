@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { doc, deleteDoc } from 'firebase/firestore'
 import { db } from '@/services/firebase'
 import { useAuthStore } from '@/store/useAuthStore'
+import { useConfirmStore } from '@/store/useConfirmStore'
 import { listAllUsers, setUserRole, isOwnerUid } from '@/services/role.service'
 import type { UserRole } from '@/types/roles'
 
@@ -19,6 +20,7 @@ export default function UsersTab() {
   const { t } = useTranslation()
   const { user } = useAuthStore()
   const [users, setUsers] = useState<UserRecord[]>([])
+  const { confirm } = useConfirmStore()
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
 
@@ -34,9 +36,15 @@ export default function UsersTab() {
     setUsers((prev) => prev.map((u) => u.uid === uid ? { ...u, role } : u))
   }
 
-  const handleDelete = async (uid: string) => {
+  const handleDelete = async (uid: string, displayName: string) => {
     if (!user || isOwnerUid(uid) || uid === user.uid) return
-    if (!confirm(t('admin.confirmDeleteUser', 'Удалить пользователя? Это действие необратимо.'))) return
+    const ok = await confirm({
+      title: t('admin.deleteUserTitle', 'Удалить пользователя?'),
+      message: t('admin.deleteUserMsg', 'Пользователь «{{name}}» будет удалён из системы. Это действие необратимо.', { name: displayName || uid }),
+      confirmLabel: t('common.delete', 'Удалить'),
+      danger: true,
+    })
+    if (!ok) return
     await deleteDoc(doc(db, 'userRoles', uid))
     try { await deleteDoc(doc(db, 'users', uid)) } catch { /* doc may not exist */ }
     setUsers((prev) => prev.filter((u) => u.uid !== uid))
@@ -104,7 +112,7 @@ export default function UsersTab() {
                     <td className="py-3 text-right">
                       {!isOwner && !isSelf && (
                         <button
-                          onClick={() => handleDelete(u.uid)}
+                          onClick={() => handleDelete(u.uid, u.displayName)}
                           className="text-red-400 hover:text-red-600 transition-colors p-1"
                           title={t('common.delete', 'Удалить')}
                         >
