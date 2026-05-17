@@ -8,6 +8,7 @@ import UsersTab from './admin/UsersTab'
 import LessonsTab from './admin/LessonsTab'
 import ClassesTab from './admin/ClassesTab'
 import AssignmentsTab from './admin/AssignmentsTab'
+import GradesTab from './admin/GradesTab'
 
 export default function AdminPanel() {
   const { t } = useTranslation()
@@ -24,6 +25,7 @@ export default function AdminPanel() {
     { id: 'lessons', label: `📚 ${t('admin.tabs.lessons', 'Уроки')}` },
     { id: 'classes', label: `🏫 ${t('admin.tabs.classes', 'Классы')}` },
     { id: 'assignments', label: `📝 ${t('admin.tabs.assignments', 'Задания')}` },
+    { id: 'grades', label: `🎓 ${t('admin.tabs.grades', 'Оценки')}` },
   ]
 
   return (
@@ -69,6 +71,7 @@ export default function AdminPanel() {
                 {activeTab === 'lessons' && <LessonsTab />}
                 {activeTab === 'classes' && <ClassesTab />}
                 {activeTab === 'assignments' && <AssignmentsTab />}
+                {activeTab === 'grades' && <GradesTab />}
               </motion.div>
             </AnimatePresence>
           </div>

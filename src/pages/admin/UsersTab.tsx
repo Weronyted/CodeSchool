@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { doc, deleteDoc } from 'firebase/firestore'
+import { db } from '@/services/firebase'
 import { useAuthStore } from '@/store/useAuthStore'
-import { listAllUsers, setUserRole } from '@/services/role.service'
+import { listAllUsers, setUserRole, isOwnerUid } from '@/services/role.service'
 import type { UserRole } from '@/types/roles'
 
 interface UserRecord {
@@ -27,9 +29,17 @@ export default function UsersTab() {
   }, [])
 
   const updateRole = async (uid: string, role: UserRole) => {
-    if (!user) return
+    if (!user || isOwnerUid(uid)) return
     await setUserRole(uid, role, user.uid)
     setUsers((prev) => prev.map((u) => u.uid === uid ? { ...u, role } : u))
+  }
+
+  const handleDelete = async (uid: string) => {
+    if (!user || isOwnerUid(uid) || uid === user.uid) return
+    if (!confirm(t('admin.confirmDeleteUser', 'Удалить пользователя? Это действие необратимо.'))) return
+    await deleteDoc(doc(db, 'userRoles', uid))
+    try { await deleteDoc(doc(db, 'users', uid)) } catch { /* doc may not exist */ }
+    setUsers((prev) => prev.filter((u) => u.uid !== uid))
   }
 
   const filtered = users.filter((u) =>
@@ -61,26 +71,50 @@ export default function UsersTab() {
                 <th className="pb-3 font-semibold text-gray-500 dark:text-gray-400">{t('admin.user', 'Пользователь')}</th>
                 <th className="pb-3 font-semibold text-gray-500 dark:text-gray-400">{t('admin.email', 'Email')}</th>
                 <th className="pb-3 font-semibold text-gray-500 dark:text-gray-400">{t('admin.role', 'Роль')}</th>
+                <th className="pb-3 w-10" />
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
-              {filtered.map((u) => (
-                <tr key={u.uid}>
-                  <td className="py-3 font-medium text-gray-900 dark:text-white">{u.displayName || '—'}</td>
-                  <td className="py-3 text-gray-500 dark:text-gray-400">{u.email || '—'}</td>
-                  <td className="py-3">
-                    <select
-                      value={u.role}
-                      onChange={(e) => updateRole(u.uid, e.target.value as UserRole)}
-                      className="px-3 py-1 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    >
-                      {ROLES.map((r) => (
-                        <option key={r} value={r}>{t(`roles.${r}`, r)}</option>
-                      ))}
-                    </select>
-                  </td>
-                </tr>
-              ))}
+              {filtered.map((u) => {
+                const isOwner = isOwnerUid(u.uid)
+                const isSelf = u.uid === user?.uid
+                return (
+                  <tr key={u.uid}>
+                    <td className="py-3 font-medium text-gray-900 dark:text-white">
+                      {u.displayName || '—'}
+                      {isOwner && <span className="ml-2 text-xs text-amber-500 font-semibold">👑 Владелец</span>}
+                      {isSelf && !isOwner && <span className="ml-2 text-xs text-gray-400">(вы)</span>}
+                    </td>
+                    <td className="py-3 text-gray-500 dark:text-gray-400">{u.email || '—'}</td>
+                    <td className="py-3">
+                      {isOwner ? (
+                        <span className="px-3 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 rounded-lg text-sm font-semibold">owner</span>
+                      ) : (
+                        <select
+                          value={u.role}
+                          onChange={(e) => updateRole(u.uid, e.target.value as UserRole)}
+                          className="px-3 py-1 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        >
+                          {ROLES.filter((r) => r !== 'owner').map((r) => (
+                            <option key={r} value={r}>{t(`roles.${r}`, r)}</option>
+                          ))}
+                        </select>
+                      )}
+                    </td>
+                    <td className="py-3 text-right">
+                      {!isOwner && !isSelf && (
+                        <button
+                          onClick={() => handleDelete(u.uid)}
+                          className="text-red-400 hover:text-red-600 transition-colors p-1"
+                          title={t('common.delete', 'Удалить')}
+                        >
+                          🗑️
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>
