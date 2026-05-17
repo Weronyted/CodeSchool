@@ -24,6 +24,7 @@ interface ProgressStore {
   getTopicProgress: (slug: string) => TopicProgress | undefined
   getCompletedCount: () => number
   getBestScore: (slug: string) => number
+  clearProgress: () => void
 }
 
 const defaultTopic = (): TopicProgress => ({
@@ -110,6 +111,8 @@ export const useProgressStore = create<ProgressStore>()(
       getCompletedCount: () => Object.values(get().progress).filter((p) => p.completed).length,
 
       getBestScore: (slug) => get().progress[slug]?.quizScore ?? 0,
+
+      clearProgress: () => set({ progress: {}, streak: 0, lastActiveDate: '' }),
     }),
     { name: 'codeschool-progress' }
   )

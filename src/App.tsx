@@ -13,6 +13,7 @@ import LessonPage from '@/pages/LessonPage'
 import LessonsListPage from '@/pages/LessonsListPage'
 import AssignmentsListPage from '@/pages/AssignmentsListPage'
 import ClassPage from '@/pages/ClassPage'
+import MyClassPage from '@/pages/MyClassPage'
 import JoinClass from '@/pages/JoinClass'
 import Glossary from '@/pages/Glossary'
 import Profile from '@/pages/Profile'
@@ -39,6 +40,7 @@ function AppRoutes() {
         <Route path="/assignments" element={<PageTransition><AssignmentsListPage /></PageTransition>} />
         <Route path="/assignments/:id" element={<ProtectedRoute><PageTransition><TakeAssignment /></PageTransition></ProtectedRoute>} />
         <Route path="/class/:classId" element={<ProtectedRoute><PageTransition><ClassPage /></PageTransition></ProtectedRoute>} />
+        <Route path="/my-class" element={<ProtectedRoute><PageTransition><MyClassPage /></PageTransition></ProtectedRoute>} />
         <Route path="/join/:code" element={<PageTransition><JoinClass /></PageTransition>} />
         <Route path="/glossary" element={<ProtectedRoute><PageTransition><Glossary /></PageTransition></ProtectedRoute>} />
         <Route path="/profile" element={<PageTransition><Profile /></PageTransition>} />

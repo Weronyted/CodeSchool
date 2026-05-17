@@ -4,9 +4,12 @@
     "assignments": "Assignments",
     "dashboard": "Dashboard",
     "glossary": "Glossary",
+    "class": "Class",
     "profile": "Profile",
     "signIn": "Sign In",
     "signOut": "Sign Out",
+    "signOutConfirmTitle": "Sign out?",
+    "signOutConfirmMsg": "Your progress is saved in the cloud. You can sign back in any time.",
     "search": "Search...",
     "searchPlaceholder": "Search lessons, terms...",
     "admin": "Admin Panel",
@@ -241,6 +244,8 @@
   },
   "admin": {
     "title": "Admin Panel",
+    "ownerDesc": "Full access",
+    "adminDesc": "Administrator",
     "tabs": {
       "lessons": "Lessons",
       "assignments": "Assignments",
@@ -250,6 +255,8 @@
   },
   "assignments": {
     "title": "Assignments",
+    "subtitle": "Assignments from your teacher",
+    "empty": "No assignments yet.",
     "noAssignments": "No assignments yet.",
     "dueDate": "Due date",
     "teacher": "Teacher",

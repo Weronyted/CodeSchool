@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sun, Moon, Search, Menu, X, Code2, LayoutDashboard, BookMarked, User, LogOut, ShieldCheck, ClipboardList, Globe } from 'lucide-react'
+import { Sun, Moon, Search, Menu, X, Code2, LayoutDashboard, BookMarked, User, LogOut, ShieldCheck, ClipboardList, Globe, School } from 'lucide-react'
 import { useThemeStore } from '@/store/useThemeStore'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useRoleStore } from '@/store/useRoleStore'
 import { useLanguageStore } from '@/store/useLanguageStore'
+import { useConfirmStore } from '@/store/useConfirmStore'
 import { signOut } from '@/services/auth.service'
 import { UserAvatar } from '@/components/auth/UserAvatar'
 
@@ -22,6 +23,7 @@ export function Navbar({ onSearchOpen, onSignInOpen }: NavbarProps) {
   const { user } = useAuthStore()
   const { isAdmin } = useRoleStore()
   const { toggleLanguage, language } = useLanguageStore()
+  const { confirm } = useConfirmStore()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
 
@@ -30,11 +32,18 @@ export function Navbar({ onSearchOpen, onSignInOpen }: NavbarProps) {
     { href: '/assignments', label: t('nav.assignments'), icon: ClipboardList },
     { href: '/dashboard', label: t('nav.dashboard'), icon: LayoutDashboard },
     { href: '/glossary', label: t('nav.glossary'), icon: BookMarked },
+    ...(user ? [{ href: '/my-class', label: t('nav.class', 'Класс'), icon: School }] : []),
   ]
 
   async function handleSignOut() {
-    await signOut()
     setUserMenuOpen(false)
+    const ok = await confirm({
+      title: t('nav.signOutConfirmTitle', 'Выйти из аккаунта?'),
+      message: t('nav.signOutConfirmMsg', 'Твой прогресс сохранён в облаке. Ты сможешь войти снова в любое время.'),
+      confirmLabel: t('nav.signOut'),
+      danger: true,
+    })
+    if (ok) await signOut()
   }
 
   return (
@@ -42,8 +51,8 @@ export function Navbar({ onSearchOpen, onSignInOpen }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 font-heading font-semibold text-lg text-primary dark:text-primary-dark">
-            <div className="w-8 h-8 bg-primary dark:bg-primary-dark rounded-lg flex items-center justify-center">
+          <Link to="/" className="flex items-center gap-2 font-heading font-semibold text-lg" style={{ color: '#3B5BDB' }}>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#3B5BDB' }}>
               <Code2 size={16} className="text-white" />
             </div>
             <span className="hidden sm:block">CodeSchool</span>
@@ -57,9 +66,10 @@ export function Navbar({ onSearchOpen, onSignInOpen }: NavbarProps) {
                 to={href}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   location.pathname.startsWith('/' + href.split('/')[1])
-                    ? 'bg-primary/10 text-primary dark:text-primary-dark'
+                    ? 'text-white'
                     : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
+                style={location.pathname.startsWith('/' + href.split('/')[1]) ? { backgroundColor: '#3B5BDB' } : {}}
               >
                 {label}
               </Link>
@@ -106,11 +116,11 @@ export function Navbar({ onSearchOpen, onSignInOpen }: NavbarProps) {
                         <User size={14} /> {t('nav.profile')}
                       </Link>
                       {isAdmin() && (
-                        <Link to="/admin" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 text-sm text-primary dark:text-primary-dark hover:bg-primary/5 dark:hover:bg-primary-dark/10 transition-colors">
+                        <Link to="/admin" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" style={{ color: '#3B5BDB' }}>
                           <ShieldCheck size={14} /> {t('nav.admin')}
                         </Link>
                       )}
-                      <button onClick={handleSignOut} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-danger hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                      <button onClick={handleSignOut} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                         <LogOut size={14} /> {t('nav.signOut')}
                       </button>
                     </motion.div>
@@ -118,7 +128,7 @@ export function Navbar({ onSearchOpen, onSignInOpen }: NavbarProps) {
                 </AnimatePresence>
               </div>
             ) : (
-              <button onClick={onSignInOpen} className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary dark:bg-primary-dark text-white text-sm font-medium transition-all hover:opacity-90 active:scale-[0.98] ml-1">
+              <button onClick={onSignInOpen} className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-lg text-white text-sm font-medium transition-all hover:opacity-90 active:scale-[0.98] ml-1" style={{ backgroundColor: '#3B5BDB' }}>
                 {t('nav.signIn')}
               </button>
             )}
@@ -145,7 +155,7 @@ export function Navbar({ onSearchOpen, onSignInOpen }: NavbarProps) {
                 </Link>
               ))}
               {!user && (
-                <button onClick={() => { onSignInOpen(); setMobileOpen(false) }} className="w-full mt-2 px-4 py-2.5 rounded-lg bg-primary dark:bg-primary-dark text-white text-sm font-medium">
+                <button onClick={() => { onSignInOpen(); setMobileOpen(false) }} className="w-full mt-2 px-4 py-2.5 rounded-lg text-white text-sm font-medium" style={{ backgroundColor: '#3B5BDB' }}>
                   {t('nav.signIn')}
                 </button>
               )}

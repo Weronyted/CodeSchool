@@ -33,14 +33,14 @@ export function ProfileSetupModal() {
   }
 
   return (
-    <Modal open={needsProfileSetup} onClose={() => setNeedsProfileSetup(false)} maxWidth="sm">
+    <Modal open={needsProfileSetup} onClose={() => {}} maxWidth="sm">
       <div className="p-6">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col items-center mb-6"
         >
-          <div className="w-14 h-14 rounded-2xl bg-primary dark:bg-primary-dark flex items-center justify-center mb-3">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-3" style={{ backgroundColor: '#3B5BDB' }}>
             <User size={26} className="text-white" />
           </div>
           <h2 className="font-heading text-xl font-semibold text-slate-900 dark:text-white">
@@ -73,13 +73,6 @@ export function ProfileSetupModal() {
             {loading ? t('common.loading') : t('common.save')}
           </Button>
         </form>
-
-        <button
-          onClick={() => setNeedsProfileSetup(false)}
-          className="mt-3 w-full text-center text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
-        >
-          {t('profile.setupSkip', 'Пропустить (можно заполнить позже в профиле)')}
-        </button>
       </div>
     </Modal>
   )

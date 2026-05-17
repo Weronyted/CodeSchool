@@ -6,7 +6,7 @@ export function SupportButton() {
     <div className="fixed bottom-4 left-4 z-50">
       <Tooltip content="Написать преподавателю">
         <a
-          href="https://t.me/codeschool_support"
+          href="https://t.me/Weronyted"
           target="_blank"
           rel="noopener noreferrer"
           className="w-11 h-11 rounded-full bg-primary dark:bg-primary-dark text-white shadow-lg flex items-center justify-center hover:opacity-90 transition-opacity"

@@ -349,6 +349,20 @@ export default function LessonPage() {
     if (sections?.length) setActiveSection(sections[0].id)
   }, [lesson])
 
+  useEffect(() => {
+    if (!lesson) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) { setActiveSection(entry.target.id); break }
+        }
+      },
+      { rootMargin: '-20% 0px -60% 0px', threshold: 0 }
+    )
+    Object.values(sectionRefs.current).forEach((el) => { if (el) observer.observe(el) })
+    return () => observer.disconnect()
+  }, [lesson])
+
   const scrollToSection = (id: string) => {
     sectionRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     setActiveSection(id)

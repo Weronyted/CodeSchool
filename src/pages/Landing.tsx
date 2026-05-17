@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useLanguageStore } from '@/store/useLanguageStore'
+import { useAuthStore } from '@/store/useAuthStore'
 import { LESSON_SLUGS, LESSON_META } from '@/lessons'
 
 const SHAPES = [
@@ -29,6 +30,13 @@ const FEATURES = [
 export default function Landing() {
   const { t } = useTranslation()
   const { language } = useLanguageStore()
+  const { user } = useAuthStore()
+  const navigate = useNavigate()
+
+  const handleStart = () => {
+    if (user) navigate('/lessons')
+    else window.dispatchEvent(new Event('open-auth-modal'))
+  }
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-amber-50 via-cream-50 to-orange-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 overflow-hidden">
@@ -55,9 +63,6 @@ export default function Landing() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-          <span className="inline-block px-4 py-1.5 bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 rounded-full text-sm font-semibold mb-6">
-            {t('landing.hero.badge')}
-          </span>
           <h1 className="font-heading text-5xl md:text-7xl font-extrabold text-gray-900 dark:text-white leading-tight mb-6">
             {t('landing.hero.title')}{' '}
             <span className="text-primary-600 dark:text-primary-400">{t('landing.hero.titleHighlight')}</span>
@@ -67,7 +72,7 @@ export default function Landing() {
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <button
-              onClick={() => window.dispatchEvent(new Event('open-auth-modal'))}
+              onClick={handleStart}
               className="px-8 py-4 rounded-2xl font-bold text-lg transition-colors shadow-xl"
               style={{ backgroundColor: '#3B5BDB', color: '#ffffff' }}
             >
@@ -190,7 +195,7 @@ export default function Landing() {
           <h2 className="font-heading text-4xl font-extrabold mb-4">{t('landing.cta.title')}</h2>
           <p className="text-indigo-100 text-lg mb-8">{t('landing.cta.subtitle')}</p>
           <button
-            onClick={() => window.dispatchEvent(new Event('open-auth-modal'))}
+            onClick={handleStart}
             className="px-8 py-4 bg-white rounded-2xl font-bold text-lg hover:bg-indigo-50 transition-colors shadow-lg"
             style={{ color: '#3B5BDB' }}
           >

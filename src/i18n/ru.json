@@ -4,9 +4,12 @@
     "assignments": "Задания",
     "dashboard": "Панель",
     "glossary": "Словарь",
+    "class": "Класс",
     "profile": "Профиль",
     "signIn": "Войти",
     "signOut": "Выйти",
+    "signOutConfirmTitle": "Выйти из аккаунта?",
+    "signOutConfirmMsg": "Твой прогресс сохранён в облаке. Ты сможешь войти снова в любое время.",
     "search": "Поиск...",
     "searchPlaceholder": "Поиск уроков, терминов...",
     "admin": "Админ-панель",
@@ -241,6 +244,8 @@
   },
   "admin": {
     "title": "Админ-панель",
+    "ownerDesc": "Полный доступ",
+    "adminDesc": "Администратор",
     "tabs": {
       "lessons": "Уроки",
       "assignments": "Задания",
@@ -250,6 +255,8 @@
   },
   "assignments": {
     "title": "Задания",
+    "subtitle": "Задания от твоего учителя",
+    "empty": "Пока нет заданий",
     "noAssignments": "Заданий пока нет.",
     "dueDate": "Срок сдачи",
     "teacher": "Преподаватель",
