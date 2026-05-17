@@ -59,7 +59,8 @@ export default function JoinClass() {
         <button
           onClick={handleJoin}
           disabled={loading || !code.trim()}
-          className="w-full py-3 bg-primary-600 text-white rounded-xl font-bold hover:bg-primary-700 transition-colors disabled:opacity-50"
+          className="w-full py-3 text-white rounded-xl font-bold disabled:opacity-50 hover:opacity-90 transition-opacity"
+          style={{ backgroundColor: '#3B5BDB' }}
         >
           {loading ? t('joinClass.joining', 'Вступаю...') : t('joinClass.join', 'Вступить')}
         </button>

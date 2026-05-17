@@ -112,11 +112,10 @@ service cloud.firestore {
     // ─── Classes ─────────────────────────────────────────────────────────────
 
     match /classes/{classId} {
-      // Members and teachers/admins can read; anyone authenticated can get by
-      // ID so invite links work without listing all classes.
+      // Any authenticated user can read/list classes so students can search
+      // by inviteCode to join. The inviteCode itself is the access secret.
       allow get: if isAuth();
-      allow list: if isTeacherOrAbove()
-        || exists(/databases/$(database)/documents/classes/$(classId)/members/$(request.auth.uid));
+      allow list: if isAuth();
       allow create, update, delete: if isTeacherOrAbove();
 
       match /members/{memberId} {
