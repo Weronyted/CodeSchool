@@ -73,7 +73,7 @@ export default function Profile() {
                   onClick={toggleLanguage}
                   className="px-4 py-1.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-semibold text-gray-700 dark:text-gray-300 hover:border-primary-400 transition-colors"
                 >
-                  {language === 'ru' ? '🇷🇺 RU' : '🇬🇧 EN'}
+                  {language === 'ru' ? '🇬🇧 EN' : '🇷🇺 RU'}
                 </button>
               </div>
             </div>
