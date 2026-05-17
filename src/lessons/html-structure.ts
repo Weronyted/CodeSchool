@@ -36,6 +36,16 @@ export const htmlStructure: Lesson = {
       title_en: 'A page is like a house',
       body_ru: 'Представь, что веб-страница — это дом. DOCTYPE — это разрешение на строительство. Тег <html> — стены вокруг всего. <head> — чердак: снаружи не видно, но там важные вещи. <body> — жилые комнаты: здесь всё, что видит гость.',
       body_en: 'Imagine a web page is a house. DOCTYPE is the building permit. The <html> tag is the walls around everything. <head> is the attic: invisible from outside but full of important things. <body> is the living rooms: everything the guest can see.',
+      visual: {
+        kind: 'emoji',
+        emojis: ['📋', '🧱', '📦', '🛋️'],
+      },
+      bullets: [
+        { text_ru: '📋 DOCTYPE — разрешение на строительство', text_en: '📋 DOCTYPE — the building permit' },
+        { text_ru: '🧱 <html> — стены, которые держат всё', text_en: '🧱 <html> — the walls holding everything together' },
+        { text_ru: '📦 <head> — чердак: невидим снаружи, но нужен', text_en: '📦 <head> — the attic: invisible outside but necessary' },
+        { text_ru: '🛋️ <body> — жилые комнаты: то, что видят гости', text_en: '🛋️ <body> — the living rooms: what guests see' },
+      ],
     },
     {
       id: 's3',
@@ -66,6 +76,38 @@ export const htmlStructure: Lesson = {
       codeLang: 'html',
     },
     {
+      id: 's4b',
+      type: 'code-anim',
+      title_ru: 'Строим каркас шаг за шагом',
+      title_en: 'Building the skeleton step by step',
+      body_ru: 'Смотри, как собирается HTML-документ — от первой строки до последней.',
+      body_en: 'Watch how an HTML document is assembled — from the first line to the last.',
+      animMode: 'console',
+      animSteps: [
+        {
+          code: '<!DOCTYPE html>',
+          comment_ru: 'Первая строка — объявляем HTML5',
+          comment_en: 'First line — declaring HTML5',
+        },
+        {
+          code: '<!DOCTYPE html>\n<html lang="ru">\n</html>',
+          comment_ru: 'Корневой тег <html> оборачивает весь документ',
+          comment_en: 'The root <html> tag wraps the whole document',
+        },
+        {
+          code: '<!DOCTYPE html>\n<html lang="ru">\n  <head>\n    <meta charset="UTF-8">\n    <title>Моя страница</title>\n  </head>\n</html>',
+          comment_ru: 'В <head> прячем кодировку и название вкладки',
+          comment_en: 'In <head> we store encoding and tab title',
+        },
+        {
+          code: '<!DOCTYPE html>\n<html lang="ru">\n  <head>\n    <meta charset="UTF-8">\n    <title>Моя страница</title>\n  </head>\n  <body>\n    <h1>Привет, мир!</h1>\n  </body>\n</html>',
+          comment_ru: 'В <body> — всё видимое содержимое. Каркас готов!',
+          comment_en: 'In <body> — all visible content. Skeleton complete!',
+          output: 'Структура HTML-документа готова ✓',
+        },
+      ],
+    },
+    {
       id: 's5',
       type: 'concept',
       title_ru: 'head — секретная начинка',
@@ -88,6 +130,65 @@ export const htmlStructure: Lesson = {
       title_en: 'Semantics: call things by their proper names',
       body_ru: 'HTML5 добавил «умные» теги, которые описывают роль части страницы. <header> — шапка. <nav> — навигация. <main> — основной контент. <footer> — подвал. <section> — раздел. <article> — отдельная статья. Это помогает поисковикам, читалкам для незрячих и самому себе — потом легче понять свой код.',
       body_en: 'HTML5 added "smart" tags that describe the role of a page section. <header> — the top banner. <nav> — navigation. <main> — the main content. <footer> — the bottom strip. <section> — a section. <article> — a standalone article. This helps search engines, screen readers, and yourself — your code is easier to understand later.',
+      visual: {
+        kind: 'svg',
+        svg: `<svg viewBox="0 0 320 268" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto">
+  <rect x="10" y="10"  width="300" height="40" rx="6" fill="#3B5BDB"/>
+  <text x="160" y="35" text-anchor="middle" fill="white" font-size="13" font-weight="bold" font-family="monospace">&lt;header&gt;</text>
+  <rect x="10" y="56"  width="300" height="28" rx="6" fill="#4263EB"/>
+  <text x="160" y="75" text-anchor="middle" fill="white" font-size="12" font-family="monospace">&lt;nav&gt;</text>
+  <rect x="10" y="90"  width="196" height="116" rx="6" fill="#7950F2"/>
+  <text x="108" y="151" text-anchor="middle" fill="white" font-size="13" font-weight="bold" font-family="monospace">&lt;main&gt;</text>
+  <rect x="212" y="90" width="98"  height="116" rx="6" fill="#5C7CFA"/>
+  <text x="261" y="151" text-anchor="middle" fill="white" font-size="12" font-family="monospace">&lt;aside&gt;</text>
+  <rect x="10" y="212" width="300" height="40" rx="6" fill="#3B5BDB"/>
+  <text x="160" y="237" text-anchor="middle" fill="white" font-size="13" font-weight="bold" font-family="monospace">&lt;footer&gt;</text>
+</svg>`,
+        caption_ru: 'Каждый тег описывает роль своей части страницы',
+        caption_en: 'Each tag describes the role of its page section',
+      },
+    },
+    {
+      id: 's7b',
+      type: 'compare',
+      title_ru: 'Семантика против «div-супа»',
+      title_en: 'Semantics vs "div soup"',
+      body_ru: 'Оба варианта выглядят одинаково в браузере. Но только первый понятен поисковикам и читалкам.',
+      body_en: 'Both look the same in the browser. But only the first is understood by search engines and screen readers.',
+      compareLeft: {
+        label_ru: 'Семантический HTML',
+        label_en: 'Semantic HTML',
+        items_ru: [
+          '<header> — сразу ясно: это шапка',
+          '<nav> — браузер знает: это меню',
+          '<main> — поисковик выделит главное',
+          '<footer> — ясно без пояснений',
+        ],
+        items_en: [
+          '<header> — clearly the site header',
+          '<nav> — browser knows: this is the menu',
+          '<main> — search engines highlight main content',
+          '<footer> — clear without explanation',
+        ],
+        color: 'green',
+      },
+      compareRight: {
+        label_ru: '«div-суп»',
+        label_en: '"div soup"',
+        items_ru: [
+          '<div id="top"> — что это? Непонятно',
+          '<div class="menu"> — просто блок',
+          '<div id="content"> — не несёт смысла',
+          '<div class="bot"> — загадка для всех',
+        ],
+        items_en: [
+          '<div id="top"> — what is this? Unknown',
+          '<div class="menu"> — just a block',
+          '<div id="content"> — carries no meaning',
+          '<div class="bot"> — a mystery for everyone',
+        ],
+        color: 'red',
+      },
     },
     {
       id: 's8',

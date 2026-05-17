@@ -45,6 +45,25 @@ export const htmlTags: Lesson = {
       title_en: 'Headings: from h1 to h6',
       body_ru: 'HTML умеет делать 6 уровней заголовков. h1 — самый большой и важный, как название книги. h2 — как глава. h3 — как параграф. h4–h6 — ещё мельче. На каждой странице должен быть ровно один h1.',
       body_en: 'HTML has 6 heading levels. h1 is the biggest and most important — like a book title. h2 is like a chapter. h3 is like a paragraph. h4–h6 go smaller still. Every page should have exactly one h1.',
+      visual: {
+        kind: 'svg',
+        svg: `<svg viewBox="0 0 480 148" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto">
+  <rect x="5"   y="10"  width="65" height="130" rx="6" fill="#3B5BDB"/>
+  <text x="37"  y="82"  text-anchor="middle" fill="white" font-size="22" font-weight="bold" font-family="monospace">h1</text>
+  <rect x="76"  y="26"  width="65" height="114" rx="6" fill="#4263EB"/>
+  <text x="108" y="89"  text-anchor="middle" fill="white" font-size="19" font-weight="bold" font-family="monospace">h2</text>
+  <rect x="147" y="42"  width="65" height="98"  rx="6" fill="#4F76F6"/>
+  <text x="179" y="96"  text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="monospace">h3</text>
+  <rect x="218" y="58"  width="65" height="82"  rx="6" fill="#6B8FF5"/>
+  <text x="250" y="103" text-anchor="middle" fill="white" font-size="13" font-weight="bold" font-family="monospace">h4</text>
+  <rect x="289" y="74"  width="65" height="66"  rx="6" fill="#8FABF7"/>
+  <text x="321" y="112" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="monospace">h5</text>
+  <rect x="360" y="88"  width="65" height="52"  rx="6" fill="#A8C0F9"/>
+  <text x="392" y="118" text-anchor="middle" fill="white" font-size="9"  font-weight="bold" font-family="monospace">h6</text>
+</svg>`,
+        caption_ru: 'h1 — самый большой заголовок, h6 — самый маленький',
+        caption_en: 'h1 is the largest heading, h6 is the smallest',
+      },
     },
     {
       id: 's4',
@@ -75,12 +94,49 @@ export const htmlTags: Lesson = {
       body_en: 'The <a> tag creates a link. The href attribute says where to go. Without href the browser does not know where to click. The attribute target="_blank" opens the link in a new tab — handy so the user does not leave your page.',
     },
     {
+      id: 's6b',
+      type: 'code-anim',
+      title_ru: 'Собираем ссылку шаг за шагом',
+      title_en: 'Building a link step by step',
+      body_ru: 'Посмотри, как из отдельных частей получается рабочая ссылка.',
+      body_en: 'Watch how individual pieces combine into a working link.',
+      animMode: 'preview',
+      animSteps: [
+        {
+          code: '<a>',
+          comment_ru: 'Открываем тег ссылки',
+          comment_en: 'Open the link tag',
+        },
+        {
+          code: '<a href="https://example.com">',
+          comment_ru: 'Добавляем href — адрес назначения',
+          comment_en: 'Add href — the destination address',
+        },
+        {
+          code: '<a href="https://example.com">Читать статью',
+          comment_ru: 'Пишем текст — это увидит пользователь',
+          comment_en: 'Write the text — this is what the user sees',
+        },
+        {
+          code: '<a href="https://example.com">Читать статью</a>',
+          comment_ru: 'Закрываем тег — ссылка готова!',
+          comment_en: 'Close the tag — the link is ready!',
+          preview: '<a href="#" style="color:#3B5BDB;font-size:18px;font-family:sans-serif;text-decoration:underline;">Читать статью</a>',
+        },
+      ],
+    },
+    {
       id: 's7',
       type: 'concept',
       title_ru: 'Изображения — тег <img>',
       title_en: 'Images — the <img> tag',
       body_ru: 'Тег <img> вставляет картинку. Это одиночный тег — закрывать не нужно. Атрибут src — путь к картинке. Атрибут alt — текст для тех, кто не видит картинку (или если она не загрузилась). Alt очень важен!',
       body_en: 'The <img> tag inserts an image. It is a self-closing tag — no closing tag needed. The src attribute is the path to the image. The alt attribute is text for those who cannot see the image. alt is very important!',
+      bullets: [
+        { text_ru: 'src — путь к файлу или URL картинки (обязательно)', text_en: 'src — path to the file or image URL (required)' },
+        { text_ru: 'alt — текст для незрячих и если картинка не загрузилась (обязательно)', text_en: 'alt — text for screen readers and failed image loads (required)' },
+        { text_ru: 'width / height — размер в пикселях (необязательно)', text_en: 'width / height — size in pixels (optional)' },
+      ],
     },
     {
       id: 's8',
@@ -89,6 +145,48 @@ export const htmlTags: Lesson = {
       title_en: 'Lists: bulleted and numbered',
       body_ru: '<ul> создаёт список с кружочками (неупорядоченный). <ol> создаёт нумерованный список. Каждый пункт — тег <li>. Запомни: ul и ol — это контейнеры, а li — один элемент списка.',
       body_en: '<ul> creates a list with bullet points (unordered). <ol> creates a numbered list. Each item is an <li> tag. Remember: ul and ol are containers, and li is one list item.',
+    },
+    {
+      id: 's8b',
+      type: 'compare',
+      title_ru: 'ul против ol: когда что выбрать',
+      title_en: 'ul vs ol: when to use which',
+      body_ru: 'Оба тега создают списки. Разница — в смысле: важен ли порядок пунктов?',
+      body_en: 'Both tags create lists. The difference is meaning: does the order of items matter?',
+      compareLeft: {
+        label_ru: 'ul — маркированный',
+        label_en: 'ul — unordered',
+        items_ru: [
+          'Порядок пунктов не важен',
+          'Ингредиенты в рецепте',
+          'Список функций сайта',
+          'Хобби, навыки, качества',
+        ],
+        items_en: [
+          'Order of items does not matter',
+          'Recipe ingredients',
+          'Website feature list',
+          'Hobbies, skills, qualities',
+        ],
+        color: 'blue',
+      },
+      compareRight: {
+        label_ru: 'ol — нумерованный',
+        label_en: 'ol — ordered',
+        items_ru: [
+          'Порядок пунктов важен',
+          'Шаги инструкции',
+          'Топ-10 лучших фильмов',
+          'Этапы выполнения задания',
+        ],
+        items_en: [
+          'Order of items matters',
+          'Steps in an instruction',
+          'Top-10 best films',
+          'Steps of a task',
+        ],
+        color: 'amber',
+      },
     },
     {
       id: 's9',
