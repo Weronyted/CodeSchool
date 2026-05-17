@@ -36,6 +36,15 @@ export const introToCss: Lesson = {
       title_en: 'Three languages of a website',
       body_ru: 'Помнишь аналогию с человеком? HTML — скелет (что есть на странице). CSS — одежда и причёска (как это выглядит). JavaScript — мозг (что умеет делать). Сегодня мы учимся «одевать» страницу.',
       body_en: 'Remember the person analogy? HTML is the skeleton (what is on the page). CSS is the clothes and hairstyle (how it looks). JavaScript is the brain (what it can do). Today we learn to "dress" the page.',
+      visual: {
+        kind: 'emoji',
+        emojis: ['📄', '🎨', '⚡'],
+      },
+      bullets: [
+        { text_ru: '📄 HTML — содержимое: что есть на странице', text_en: '📄 HTML — content: what is on the page' },
+        { text_ru: '🎨 CSS — внешний вид: как это выглядит', text_en: '🎨 CSS — appearance: how it looks' },
+        { text_ru: '⚡ JavaScript — поведение: что страница умеет делать', text_en: '⚡ JavaScript — behaviour: what the page can do' },
+      ],
     },
     {
       id: 's3',
@@ -52,6 +61,54 @@ export const introToCss: Lesson = {
       title_en: 'Anatomy of a CSS rule',
       body_ru: 'CSS-правило состоит из трёх частей. Селектор — кого стилизуем (например, все абзацы). Свойство — что меняем (цвет, размер, фон). Значение — как меняем (красный, 20px, синий).',
       body_en: 'A CSS rule has three parts. Selector — who we are styling (for example, all paragraphs). Property — what we are changing (colour, size, background). Value — how we change it (red, 20px, blue).',
+      visual: {
+        kind: 'svg',
+        svg: `<svg viewBox="0 0 400 68" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto">
+  <rect x="4"   y="8" width="56"  height="52" rx="8" fill="#3B5BDB"/>
+  <text x="32"  y="39" text-anchor="middle" fill="white" font-size="19" font-weight="bold" font-family="monospace">h1</text>
+  <text x="68"  y="40" fill="rgba(255,255,255,0.45)" font-size="28" font-family="monospace">{</text>
+  <rect x="84"  y="8" width="84"  height="52" rx="8" fill="#7950F2"/>
+  <text x="126" y="39" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="monospace">color</text>
+  <text x="175" y="39" fill="rgba(255,255,255,0.45)" font-size="24" font-family="monospace">:</text>
+  <rect x="192" y="8" width="140" height="52" rx="8" fill="#2f9e44"/>
+  <text x="262" y="39" text-anchor="middle" fill="white" font-size="15" font-weight="bold" font-family="monospace">royalblue</text>
+  <text x="338" y="39" fill="rgba(255,255,255,0.45)" font-size="22" font-family="monospace">; }</text>
+</svg>`,
+        caption_ru: '🔵 selector — 🟣 property — 🟢 value',
+        caption_en: '🔵 selector — 🟣 property — 🟢 value',
+      },
+    },
+    {
+      id: 's4b',
+      type: 'code-anim',
+      title_ru: 'Собираем CSS-правило по шагам',
+      title_en: 'Building a CSS rule step by step',
+      body_ru: 'CSS-правило строится из трёх частей. Смотри, как оно собирается шаг за шагом.',
+      body_en: 'A CSS rule has three parts. Watch it come together step by step.',
+      animMode: 'preview',
+      animSteps: [
+        {
+          code: 'h1',
+          comment_ru: '1. Пишем селектор — выбираем элемент для стилизации',
+          comment_en: '1. Write the selector — pick the element to style',
+        },
+        {
+          code: 'h1 {',
+          comment_ru: '2. Открываем фигурную скобку — начало блока стилей',
+          comment_en: '2. Open a curly brace — start of the style block',
+        },
+        {
+          code: 'h1 {\n  color: royalblue;',
+          comment_ru: '3. Свойство и значение разделены двоеточием',
+          comment_en: '3. Property and value separated by a colon',
+        },
+        {
+          code: 'h1 {\n  color: royalblue;\n}',
+          comment_ru: '4. Закрываем скобку — правило готово!',
+          comment_en: '4. Close the brace — the rule is complete!',
+          preview: '<h1 style="color:royalblue;font-size:2em;font-family:Georgia,serif;margin:0">Привет, мир!</h1>',
+        },
+      ],
     },
     {
       id: 's5',
@@ -78,6 +135,11 @@ p {
       title_en: 'Three ways to add CSS',
       body_ru: 'Способ 1: отдельный файл style.css (лучший вариант — подключается через <link>). Способ 2: тег <style> внутри <head> (для небольших проектов). Способ 3: атрибут style="" прямо в теге (только для одного элемента, не рекомендуется).',
       body_en: 'Way 1: a separate style.css file (best option — linked via <link>). Way 2: a <style> tag inside <head> (fine for small projects). Way 3: the style="" attribute directly in a tag (only for one element, not recommended).',
+      bullets: [
+        { text_ru: '📁 Файл style.css — лучший вариант, один файл для всего сайта', text_en: '📁 style.css file — best option, one file for the whole site' },
+        { text_ru: '🏷️ Тег <style> в <head> — подходит для небольших проектов', text_en: '🏷️ <style> tag in <head> — fine for small projects' },
+        { text_ru: '✍️ Атрибут style="" — только для одного элемента, не рекомендуется', text_en: '✍️ style="" attribute — only for one element, not recommended' },
+      ],
     },
     {
       id: 's7',

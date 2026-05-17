@@ -36,6 +36,16 @@ export const cssLayout: Lesson = {
       title_en: 'The box model — like a Russian doll',
       body_ru: 'Каждый HTML-элемент — это коробка. Внутри — содержимое (content). Вокруг содержимого — мягкая набивка (padding). Затем — стенка коробки (border). Снаружи — расстояние до соседей (margin). Как матрёшка: одно внутри другого.',
       body_en: 'Every HTML element is a box. Inside is the content. Around the content is soft padding. Then the box wall (border). Outside is the distance to neighbours (margin). Like a Russian doll: one inside another.',
+      visual: {
+        kind: 'emoji',
+        emojis: ['📝', '🫧', '🛡️', '↔️'],
+      },
+      bullets: [
+        { text_ru: '📝 content — сам текст или картинка', text_en: '📝 content — the text or image itself' },
+        { text_ru: '🫧 padding — мягкая набивка внутри рамки', text_en: '🫧 padding — soft cushion inside the border' },
+        { text_ru: '🛡️ border — стенка коробки (рамка)', text_en: '🛡️ border — the wall of the box (frame)' },
+        { text_ru: '↔️ margin — расстояние до соседних элементов', text_en: '↔️ margin — distance to neighbouring elements' },
+      ],
     },
     {
       id: 's3',
@@ -44,6 +54,21 @@ export const cssLayout: Lesson = {
       title_en: 'The box model: four layers',
       body_ru: 'Content — сам текст или картинка. Padding — внутренний отступ (пространство между содержимым и рамкой). Border — рамка. Margin — внешний отступ (пространство между элементами). Свойство box-sizing: border-box делает так, чтобы padding и border не увеличивали размер блока — очень удобно.',
       body_en: 'Content — the text or image itself. Padding — inner spacing (space between content and border). Border — the frame. Margin — outer spacing (space between elements). The property box-sizing: border-box makes padding and border not grow the block size — very convenient.',
+      visual: {
+        kind: 'svg',
+        svg: `<svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto">
+  <rect x="4"  y="4"  width="312" height="172" rx="12" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="20" y="24" fill="rgba(255,255,255,0.5)" font-size="13" font-family="sans-serif">margin</text>
+  <rect x="36" y="34" width="248" height="112" rx="10" fill="none" stroke="#3B5BDB" stroke-width="3"/>
+  <text x="52" y="54" fill="#74c0fc" font-size="13" font-family="sans-serif">border</text>
+  <rect x="56" y="60" width="208" height="72" rx="8" fill="#7950F2" fill-opacity="0.15"/>
+  <text x="72" y="80" fill="#b197fc" font-size="13" font-family="sans-serif">padding</text>
+  <rect x="88" y="86" width="144" height="36" rx="6" fill="#2f9e44" fill-opacity="0.7"/>
+  <text x="160" y="109" text-anchor="middle" fill="white" font-size="14" font-family="sans-serif" font-weight="bold">content</text>
+</svg>`,
+        caption_ru: 'margin → border → padding → content',
+        caption_en: 'margin → border → padding → content',
+      },
     },
     {
       id: 's4',
@@ -80,6 +105,11 @@ export const cssLayout: Lesson = {
       title_en: 'display: block, inline, flex',
       body_ru: 'Свойство display определяет, как элемент ведёт себя в потоке. block — занимает всю ширину, следующий элемент — с новой строки (div, p, h1). inline — занимает только ширину содержимого, соседи рядом (span, a, strong). flex — включает Flexbox — элементы выстраиваются гибко. Это самый мощный режим для раскладок.',
       body_en: 'The display property determines how an element behaves in the flow. block — takes the full width, next element starts on a new line (div, p, h1). inline — takes only the content width, neighbours sit beside it (span, a, strong). flex — enables Flexbox — elements arrange themselves flexibly. This is the most powerful mode for layouts.',
+      bullets: [
+        { text_ru: '📦 block — вся ширина, следующий элемент с новой строки (div, p, h1)', text_en: '📦 block — full width, next element on a new line (div, p, h1)' },
+        { text_ru: '📝 inline — только ширина содержимого, соседи рядом (span, a)', text_en: '📝 inline — content width only, neighbours beside it (span, a)' },
+        { text_ru: '⚡ flex — дочерние элементы выстраиваются гибко (самый мощный режим)', text_en: '⚡ flex — children arrange flexibly (the most powerful mode)' },
+      ],
     },
     {
       id: 's6',
@@ -88,6 +118,53 @@ export const cssLayout: Lesson = {
       title_en: 'Flexbox — a powerful tool',
       body_ru: 'Flexbox решает главную боль вёрстки — расположить элементы рядом и выровнять их. Добавь display: flex на родительский контейнер, и его дети выстроятся в ряд. justify-content управляет выравниванием по горизонтали, align-items — по вертикали. gap задаёт расстояние между элементами.',
       body_en: 'Flexbox solves the main pain of layout — placing elements side by side and aligning them. Add display: flex to the parent container and its children line up in a row. justify-content controls horizontal alignment, align-items controls vertical. gap sets the distance between elements.',
+      visual: {
+        kind: 'svg',
+        svg: `<svg viewBox="0 0 340 82" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto">
+  <rect x="4"  y="4"  width="332" height="74" rx="10" fill="none" stroke="#3B5BDB" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="14" y="20" fill="#74c0fc" font-size="11" font-family="monospace">display: flex</text>
+  <rect x="16" y="26" width="88" height="44" rx="8" fill="#3B5BDB"/>
+  <text x="60"  y="52" text-anchor="middle" fill="white" font-size="13" font-family="sans-serif">item 1</text>
+  <rect x="120" y="26" width="88" height="44" rx="8" fill="#7950F2"/>
+  <text x="164" y="52" text-anchor="middle" fill="white" font-size="13" font-family="sans-serif">item 2</text>
+  <rect x="224" y="26" width="88" height="44" rx="8" fill="#2f9e44"/>
+  <text x="268" y="52" text-anchor="middle" fill="white" font-size="13" font-family="sans-serif">item 3</text>
+</svg>`,
+        caption_ru: 'Три дочерних элемента выстраиваются в ряд',
+        caption_en: 'Three children line up in a row',
+      },
+    },
+    {
+      id: 's6b',
+      type: 'code-anim',
+      title_ru: 'Строим Flexbox-раскладку по шагам',
+      title_en: 'Building a Flexbox layout step by step',
+      body_ru: 'Flexbox включается одним свойством на родительском элементе. Смотри, как это работает.',
+      body_en: 'Flexbox is switched on with one property on the parent. Watch how it works.',
+      animMode: 'preview',
+      animSteps: [
+        {
+          code: '.cards {\n\n}',
+          comment_ru: '1. Пустой контейнер — карточки стоят вертикально',
+          comment_en: '1. Empty container — cards stack vertically',
+        },
+        {
+          code: '.cards {\n  display: flex;\n}',
+          comment_ru: '2. display: flex — карточки выстроились в ряд!',
+          comment_en: '2. display: flex — cards lined up in a row!',
+        },
+        {
+          code: '.cards {\n  display: flex;\n  gap: 24px;\n}',
+          comment_ru: '3. gap — добавляем расстояние между карточками',
+          comment_en: '3. gap — adding space between the cards',
+        },
+        {
+          code: '.cards {\n  display: flex;\n  gap: 24px;\n  justify-content: center;\n}',
+          comment_ru: '4. justify-content: center — центрируем всё по горизонтали',
+          comment_en: '4. justify-content: center — centring everything horizontally',
+          preview: '<div style="display:flex;gap:16px;justify-content:center;padding:8px"><div style="background:#3B5BDB;color:white;padding:12px 20px;border-radius:8px;font-family:sans-serif">CSS</div><div style="background:#7950F2;color:white;padding:12px 20px;border-radius:8px;font-family:sans-serif">это</div><div style="background:#2f9e44;color:white;padding:12px 20px;border-radius:8px;font-family:sans-serif">круто!</div></div>',
+        },
+      ],
     },
     {
       id: 's7',

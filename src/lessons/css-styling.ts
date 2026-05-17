@@ -36,6 +36,15 @@ export const cssStyling: Lesson = {
       title_en: 'CSS is like a painter with a palette',
       body_ru: 'Представь художника. У него есть палитра с красками (цвета), разные кисти (размеры шрифтов), холст (фон) и рамка для картины (border). CSS даёт тебе те же инструменты, только для веб-страниц.',
       body_en: 'Imagine a painter. They have a palette of colours (colours), different brushes (font sizes), a canvas (background) and a picture frame (border). CSS gives you the same tools, but for web pages.',
+      visual: {
+        kind: 'emoji',
+        emojis: ['🎨', '🖌️', '🖼️'],
+      },
+      bullets: [
+        { text_ru: '🎨 Палитра с красками — свойство color и background-color', text_en: '🎨 Paint palette — the color and background-color properties' },
+        { text_ru: '🖌️ Разные кисти — font-size, font-weight, font-family', text_en: '🖌️ Different brushes — font-size, font-weight, font-family' },
+        { text_ru: '🖼️ Рамка для картины — border и border-radius', text_en: '🖼️ Picture frame — border and border-radius' },
+      ],
     },
     {
       id: 's3',
@@ -44,6 +53,44 @@ export const cssStyling: Lesson = {
       title_en: 'Colours in CSS: three ways',
       body_ru: '1. Имя: red, blue, tomato, royalblue — просто напиши название. 2. Шестнадцатеричный код: #ff0000 — точный цвет (# и 6 символов). 3. Функция rgb: rgb(255, 0, 0) — три числа от 0 до 255 для красного, зелёного, синего. Все три варианта дают одинаковый результат.',
       body_en: '1. Name: red, blue, tomato, royalblue — just type the name. 2. Hex code: #ff0000 — an exact colour (# and 6 characters). 3. RGB function: rgb(255, 0, 0) — three numbers 0–255 for red, green, blue. All three give the same result.',
+      visual: {
+        kind: 'svg',
+        svg: `<svg viewBox="0 0 336 82" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto">
+  <rect x="8"   y="8" width="96" height="54" rx="10" fill="#e03131"/>
+  <text x="56"  y="30" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="12" font-family="sans-serif">color:</text>
+  <text x="56"  y="52" text-anchor="middle" fill="white" font-size="16" font-family="monospace" font-weight="bold">red</text>
+  <rect x="120" y="8" width="96" height="54" rx="10" fill="#e03131"/>
+  <text x="168" y="30" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="12" font-family="sans-serif">color:</text>
+  <text x="168" y="52" text-anchor="middle" fill="white" font-size="14" font-family="monospace" font-weight="bold">#e03131</text>
+  <rect x="232" y="8" width="96" height="54" rx="10" fill="#e03131"/>
+  <text x="280" y="30" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="12" font-family="sans-serif">color:</text>
+  <text x="280" y="52" text-anchor="middle" fill="white" font-size="11" font-family="monospace" font-weight="bold">rgb(224,49,49)</text>
+</svg>`,
+        caption_ru: 'Три способа — один и тот же цвет',
+        caption_en: 'Three notations — the same colour',
+      },
+    },
+    {
+      id: 's3b',
+      type: 'compare',
+      title_ru: 'Хороший и плохой контраст',
+      title_en: 'Good and bad contrast',
+      body_ru: 'Контраст — главное правило цвета. Текст должен хорошо читаться на фоне. Тёмный текст на светлом фоне — всегда безопасный выбор.',
+      body_en: 'Contrast is the golden rule of colour. Text must be easy to read on the background. Dark text on a light background is always a safe choice.',
+      compareLeft: {
+        label_ru: '✅ Хороший контраст',
+        label_en: '✅ Good contrast',
+        items_ru: ['Белый текст на тёмном фоне', 'Тёмный текст на светлом фоне', 'Яркий цвет — только для акцентов'],
+        items_en: ['White text on dark background', 'Dark text on light background', 'Bright colour — for accents only'],
+        color: 'green',
+      },
+      compareRight: {
+        label_ru: '❌ Плохой контраст',
+        label_en: '❌ Bad contrast',
+        items_ru: ['Жёлтый текст на белом фоне', 'Серый текст на сером фоне', 'Слишком много ярких цветов сразу'],
+        items_en: ['Yellow text on white background', 'Grey text on grey background', 'Too many bright colours at once'],
+        color: 'red',
+      },
     },
     {
       id: 's4',
@@ -109,6 +156,11 @@ p {
       title_en: 'Background, borders and rounding',
       body_ru: 'background-color задаёт цвет фона. border задаёт рамку: толщина, стиль, цвет (1px solid #ccc). border-radius скругляет углы — 8px делает чуть скруглёнными, 50% превращает квадрат в круг. Эти три свойства вместе создают красивые карточки и кнопки.',
       body_en: 'background-color sets the background colour. border sets the border: width, style, colour (1px solid #ccc). border-radius rounds corners — 8px makes them slightly rounded, 50% turns a square into a circle. These three properties together create beautiful cards and buttons.',
+      bullets: [
+        { text_ru: '🎨 background-color — цвет фона элемента', text_en: '🎨 background-color — element background colour' },
+        { text_ru: '🔲 border — рамка: толщина, стиль, цвет (1px solid #ccc)', text_en: '🔲 border — frame: width, style, colour (1px solid #ccc)' },
+        { text_ru: '🔵 border-radius — скругление: 8px или 50% для круга', text_en: '🔵 border-radius — rounding: 8px or 50% for a circle' },
+      ],
     },
     {
       id: 's8',
