@@ -343,7 +343,8 @@ export default function LessonPage() {
     window.scrollTo(0, 0)
     LESSON_LOADERS[slug]().then((mod) => {
       const key = Object.keys(mod).find((k) => k !== 'default')
-      if (key) setLesson(mod[key] as Record<string, unknown>)
+      const data = key ? mod[key] : mod['default']
+      if (data) setLesson(data as Record<string, unknown>)
     })
   }, [slug, navigate])
 
