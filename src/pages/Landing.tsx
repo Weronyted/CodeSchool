@@ -89,7 +89,7 @@ export default function Landing() {
 
         {/* Stats */}
         <motion.div
-          className="mt-16 grid grid-cols-3 gap-6 max-w-lg mx-auto"
+          className="mt-16 grid grid-cols-2 gap-6 max-w-xs mx-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.6 }}
@@ -97,7 +97,6 @@ export default function Landing() {
           {[
             { value: String(LESSON_SLUGS.length), label: t('landing.hero.stat1') },
             { value: '100+', label: t('landing.hero.stat2') },
-            { value: '100%', label: t('landing.hero.stat3') },
           ].map((s) => (
             <div key={s.label} className="text-center">
               <div className="text-4xl font-extrabold font-heading" style={{ color: '#3B5BDB' }}>{s.value}</div>

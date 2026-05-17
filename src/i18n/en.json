@@ -25,7 +25,7 @@
       "title": "Learn to code",
       "titleHighlight": "step by step",
       "subtitle": "Interactive lessons on HTML, CSS and JavaScript. Write real code, see instant results — right in your browser.",
-      "cta": "Start for Free",
+      "cta": "Start",
       "ctaSecondary": "All Topics",
       "stat1": "Lessons",
       "stat2": "Exercises",
@@ -66,7 +66,7 @@
     "cta": {
       "title": "Ready to start coding?",
       "subtitle": "Join thousands of learners already building their first websites.",
-      "button": "Start for Free"
+      "button": "Start"
     }
   },
   "lessons": {
