@@ -1,0 +1,122 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Helpers ─────────────────────────────────────────────────────────────
+
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function role() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function isAdminOrOwner() {
+      return isAuth() && role() in ['admin', 'owner'];
+    }
+
+    function isTeacherOrAbove() {
+      return isAuth() && role() in ['teacher', 'admin', 'owner'];
+    }
+
+    // ─── Users ───────────────────────────────────────────────────────────────
+    // Self-registration is locked to role 'student' — a user cannot grant
+    // themselves teacher/admin via the client app.
+
+    match /users/{uid} {
+      allow read: if isAuth() && (request.auth.uid == uid || isAdminOrOwner());
+      allow list: if isAdminOrOwner();
+
+      // Only 'student' allowed on self-create; whitelisted fields only.
+      allow create: if isAuth()
+        && request.auth.uid == uid
+        && request.resource.data.role == 'student'
+        && request.resource.data.keys().hasOnly(['role', 'displayName', 'email', 'photoURL', 'createdAt']);
+
+      // Users can update their own profile fields but NOT role.
+      // Admins/owners can update anything (including role changes).
+      allow update: if isAdminOrOwner()
+        || (isAuth() && request.auth.uid == uid
+            && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']));
+    }
+
+    // ─── Progress ────────────────────────────────────────────────────────────
+
+    match /progress/{uid}/{lessonId} {
+      allow read, write: if isAuth() && request.auth.uid == uid;
+    }
+
+    // ─── Lessons (dynamic) ───────────────────────────────────────────────────
+    // Students may only query/read published lessons.
+
+    match /lessons/{lessonId} {
+      allow get:  if isAuth() && (resource.data.published == true || isTeacherOrAbove());
+      allow list: if isTeacherOrAbove()
+        || (isAuth() && resource.data.published == true);
+      allow create, update, delete: if isTeacherOrAbove();
+    }
+
+    // ─── Assignments ─────────────────────────────────────────────────────────
+
+    match /assignments/{assignmentId} {
+      allow get:  if isAuth() && (resource.data.published == true || isTeacherOrAbove());
+      allow list: if isTeacherOrAbove()
+        || (isAuth() && resource.data.published == true);
+      allow create, update, delete: if isTeacherOrAbove();
+    }
+
+    // ─── Submissions ─────────────────────────────────────────────────────────
+    // - Students create their own submission; cannot pre-set grading fields.
+    // - Students can only read/list their own submissions.
+    // - Teachers can update only grading fields — cannot overwrite answers.
+
+    match /submissions/{submissionId} {
+      allow get: if isAuth() && (
+        resource.data.studentId == request.auth.uid || isTeacherOrAbove()
+      );
+
+      // resource.data.studentId in list context: Firestore validates that the
+      // client query filters to studentId == request.auth.uid.
+      allow list: if isAuth() && (
+        resource.data.studentId == request.auth.uid || isTeacherOrAbove()
+      );
+
+      allow create: if isAuth()
+        && request.resource.data.studentId == request.auth.uid
+        && !request.resource.data.keys().hasAny(['grade', 'feedback', 'gradedBy', 'gradedAt']);
+
+      // Teachers may only write grading fields — answers and studentId are immutable.
+      allow update: if isTeacherOrAbove()
+        && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['grade', 'feedback', 'gradedBy', 'gradedAt']);
+
+      allow delete: if isAdminOrOwner();
+    }
+
+    // ─── Classes ─────────────────────────────────────────────────────────────
+
+    match /classes/{classId} {
+      // Members and teachers/admins can read; anyone authenticated can get by
+      // ID so invite links work without listing all classes.
+      allow get: if isAuth();
+      allow list: if isTeacherOrAbove()
+        || exists(/databases/$(database)/documents/classes/$(classId)/members/$(request.auth.uid));
+      allow create, update, delete: if isTeacherOrAbove();
+
+      match /members/{memberId} {
+        allow read, list: if isAuth() && (
+          request.auth.uid == memberId || isTeacherOrAbove()
+          || exists(/databases/$(database)/documents/classes/$(classId)/members/$(request.auth.uid))
+        );
+        allow create: if isAuth() && request.auth.uid == memberId;
+        allow delete: if isAuth() && (request.auth.uid == memberId || isTeacherOrAbove());
+      }
+    }
+
+    // ─── Deny everything else ────────────────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
