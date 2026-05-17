@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { PageTransition } from '@/components/layout/PageTransition'
@@ -24,6 +24,7 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { SupportButton } from '@/components/ui/SupportButton'
 import { useAuth } from '@/hooks/useAuth'
 import { useKeyboard } from '@/hooks/useKeyboard'
+import { useLanguageStore } from '@/store/useLanguageStore'
 
 function AppRoutes() {
   const location = useLocation()
@@ -50,6 +51,7 @@ function AppRoutes() {
 export default function App() {
   const [authOpen, setAuthOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const { language } = useLanguageStore()
 
   useAuth()
   useKeyboard({ onSearchOpen: () => setSearchOpen(true) })
@@ -64,9 +66,15 @@ export default function App() {
     <div className="min-h-screen flex flex-col bg-cream-50 dark:bg-gray-950 font-body text-slate-900 dark:text-slate-100">
       <Navbar onSearchOpen={() => setSearchOpen(true)} onSignInOpen={() => setAuthOpen(true)} />
 
-      <main className="flex-1">
+      <motion.main
+        key={language}
+        className="flex-1"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.18 }}
+      >
         <AppRoutes />
-      </main>
+      </motion.main>
 
       <Footer />
 

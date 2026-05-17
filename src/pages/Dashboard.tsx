@@ -34,7 +34,7 @@ export default function Dashboard() {
   const earnedBadges = BADGES.filter((b) => progress[LESSON_SLUGS[b.slugIndex]]?.completed)
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen bg-cream-50 dark:bg-gray-950">
       <div className="max-w-7xl mx-auto px-4 py-10">
 
         {/* Welcome card */}
@@ -132,7 +132,7 @@ export default function Dashboard() {
               transition={{ delay: 0.3 }}
             >
               <h3 className="font-heading font-bold text-gray-900 dark:text-white mb-4">
-                🏅 {t('dashboard.badges', 'Достижения')}
+                🏅 {t('dashboard.badgesTitle', 'Достижения')}
               </h3>
               <div className="flex flex-wrap gap-3">
                 {BADGES.map((badge) => {

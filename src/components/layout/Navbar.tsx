@@ -73,7 +73,9 @@ export function Navbar({ onSearchOpen, onSignInOpen }: NavbarProps) {
             </button>
 
             <button onClick={toggleLanguage} className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Переключить язык (L)">
-              <Globe size={18} />
+              <motion.div key={language} initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} transition={{ duration: 0.2 }}>
+                <Globe size={18} />
+              </motion.div>
               <span className="sr-only">{language === 'ru' ? 'EN' : 'RU'}</span>
             </button>
 

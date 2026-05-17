@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { LESSON_SLUGS, LESSON_META } from '@/lessons'
 
 const SHAPES = [
-  { emoji: '🏗️', x: '8%', y: '12%', size: 56, delay: 0 },
-  { emoji: '🎨', x: '85%', y: '8%', size: 48, delay: 0.3 },
+  { emoji: '🏗️', x: '8%',  y: '12%', size: 56, delay: 0 },
+  { emoji: '🎨', x: '85%', y: '8%',  size: 48, delay: 0.3 },
   { emoji: '⚡', x: '75%', y: '65%', size: 64, delay: 0.6 },
-  { emoji: '</>', x: '5%', y: '70%', size: 52, delay: 0.2 },
-  { emoji: '🖥️', x: '50%', y: '5%', size: 44, delay: 0.9 },
+  { emoji: '</>', x: '5%',  y: '70%', size: 52, delay: 0.2 },
+  { emoji: '🖥️', x: '50%', y: '5%',  size: 44, delay: 0.9 },
   { emoji: '📱', x: '92%', y: '40%', size: 40, delay: 0.4 },
   { emoji: '🔧', x: '15%', y: '40%', size: 38, delay: 0.7 },
   { emoji: '🌐', x: '60%', y: '80%', size: 46, delay: 1.1 },
@@ -19,21 +19,20 @@ const SHAPES = [
 ]
 
 const FEATURES = [
-  { icon: '📚', titleKey: 'landing.feat1Title', descKey: 'landing.feat1Desc' },
-  { icon: '⚡', titleKey: 'landing.feat2Title', descKey: 'landing.feat2Desc' },
-  { icon: '🎮', titleKey: 'landing.feat3Title', descKey: 'landing.feat3Desc' },
-  { icon: '🏆', titleKey: 'landing.feat4Title', descKey: 'landing.feat4Desc' },
-  { icon: '🌙', titleKey: 'landing.feat5Title', descKey: 'landing.feat5Desc' },
-  { icon: '👨‍🏫', titleKey: 'landing.feat6Title', descKey: 'landing.feat6Desc' },
+  { icon: '💻', titleKey: 'landing.features.interactive.title', descKey: 'landing.features.interactive.desc' },
+  { icon: '✅', titleKey: 'landing.features.quizzes.title',     descKey: 'landing.features.quizzes.desc' },
+  { icon: '📊', titleKey: 'landing.features.progress.title',    descKey: 'landing.features.progress.desc' },
+  { icon: '🆓', titleKey: 'landing.features.free.title',        descKey: 'landing.features.free.desc' },
 ]
 
 export default function Landing() {
   const { t } = useTranslation()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 overflow-hidden">
+    <div className="relative min-h-screen bg-gradient-to-br from-amber-50 via-cream-50 to-orange-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 overflow-hidden">
+
       {/* Floating shapes */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden>
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
         {SHAPES.map((s, i) => (
           <motion.div
             key={i}
@@ -42,31 +41,10 @@ export default function Landing() {
             animate={{ y: [0, -18, 0] }}
             transition={{ duration: 4 + i * 0.3, repeat: Infinity, delay: s.delay, ease: 'easeInOut' }}
           >
-            <span className="opacity-20 dark:opacity-10">{s.emoji}</span>
+            <span className="opacity-30 dark:opacity-10">{s.emoji}</span>
           </motion.div>
         ))}
       </div>
-
-      {/* Navbar */}
-      <nav className="relative z-10 flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-        <Link to="/" className="flex items-center gap-2 font-heading font-extrabold text-2xl text-primary-600 dark:text-primary-400">
-          <span className="text-3xl">💻</span> CodeSchool
-        </Link>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => document.dispatchEvent(new Event('open-auth-modal'))}
-            className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors"
-          >
-            {t('auth.signIn')}
-          </button>
-          <button
-            onClick={() => document.dispatchEvent(new Event('open-auth-modal'))}
-            className="px-5 py-2 bg-primary-600 text-white rounded-xl font-semibold hover:bg-primary-700 transition-colors shadow-md shadow-primary-200 dark:shadow-none"
-          >
-            {t('landing.getStarted')}
-          </button>
-        </div>
-      </nav>
 
       {/* Hero */}
       <section className="relative z-10 text-center px-4 pt-16 pb-24 max-w-4xl mx-auto">
@@ -76,27 +54,27 @@ export default function Landing() {
           transition={{ duration: 0.7 }}
         >
           <span className="inline-block px-4 py-1.5 bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 rounded-full text-sm font-semibold mb-6">
-            {t('landing.badge', '12 уроков · HTML · CSS · JavaScript')}
+            {t('landing.hero.badge')}
           </span>
           <h1 className="font-heading text-5xl md:text-7xl font-extrabold text-gray-900 dark:text-white leading-tight mb-6">
-            {t('landing.heroTitle1', 'Научись создавать')}{' '}
-            <span className="text-primary-600 dark:text-primary-400">{t('landing.heroTitle2', 'веб-сайты')}</span>
+            {t('landing.hero.title')}{' '}
+            <span className="text-primary-600 dark:text-primary-400">{t('landing.hero.titleHighlight')}</span>
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            {t('landing.heroDesc', 'Пройди 12 интерактивных уроков от первого тега до полноценного веб-приложения. Практические задания, встроенный редактор кода и мгновенная проверка.')}
+            {t('landing.hero.subtitle')}
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <button
-              onClick={() => document.dispatchEvent(new Event('open-auth-modal'))}
+              onClick={() => window.dispatchEvent(new Event('open-auth-modal'))}
               className="px-8 py-4 bg-primary-600 text-white rounded-2xl font-bold text-lg hover:bg-primary-700 transition-colors shadow-xl shadow-primary-200 dark:shadow-none"
             >
-              {t('landing.startFree', 'Начать бесплатно →')}
+              {t('landing.hero.cta')}
             </button>
             <Link
               to="/lessons"
-              className="px-8 py-4 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-2xl font-bold text-lg hover:border-primary-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              className="px-8 py-4 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-2xl font-bold text-lg hover:border-primary-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors bg-white/60 dark:bg-transparent backdrop-blur-sm"
             >
-              {t('landing.viewLessons', 'Посмотреть уроки')}
+              {t('landing.hero.ctaSecondary')}
             </Link>
           </div>
         </motion.div>
@@ -109,9 +87,9 @@ export default function Landing() {
           transition={{ delay: 0.4, duration: 0.6 }}
         >
           {[
-            { value: '12', label: t('landing.stat1', 'Уроков') },
-            { value: '60+', label: t('landing.stat2', 'Заданий') },
-            { value: '3', label: t('landing.stat3', 'Языка') },
+            { value: '12',   label: t('landing.hero.stat1') },
+            { value: '100+', label: t('landing.hero.stat2') },
+            { value: '100%', label: t('landing.hero.stat3') },
           ].map((s) => (
             <div key={s.label} className="text-center">
               <div className="text-4xl font-extrabold text-primary-600 dark:text-primary-400 font-heading">{s.value}</div>
@@ -129,17 +107,17 @@ export default function Landing() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          {t('landing.whyTitle', 'Почему CodeSchool?')}
+          {t('landing.features.title')}
         </motion.h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
           {FEATURES.map((f, i) => (
             <motion.div
               key={f.titleKey}
-              className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow"
+              className="bg-white/80 dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-cream-200 dark:border-gray-700 hover:shadow-md transition-shadow backdrop-blur-sm"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.07 }}
+              transition={{ delay: i * 0.1 }}
             >
               <div className="text-4xl mb-4">{f.icon}</div>
               <h3 className="font-heading font-bold text-lg text-gray-900 dark:text-white mb-2">{t(f.titleKey)}</h3>
@@ -152,20 +130,28 @@ export default function Landing() {
       {/* Lessons grid */}
       <section className="relative z-10 py-20 px-4 max-w-7xl mx-auto">
         <motion.h2
-          className="font-heading text-3xl md:text-4xl font-extrabold text-center text-gray-900 dark:text-white mb-12"
+          className="font-heading text-3xl md:text-4xl font-extrabold text-center text-gray-900 dark:text-white mb-4"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          {t('landing.topicsTitle', 'Программа курса')}
+          {t('landing.topics.title')}
         </motion.h2>
+        <motion.p
+          className="text-center text-gray-500 dark:text-gray-400 mb-12"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
+          {t('landing.topics.subtitle')}
+        </motion.p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {LESSON_SLUGS.map((slug, i) => {
             const meta = LESSON_META[slug]
             return (
               <motion.div
                 key={slug}
-                className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700 flex items-start gap-4 hover:border-primary-300 dark:hover:border-primary-600 transition-colors"
+                className="bg-white/80 dark:bg-gray-800 rounded-2xl p-5 border border-cream-200 dark:border-gray-700 flex items-start gap-4 hover:border-primary-300 dark:hover:border-primary-600 transition-colors backdrop-blur-sm"
                 initial={{ opacity: 0, scale: 0.97 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
@@ -174,7 +160,7 @@ export default function Landing() {
                 <span className="text-3xl flex-shrink-0">{meta.icon}</span>
                 <div>
                   <span className="text-xs font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-wide">
-                    {t('landing.lesson', 'Урок')} {i + 1}
+                    {t('landing.lesson')} {i + 1}
                   </span>
                   <h3 className="font-heading font-bold text-gray-900 dark:text-white text-sm mt-0.5">{meta.title}</h3>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">{meta.description}</p>
@@ -193,20 +179,19 @@ export default function Landing() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="font-heading text-4xl font-extrabold mb-4">{t('landing.ctaTitle', 'Готов начать?')}</h2>
-          <p className="text-primary-100 text-lg mb-8">{t('landing.ctaDesc', 'Создай аккаунт бесплатно и начни свой первый урок прямо сейчас.')}</p>
+          <h2 className="font-heading text-4xl font-extrabold mb-4">{t('landing.cta.title')}</h2>
+          <p className="text-primary-100 text-lg mb-8">{t('landing.cta.subtitle')}</p>
           <button
-            onClick={() => document.dispatchEvent(new Event('open-auth-modal'))}
+            onClick={() => window.dispatchEvent(new Event('open-auth-modal'))}
             className="px-8 py-4 bg-white text-primary-700 rounded-2xl font-bold text-lg hover:bg-primary-50 transition-colors shadow-lg"
           >
-            {t('landing.startFree', 'Начать бесплатно →')}
+            {t('landing.cta.button')}
           </button>
         </motion.div>
       </section>
 
-      {/* Footer */}
-      <footer className="relative z-10 text-center py-8 text-gray-400 dark:text-gray-500 text-sm border-t border-gray-100 dark:border-gray-800">
-        © {new Date().getFullYear()} CodeSchool — {t('landing.footer', 'Учись создавать интернет')}
+      <footer className="relative z-10 text-center py-8 text-gray-400 dark:text-gray-500 text-sm border-t border-cream-200 dark:border-gray-800">
+        © {new Date().getFullYear()} CodeSchool — {t('footer.forLearners')}
       </footer>
     </div>
   )

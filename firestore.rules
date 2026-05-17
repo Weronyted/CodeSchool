@@ -41,6 +41,15 @@ service cloud.firestore {
             && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']));
     }
 
+    // ─── User Roles ──────────────────────────────────────────────────────────
+
+    match /userRoles/{uid} {
+      allow read: if isAuth() && (request.auth.uid == uid || isAdminOrOwner());
+      allow list:  if isAdminOrOwner();
+      allow create: if isAuth() && request.auth.uid == uid;
+      allow update: if isAdminOrOwner();
+    }
+
     // ─── Progress ────────────────────────────────────────────────────────────
 
     match /progress/{uid}/{lessonId} {

@@ -16,7 +16,7 @@ const provider = new GoogleAuthProvider()
 
 export async function signInWithGoogle(): Promise<User> {
   const result = await signInWithPopup(auth, provider)
-  await ensureUserProfile(result.user)
+  try { await ensureUserProfile(result.user) } catch {}
   return result.user
 }
 
@@ -28,7 +28,7 @@ export async function signInWithEmail(email: string, password: string): Promise<
 export async function signUpWithEmail(email: string, password: string, displayName: string): Promise<User> {
   const result = await createUserWithEmailAndPassword(auth, email, password)
   await updateProfile(result.user, { displayName })
-  await ensureUserProfile(result.user)
+  try { await ensureUserProfile(result.user) } catch {}
   return result.user
 }
 
@@ -45,13 +45,14 @@ export function onAuthChange(callback: (user: User | null) => void): () => void 
 }
 
 export async function ensureUserProfile(user: User): Promise<void> {
-  const ref = doc(db, 'users', user.uid, 'meta', 'profile')
+  const ref = doc(db, 'users', user.uid)
   const snap = await getDoc(ref)
   if (!snap.exists()) {
     await setDoc(ref, {
-      displayName: user.displayName,
-      email: user.email,
-      photoURL: user.photoURL,
+      role: 'student',
+      displayName: user.displayName ?? '',
+      email: user.email ?? '',
+      photoURL: user.photoURL ?? null,
       createdAt: serverTimestamp(),
     })
   }
