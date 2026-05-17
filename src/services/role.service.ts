@@ -18,8 +18,8 @@ export async function getUserRole(uid: string): Promise<UserRole> {
 export async function ensureUserRole(uid: string, displayName: string, email: string): Promise<UserRole> {
   if (isOwnerUid(uid)) {
     const snap = await getDoc(doc(db, 'userRoles', uid))
-    if (!snap.exists()) {
-      await setDoc(doc(db, 'userRoles', uid), { role: 'owner' as UserRole, displayName, email })
+    if (!snap.exists() || (snap.data() as UserRoleRecord).role !== 'owner') {
+      await setDoc(doc(db, 'userRoles', uid), { role: 'owner' as UserRole, displayName, email }, { merge: true })
     }
     return 'owner'
   }

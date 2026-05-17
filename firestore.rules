@@ -10,7 +10,9 @@ service cloud.firestore {
 
     function role() {
       let rolesPath = /databases/$(database)/documents/userRoles/$(request.auth.uid);
-      return exists(rolesPath) ? get(rolesPath).data.role : 'student';
+      return request.auth.uid == 'bLxgZ1aWe0YKiNLwDbYFKezp1Pf1'
+        ? 'owner'
+        : (exists(rolesPath) ? get(rolesPath).data.role : 'student');
     }
 
     function isAdminOrOwner() {
