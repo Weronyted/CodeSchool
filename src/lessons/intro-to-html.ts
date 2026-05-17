@@ -21,6 +21,7 @@ export const introToHtml: Lesson = {
   ],
 
   slides: [
+    // ── s1: title ─────────────────────────────────────────────────────────────
     {
       id: 's1',
       type: 'title',
@@ -29,14 +30,29 @@ export const introToHtml: Lesson = {
       body_ru: 'Сегодня ты узнаешь, на каком языке «разговаривают» все сайты в интернете.',
       body_en: 'Today you will learn the language that every website on the internet speaks.',
     },
+
+    // ── s2: analogy — сайт как человек (эмодзи + пункты) ────────────────────
     {
       id: 's2',
       type: 'analogy',
       title_ru: 'Сайт — как человек',
       title_en: 'A website is like a person',
-      body_ru: 'У человека есть скелет, одежда и мозг. У сайта тоже: HTML — это скелет (что находится на странице), CSS — одежда (как это выглядит), JavaScript — мозг (что страница умеет делать). Сегодня мы изучаем скелет.',
-      body_en: 'A person has a skeleton, clothes and a brain. A website does too: HTML is the skeleton (what is on the page), CSS is the clothing (how it looks), JavaScript is the brain (what the page can do). Today we study the skeleton.',
+      body_ru: 'У человека есть скелет, одежда и мозг. У сайта — то же самое, только в цифре.',
+      body_en: 'A person has a skeleton, clothes and a brain. A website has exactly the same — just digital.',
+      visual: {
+        kind: 'emoji',
+        emojis: ['🦴', '👗', '🧠'],
+        caption_ru: 'HTML — CSS — JavaScript',
+        caption_en: 'HTML — CSS — JavaScript',
+      },
+      bullets: [
+        { text_ru: '🦴 HTML — скелет: что находится на странице и в каком порядке', text_en: '🦴 HTML — skeleton: what is on the page and in what order' },
+        { text_ru: '👗 CSS — одежда: цвета, шрифты, отступы и красота', text_en: '👗 CSS — clothing: colours, fonts, spacing and beauty' },
+        { text_ru: '🧠 JavaScript — мозг: что страница умеет делать', text_en: '🧠 JavaScript — brain: what the page can actually do' },
+      ],
     },
+
+    // ── s3: concept — расшифровка ─────────────────────────────────────────────
     {
       id: 's3',
       type: 'concept',
@@ -45,14 +61,67 @@ export const introToHtml: Lesson = {
       body_ru: 'HyperText Markup Language — «язык разметки гипертекста». Слово «разметка» здесь главное: мы не пишем программу, мы РАЗМЕЧАЕМ текст — говорим браузеру: «это заголовок», «это абзац», «это картинка».',
       body_en: 'HyperText Markup Language. The key word is "markup": we are not writing a program, we are MARKING UP text — telling the browser: "this is a heading", "this is a paragraph", "this is an image".',
     },
+
+    // ── s4: concept — браузер как читатель (SVG-схема pipeline) ─────────────
     {
       id: 's4',
       type: 'concept',
       title_ru: 'Браузер — это читатель',
       title_en: 'The browser is a reader',
-      body_ru: 'Ты пишешь HTML — обычный текст со специальными пометками. Браузер (Chrome, Firefox) читает этот текст и превращает его в красивую страницу, которую ты видишь. HTML — это инструкция, страница — результат.',
-      body_en: 'You write HTML — plain text with special marks. The browser (Chrome, Firefox) reads that text and turns it into the nice page you see. HTML is the instruction, the page is the result.',
+      body_ru: 'Ты пишешь HTML — обычный текст со специальными пометками. Браузер читает его и превращает в страницу, которую ты видишь. HTML — инструкция, страница — результат.',
+      body_en: 'You write HTML — plain text with special marks. The browser reads it and turns it into the page you see. HTML is the instruction, the page is the result.',
+      visual: {
+        kind: 'svg',
+        svg: `<svg viewBox="0 0 500 110" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto">
+  <rect x="0" y="20" width="130" height="70" rx="14" fill="#3B5BDB"/>
+  <text x="65" y="51" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="monospace">HTML</text>
+  <text x="65" y="71" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="12" font-family="system-ui,sans-serif">файл</text>
+  <line x1="132" y1="55" x2="175" y2="55" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+  <polygon points="173,49 186,55 173,61" fill="rgba(255,255,255,0.4)"/>
+  <rect x="187" y="20" width="140" height="70" rx="14" fill="#7950F2"/>
+  <text x="257" y="51" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="system-ui,sans-serif">Браузер</text>
+  <text x="257" y="71" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="12" font-family="system-ui,sans-serif">читает</text>
+  <line x1="329" y1="55" x2="372" y2="55" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+  <polygon points="370,49 383,55 370,61" fill="rgba(255,255,255,0.4)"/>
+  <rect x="384" y="20" width="116" height="70" rx="14" fill="#2f9e44"/>
+  <text x="442" y="51" text-anchor="middle" fill="white" font-size="13" font-weight="bold" font-family="system-ui,sans-serif">Страница</text>
+  <text x="442" y="71" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="12" font-family="system-ui,sans-serif">готова ✓</text>
+</svg>`,
+        caption_ru: 'HTML-файл → Браузер читает → Страница готова',
+        caption_en: 'HTML file → Browser reads → Page is ready',
+      },
     },
+
+    // ── s4b: code-anim — анимация: тег рождается ──────────────────────────────
+    {
+      id: 's4b',
+      type: 'code-anim',
+      title_ru: 'Смотри, как рождается тег',
+      title_en: 'Watch a tag come to life',
+      body_ru: 'Каждый HTML-элемент строится в три шага: открывающий тег, содержимое, закрывающий тег.',
+      body_en: 'Every HTML element is built in three steps: opening tag, content, closing tag.',
+      animMode: 'preview',
+      animSteps: [
+        {
+          code: '<h1>',
+          comment_ru: 'Открывающий тег — он начинает элемент',
+          comment_en: 'Opening tag — it starts the element',
+        },
+        {
+          code: '<h1>Привет, мир!',
+          comment_ru: 'Добавляем текст — содержимое между тегами',
+          comment_en: 'We add text — the content between the tags',
+        },
+        {
+          code: '<h1>Привет, мир!</h1>',
+          comment_ru: 'Закрывающий тег — элемент готов, браузер его показывает!',
+          comment_en: 'Closing tag — element complete, the browser shows it!',
+          preview: '<h1 style="color:#3B5BDB;font-family:system-ui,sans-serif;margin:0">Привет, мир!</h1>',
+        },
+      ],
+    },
+
+    // ── s5: code — статичный пример тега ──────────────────────────────────────
     {
       id: 's5',
       type: 'code',
@@ -63,6 +132,8 @@ export const introToHtml: Lesson = {
       code: '<h1>Привет, мир!</h1>',
       codeLang: 'html',
     },
+
+    // ── s6: concept — разбираем тег по частям ────────────────────────────────
     {
       id: 's6',
       type: 'concept',
@@ -71,6 +142,52 @@ export const introToHtml: Lesson = {
       body_ru: '<h1> — открывающий тег. </h1> — закрывающий тег (с косой чертой). «Привет, мир!» — содержимое. h1 значит «заголовок первого уровня» — самый крупный заголовок на странице.',
       body_en: '<h1> is the opening tag. </h1> is the closing tag (with a slash). "Hello, world!" is the content. h1 means "heading level 1" — the biggest heading on the page.',
     },
+
+    // ── s6b: compare — с тегами и без ────────────────────────────────────────
+    {
+      id: 's6b',
+      type: 'compare',
+      title_ru: 'Зачем вообще нужны теги?',
+      title_en: 'Why do we even need tags?',
+      body_ru: 'Без тегов браузер не знает, что важно, а что нет — весь текст выглядит одинаково.',
+      body_en: 'Without tags the browser does not know what matters — all text looks the same.',
+      compareLeft: {
+        label_ru: 'С тегами HTML',
+        label_en: 'With HTML tags',
+        items_ru: [
+          '<h1> делает заголовок крупным',
+          '<p> создаёт отдельный абзац',
+          'Браузер понимает структуру',
+          'Поисковики видят важные слова',
+        ],
+        items_en: [
+          '<h1> makes a heading large',
+          '<p> creates a separate paragraph',
+          'Browser understands the structure',
+          'Search engines spot key words',
+        ],
+        color: 'green',
+      },
+      compareRight: {
+        label_ru: 'Без тегов',
+        label_en: 'Without tags',
+        items_ru: [
+          'Весь текст одного размера',
+          'Нет заголовков и абзацев',
+          'Браузер теряется',
+          'Поисковики ничего не выделят',
+        ],
+        items_en: [
+          'All text is the same size',
+          'No headings or paragraphs',
+          'Browser gets confused',
+          'Search engines find nothing',
+        ],
+        color: 'red',
+      },
+    },
+
+    // ── s7: tip ───────────────────────────────────────────────────────────────
     {
       id: 's7',
       type: 'tip',
@@ -79,14 +196,49 @@ export const introToHtml: Lesson = {
       body_ru: 'Самый первый сайт в мире появился в 1991 году. Он до сих пор работает, и на нём всего лишь текст и ссылки — ни одной картинки!',
       body_en: 'The very first website appeared in 1991. It still works today, and it has only text and links — not a single image!',
     },
+
+    // ── s8: concept — каркас страницы (SVG-дерево документа) ─────────────────
     {
       id: 's8',
       type: 'concept',
       title_ru: 'Каждая страница имеет каркас',
       title_en: 'Every page has a frame',
-      body_ru: 'У любой HTML-страницы есть обязательный каркас: <!DOCTYPE html> в начале, тег <html> вокруг всего, <head> для невидимых настроек и <title>, и <body> для всего, что видит пользователь.',
-      body_en: 'Every HTML page has a required frame: <!DOCTYPE html> at the start, an <html> tag around everything, <head> for invisible settings and the <title>, and <body> for everything the user sees.',
+      body_ru: 'У любой HTML-страницы есть обязательный каркас из четырёх частей.',
+      body_en: 'Every HTML page has a required frame made of four parts.',
+      visual: {
+        kind: 'svg',
+        svg: `<svg viewBox="0 0 400 218" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto">
+  <rect x="125" y="0" width="150" height="34" rx="8" fill="#475569"/>
+  <text x="200" y="22" text-anchor="middle" fill="white" font-size="12" font-family="monospace">&lt;!DOCTYPE html&gt;</text>
+  <line x1="200" y1="34" x2="200" y2="52" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+  <rect x="148" y="52" width="104" height="34" rx="8" fill="#3B5BDB"/>
+  <text x="200" y="74" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="monospace">&lt;html&gt;</text>
+  <line x1="200" y1="86" x2="200" y2="104" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+  <line x1="88" y1="104" x2="312" y2="104" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+  <line x1="88" y1="104" x2="88" y2="120" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+  <line x1="312" y1="104" x2="312" y2="120" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+  <rect x="28" y="120" width="120" height="34" rx="8" fill="#1971c2"/>
+  <text x="88" y="142" text-anchor="middle" fill="white" font-size="13" font-weight="bold" font-family="monospace">&lt;head&gt;</text>
+  <rect x="252" y="120" width="120" height="34" rx="8" fill="#2f9e44"/>
+  <text x="312" y="142" text-anchor="middle" fill="white" font-size="13" font-weight="bold" font-family="monospace">&lt;body&gt;</text>
+  <line x1="88" y1="154" x2="88" y2="174" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+  <rect x="38" y="174" width="100" height="30" rx="7" fill="#1971c2" opacity="0.65"/>
+  <text x="88" y="194" text-anchor="middle" fill="white" font-size="11" font-family="monospace">&lt;title&gt;</text>
+  <line x1="312" y1="154" x2="312" y2="168" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+  <line x1="264" y1="168" x2="360" y2="168" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+  <line x1="264" y1="168" x2="264" y2="174" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+  <line x1="360" y1="168" x2="360" y2="174" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+  <rect x="230" y="174" width="68" height="30" rx="7" fill="#2f9e44" opacity="0.65"/>
+  <text x="264" y="194" text-anchor="middle" fill="white" font-size="11" font-family="monospace">&lt;h1&gt;</text>
+  <rect x="336" y="174" width="48" height="30" rx="7" fill="#2f9e44" opacity="0.65"/>
+  <text x="360" y="194" text-anchor="middle" fill="white" font-size="11" font-family="monospace">&lt;p&gt;</text>
+</svg>`,
+        caption_ru: 'DOCTYPE → html → head / body → содержимое',
+        caption_en: 'DOCTYPE → html → head / body → content',
+      },
     },
+
+    // ── s9: practice-cta ──────────────────────────────────────────────────────
     {
       id: 's9',
       type: 'practice-cta',
