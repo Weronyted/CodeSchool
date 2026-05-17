@@ -21,11 +21,11 @@ export default function ClassPage() {
     if (!id) return
     Promise.all([
       getDoc(doc(db, 'classes', id)),
-      getClassMembers(id),
+      getClassMembers(id).catch(() => [] as ClassMember[]),
     ]).then(([snap, mems]) => {
       if (snap.exists()) setClassGroup({ id: snap.id, ...snap.data() } as ClassGroup)
       setMembers(mems)
-    }).finally(() => setLoading(false))
+    }).catch(() => {}).finally(() => setLoading(false))
   }, [id])
 
   if (loading) return <div className="min-h-screen flex items-center justify-center text-4xl animate-pulse">🏫</div>
@@ -37,7 +37,7 @@ export default function ClassPage() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
 
           {/* Header */}
-          <div className="bg-gradient-to-br from-primary-600 to-secondary-600 rounded-3xl p-8 text-white mb-6">
+          <div className="rounded-3xl p-8 text-white mb-6" style={{ background: 'linear-gradient(135deg, #3B5BDB, #7950F2)' }}>
             <h1 className="font-heading text-3xl font-extrabold mb-1">{classGroup.name}</h1>
             {classGroup.description && (
               <p className="text-primary-200">{classGroup.description}</p>

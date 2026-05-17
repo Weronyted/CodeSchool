@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { collection, getDocs, query } from 'firebase/firestore'
+import { collection, getDocs, query, where } from 'firebase/firestore'
 import { db } from '@/services/firebase'
 import { useAuthStore } from '@/store/useAuthStore'
 
@@ -16,18 +16,28 @@ export default function MyClassPage() {
     if (!user) return
     const findClass = async () => {
       try {
-        const snap = await getDocs(query(collection(db, 'classes')))
-        for (const doc of snap.docs) {
-          const { getDocs: gd, collection: c } = await import('firebase/firestore')
-          const memberSnap = await gd(c(db, 'classes', doc.id, 'members'))
-          const isMember = memberSnap.docs.some((m) => m.id === user.uid)
-          if (isMember) {
-            navigate(`/class/${doc.id}`, { replace: true })
+        // Teachers/owners: find a class they created
+        const teacherSnap = await getDocs(
+          query(collection(db, 'classes'), where('teacherId', '==', user.uid))
+        )
+        if (!teacherSnap.empty) {
+          navigate(`/class/${teacherSnap.docs[0].id}`, { replace: true })
+          return
+        }
+
+        // Students: find a class they're a member of
+        const allSnap = await getDocs(collection(db, 'classes'))
+        for (const classDoc of allSnap.docs) {
+          const memberSnap = await getDocs(
+            collection(db, 'classes', classDoc.id, 'members')
+          )
+          if (memberSnap.docs.some((m) => m.id === user.uid)) {
+            navigate(`/class/${classDoc.id}`, { replace: true })
             return
           }
         }
       } catch {
-        // no class found or no access
+        // permission denied or no classes
       }
       setLoading(false)
     }
