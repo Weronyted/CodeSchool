@@ -62,9 +62,13 @@ export default function Profile() {
                 <span className="text-gray-700 dark:text-gray-300">{t('profile.darkMode', 'Тёмная тема')}</span>
                 <button
                   onClick={toggleTheme}
-                  className={`relative w-12 h-6 rounded-full transition-colors ${isDark ? 'bg-primary-600' : 'bg-gray-200'}`}
+                  style={{ backgroundColor: isDark ? '#3B5BDB' : '#d1d5db' }}
+                  className="relative w-12 h-6 rounded-full transition-colors"
                 >
-                  <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${isDark ? 'translate-x-7' : 'translate-x-1'}`} />
+                  <span
+                    style={{ transform: `translateX(${isDark ? '28px' : '4px'})` }}
+                    className="absolute top-1 left-0 w-4 h-4 bg-white rounded-full shadow transition-transform"
+                  />
                 </button>
               </div>
               <div className="flex items-center justify-between">
