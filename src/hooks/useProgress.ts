@@ -1,6 +1,6 @@
 import { useProgressStore } from '@/store/useProgressStore'
 import { useAuthStore } from '@/store/useAuthStore'
-import { saveTopicProgress, saveQuizAttempt } from '@/services/progress.service'
+import { saveTopicProgress, saveQuizAttempt, saveUserMeta } from '@/services/progress.service'
 
 export function useProgress(slug?: string) {
   const store = useProgressStore()
@@ -12,16 +12,23 @@ export function useProgress(slug?: string) {
 
   function markVisited(s: string) {
     store.markVisited(s)
-    if (user) saveTopicProgress(user.uid, s, { lastVisited: Date.now() }).catch(() => {})
+    if (user) {
+      // Read fresh state after synchronous Zustand update
+      const fresh = useProgressStore.getState()
+      saveTopicProgress(user.uid, s, { lastVisited: Date.now() }).catch(() => {})
+      saveUserMeta(user.uid, { streak: fresh.streak, lastActiveDate: fresh.lastActiveDate }).catch(() => {})
+    }
   }
 
   function updateQuizScore(s: string, score: number) {
     store.updateQuizScore(s, score)
     if (user) {
+      const fresh = useProgressStore.getState()
+      const freshTopic = fresh.progress[s]
       saveTopicProgress(user.uid, s, {
-        quizScore: Math.max(store.getBestScore(s), score),
-        quizAttempts: (store.progress[s]?.quizAttempts ?? 0) + 1,
-        completed: score >= 60 || store.progress[s]?.completed,
+        quizScore: freshTopic?.quizScore ?? score,
+        quizAttempts: freshTopic?.quizAttempts ?? 1,
+        completed: freshTopic?.completed ?? false,
       }).catch(() => {})
       saveQuizAttempt(user.uid, { topicSlug: s, score, maxScore: 100 }).catch(() => {})
     }
@@ -30,8 +37,9 @@ export function useProgress(slug?: string) {
   function toggleBookmark(s: string, sectionId: string) {
     store.toggleBookmark(s, sectionId)
     if (user) {
-      const updated = store.progress[s]?.bookmarks ?? []
-      saveTopicProgress(user.uid, s, { bookmarks: updated }).catch(() => {})
+      // Read fresh state after synchronous Zustand update to avoid stale closure
+      const freshBookmarks = useProgressStore.getState().progress[s]?.bookmarks ?? []
+      saveTopicProgress(user.uid, s, { bookmarks: freshBookmarks }).catch(() => {})
     }
   }
 

@@ -7,6 +7,19 @@ export async function saveTopicProgress(uid: string, topicSlug: string, data: Pa
   await setDoc(ref, data, { merge: true })
 }
 
+export interface UserMeta { streak: number; lastActiveDate: string }
+
+export async function saveUserMeta(uid: string, meta: UserMeta): Promise<void> {
+  await setDoc(doc(db, 'users', uid), meta, { merge: true })
+}
+
+export async function getUserMeta(uid: string): Promise<UserMeta | null> {
+  const snap = await getDoc(doc(db, 'users', uid))
+  if (!snap.exists()) return null
+  const d = snap.data()
+  return d.streak != null ? { streak: d.streak as number, lastActiveDate: d.lastActiveDate as string ?? '' } : null
+}
+
 export async function getAllProgress(uid: string): Promise<Record<string, TopicProgress>> {
   const snap = await getDocs(collection(db, 'users', uid, 'progress'))
   const result: Record<string, TopicProgress> = {}
