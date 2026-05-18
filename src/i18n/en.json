@@ -31,7 +31,7 @@
       "stat2": "Exercises",
       "stat3": "Free",
       "stats": {
-        "lessons": "12 lessons",
+        "lessons": "40 lessons",
         "lessonsDesc": "Structured topics",
         "quizzes": "100+ exercises",
         "quizzesDesc": "Hands-on practice",
@@ -59,7 +59,7 @@
       }
     },
     "topics": {
-      "title": "12 topics — from zero to your first website",
+      "title": "40 lessons — from zero to your first website",
       "subtitle": "Start with HTML basics and work your way up to interactive JavaScript pages."
     },
     "lesson": "Lesson",
@@ -153,7 +153,7 @@
       "developer": "Developer",
       "developerDesc": "Complete 9 topics",
       "fullStack": "Full-Stack",
-      "fullStackDesc": "Complete all 12 topics with 80%+",
+      "fullStackDesc": "Complete all 40 lessons with 80%+",
       "perfectScore": "Perfect Score",
       "perfectScoreDesc": "Score 100% on any quiz",
       "persistent": "Persistent",

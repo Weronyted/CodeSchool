@@ -25,31 +25,9 @@ import type { Lesson, ContentBlock, BilingualKeyTerm, DidYouKnowItem, QuizQuesti
 
 type LessonSlug = typeof LESSON_SLUGS[number]
 
-// ─── Lesson loaders ──────────────────────────────────────────────────────────
+// ─── Lesson loaders (auto-discovers all files in src/lessons/) ───────────────
 
-const LESSON_LOADERS: Record<LessonSlug, () => Promise<Record<string, unknown>>> = {
-  'intro-to-programming': () => import('@/lessons/intro-to-programming') as Promise<Record<string, unknown>>,
-  'intro-to-html': () => import('@/lessons/intro-to-html') as Promise<Record<string, unknown>>,
-  'html-tags': () => import('@/lessons/html-tags') as Promise<Record<string, unknown>>,
-  'html-structure': () => import('@/lessons/html-structure') as Promise<Record<string, unknown>>,
-  'html-elements': () => import('@/lessons/html-elements') as Promise<Record<string, unknown>>,
-  'intro-to-css': () => import('@/lessons/intro-to-css') as Promise<Record<string, unknown>>,
-  'css-styling': () => import('@/lessons/css-styling') as Promise<Record<string, unknown>>,
-  'css-layout': () => import('@/lessons/css-layout') as Promise<Record<string, unknown>>,
-  'css-basics': () => import('@/lessons/css-basics') as Promise<Record<string, unknown>>,
-  'css-box-model': () => import('@/lessons/css-box-model') as Promise<Record<string, unknown>>,
-  'css-flexbox': () => import('@/lessons/css-flexbox') as Promise<Record<string, unknown>>,
-  'intro-to-js': () => import('@/lessons/intro-to-js') as Promise<Record<string, unknown>>,
-  'js-logic': () => import('@/lessons/js-logic') as Promise<Record<string, unknown>>,
-  'js-dom': () => import('@/lessons/js-dom') as Promise<Record<string, unknown>>,
-  'intro-to-javascript': () => import('@/lessons/intro-to-javascript') as Promise<Record<string, unknown>>,
-  'javascript-functions': () => import('@/lessons/javascript-functions') as Promise<Record<string, unknown>>,
-  'javascript-conditions': () => import('@/lessons/javascript-conditions') as Promise<Record<string, unknown>>,
-  'javascript-loops': () => import('@/lessons/javascript-loops') as Promise<Record<string, unknown>>,
-  'javascript-arrays': () => import('@/lessons/javascript-arrays') as Promise<Record<string, unknown>>,
-  'dom-manipulation': () => import('@/lessons/dom-manipulation') as Promise<Record<string, unknown>>,
-  'build-your-webpage': () => import('@/lessons/build-your-webpage') as Promise<Record<string, unknown>>,
-}
+const LESSON_FILES = import.meta.glob('/src/lessons/*.ts')
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -328,6 +306,7 @@ export default function LessonPage() {
   const [lesson, setLesson] = useState<Record<string, unknown> | null>(null)
   const [activeSection, setActiveSection] = useState<string>('')
   const [showSlides, setShowSlides] = useState(false)
+  const [comingSoon, setComingSoon] = useState(false)
   const sectionRefs = useRef<Record<string, HTMLElement>>({})
   const practiceRef = useRef<HTMLElement | null>(null)
 
@@ -341,9 +320,15 @@ export default function LessonPage() {
   useEffect(() => {
     if (!slug || !isValidSlug(slug)) { navigate('/lessons'); return }
     window.scrollTo(0, 0)
-    LESSON_LOADERS[slug]().then((mod) => {
-      const key = Object.keys(mod).find((k) => k !== 'default')
-      const data = key ? mod[key] : mod['default']
+    setLesson(null)
+    setComingSoon(false)
+    const filePath = `/src/lessons/${slug}.ts`
+    const loader = LESSON_FILES[filePath]
+    if (!loader) { setComingSoon(true); return }
+    loader().then((mod) => {
+      const record = mod as Record<string, unknown>
+      const key = Object.keys(record).find((k) => k !== 'default')
+      const data = key ? record[key] : record['default']
       if (data) setLesson(data as Record<string, unknown>)
     })
   }, [slug, navigate])
@@ -376,6 +361,25 @@ export default function LessonPage() {
   const scrollToPractice = () => {
     setShowSlides(false)
     setTimeout(() => practiceRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
+  }
+
+  if (comingSoon && meta) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center px-4">
+        <div className="text-center max-w-md">
+          <div className="text-6xl mb-6">{meta.icon}</div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+            {language === 'ru' ? meta.title : meta.title_en}
+          </h1>
+          <p className="text-gray-500 dark:text-gray-400 mb-8">
+            {language === 'ru' ? 'Этот урок скоро появится. Мы активно работаем над курсом.' : 'This lesson is coming soon. We are actively working on the course.'}
+          </p>
+          <Link to="/lessons" className="inline-block px-6 py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors">
+            {language === 'ru' ? '← Все уроки' : '← All lessons'}
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   if (!lesson || !slug || !meta) {
