@@ -9,11 +9,13 @@ import { LESSON_SLUGS, LESSON_META } from '@/lessons'
 import { useThemeStore } from '@/store/useThemeStore'
 
 const BADGES = [
-  { id: 'firstTag', emoji: '🏷️', slugIndex: 0 },
-  { id: 'stylist', emoji: '🎨', slugIndex: 3 },
-  { id: 'coder', emoji: '⚡', slugIndex: 5 },
-  { id: 'developer', emoji: '🖥️', slugIndex: 10 },
-  { id: 'fullStack', emoji: '🚀', slugIndex: 11 },
+  { id: 'firstTag',     emoji: '🏷️' },
+  { id: 'stylist',      emoji: '🎨' },
+  { id: 'coder',        emoji: '⚡' },
+  { id: 'developer',    emoji: '🖥️' },
+  { id: 'fullStack',    emoji: '🚀' },
+  { id: 'perfectScore', emoji: '⭐' },
+  { id: 'persistent',   emoji: '💪' },
 ]
 
 export default function Dashboard() {
@@ -38,7 +40,19 @@ export default function Dashboard() {
     }
   })
 
-  const earnedBadges = BADGES.filter((b) => progress[LESSON_SLUGS[b.slugIndex]]?.completed)
+  const allValues = Object.values(progress)
+  const earnedBadges = new Set<string>([
+    ...(completedCount >= 1  ? ['firstTag']     : []),
+    ...(completedCount >= 3  ? ['stylist']       : []),
+    ...(completedCount >= 6  ? ['coder']         : []),
+    ...(completedCount >= 9  ? ['developer']     : []),
+    ...(completedCount >= totalCount && allValues.length > 0 &&
+        allValues.every((p) => !p.completed || p.quizScore >= 80)
+        && allValues.filter((p) => p.completed).length >= totalCount
+          ? ['fullStack'] : []),
+    ...(allValues.some((p) => p.quizScore >= 100)  ? ['perfectScore'] : []),
+    ...(allValues.some((p) => (p.quizAttempts ?? 0) >= 3) ? ['persistent'] : []),
+  ])
 
   return (
     <div className="min-h-screen bg-cream-50 dark:bg-gray-950">
@@ -143,7 +157,7 @@ export default function Dashboard() {
               </h3>
               <div className="flex flex-wrap gap-3">
                 {BADGES.map((badge) => {
-                  const earned = earnedBadges.includes(badge)
+                  const earned = earnedBadges.has(badge.id)
                   return (
                     <div
                       key={badge.id}
