@@ -234,7 +234,8 @@ export function SlideMode({ slides, lessonTitle, onClose, onGoToPractice }: Slid
       </div>
 
       {/* Slide area — overflow-y-auto so tall slides (code-anim, compare) are scrollable */}
-      <div className="flex-1 min-h-0 overflow-y-auto relative flex items-start justify-center px-4 py-5">
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 py-5">
+        <div className="min-h-full flex items-center justify-center">
         <AnimatePresence custom={direction} mode="wait">
           <motion.div
             key={current}
@@ -244,7 +245,7 @@ export function SlideMode({ slides, lessonTitle, onClose, onGoToPractice }: Slid
             animate="center"
             exit="exit"
             transition={{ type: 'spring', stiffness: 320, damping: 32, mass: 0.8 }}
-            className="w-full max-w-2xl my-auto"
+            className="w-full max-w-2xl"
           >
             {/* Card */}
             <div className="bg-gray-900 rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
@@ -339,6 +340,7 @@ export function SlideMode({ slides, lessonTitle, onClose, onGoToPractice }: Slid
             </div>
           </motion.div>
         </AnimatePresence>
+        </div>
       </div>
 
       {/* Bottom navigation */}

@@ -133,7 +133,7 @@ function NewSectionContent({ block, lang }: { block: ContentBlock; lang: 'ru' | 
   const text = lang === 'ru' ? block.text_ru : block.text_en
   return (
     <div className="space-y-4">
-      <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">{text}</p>
+      <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line break-words">{text}</p>
       {block.code && <CodeBlock code={block.code} lang={block.codeLang ?? 'html'} />}
     </div>
   )
@@ -449,7 +449,7 @@ export default function LessonPage() {
         )}
       </AnimatePresence>
 
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 overflow-x-hidden">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex gap-4 lg:gap-8">
 
@@ -494,9 +494,9 @@ export default function LessonPage() {
                 animate={{ opacity: 1, y: 0 }}
               >
                 <div className="flex items-start justify-between gap-4">
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <span className="text-5xl">{meta.icon}</span>
-                    <h1 className="font-heading text-3xl font-extrabold text-gray-900 dark:text-white mt-3 mb-2">
+                    <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mt-3 mb-2">
                       {lessonTitle}
                     </h1>
                     <p className="text-gray-500 dark:text-gray-400">
@@ -544,7 +544,7 @@ export default function LessonPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 }}
                 >
-                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg break-words">
                     {isNew
                       ? (lang === 'ru' ? newLesson?.content.intro_ru : newLesson?.content.intro_en)
                       : (lesson.content as Record<string, unknown>).intro as string}
