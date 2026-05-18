@@ -41,18 +41,22 @@ export default function Landing() {
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-amber-50 via-cream-50 to-orange-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 overflow-hidden">
 
-      {/* Floating shapes */}
+      {/* Floating shapes — CSS animation: starts immediately, no JS init delay */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
         {SHAPES.map((s, i) => (
-          <motion.div
+          <div
             key={i}
             className="absolute select-none"
-            style={{ left: s.x, top: s.y, fontSize: s.size }}
-            animate={{ y: [0, -18, 0] }}
-            transition={{ duration: 4 + i * 0.3, repeat: Infinity, delay: s.delay, ease: 'easeInOut' }}
+            style={{
+              left: s.x,
+              top: s.y,
+              fontSize: s.size,
+              animation: `float ${4 + i * 0.3}s ease-in-out infinite`,
+              animationDelay: `${s.delay}s`,
+            }}
           >
             <span className="opacity-50 dark:opacity-15">{s.emoji}</span>
-          </motion.div>
+          </div>
         ))}
       </div>
 
