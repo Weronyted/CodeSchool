@@ -280,6 +280,32 @@ const topStudents = students
 console.log(topStudents); // ["Алиса", "Вера"]`,
         codeLang: 'javascript',
       },
+      {
+        sectionId: 'spread-rest',
+        heading_ru: 'Spread и деструктуризация массивов',
+        heading_en: 'Spread and Array Destructuring',
+        text_ru: 'Оператор spread (...) позволяет «распаковать» массив в отдельные элементы. Это удобно для создания копий массива без мутации оригинала, для объединения нескольких массивов в один и для передачи массива как отдельных аргументов в функцию. Копия, созданная через spread, поверхностная: вложенные объекты по-прежнему разделяются.\n\nДеструктуризация массива позволяет извлекать элементы по позиции сразу в переменные. Остаточный параметр ...rest собирает все оставшиеся элементы в новый массив. Комбинация spread и деструктуризации значительно сокращает код при работе с массивами и делает намерения программиста явными.',
+        text_en: 'The spread operator (...) lets you "unpack" an array into individual elements. This is useful for creating copies of an array without mutating the original, for merging multiple arrays into one, and for passing an array as separate arguments to a function. A spread copy is shallow: nested objects are still shared.\n\nArray destructuring lets you extract elements by position directly into variables. The rest parameter ...rest collects all remaining elements into a new array. Combining spread and destructuring significantly reduces code when working with arrays and makes the programmer\'s intent explicit.',
+        code: `const fruits = ["яблоко", "банан", "вишня"];
+const vegs = ["морковь", "картофель"];
+
+// Объединение массивов
+const basket = [...fruits, ...vegs];
+console.log(basket);
+// ["яблоко", "банан", "вишня", "морковь", "картофель"]
+
+// Копия без мутации оригинала
+const sorted = [...fruits].sort();
+console.log(fruits);  // оригинал не изменился
+console.log(sorted);  // ["банан", "вишня", "яблоко"]
+
+// Деструктуризация
+const [first, second, ...rest] = basket;
+console.log(first);  // "яблоко"
+console.log(second); // "банан"
+console.log(rest);   // ["вишня", "морковь", "картофель"]`,
+        codeLang: 'javascript',
+      },
     ],
   },
 

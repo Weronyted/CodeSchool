@@ -165,6 +165,122 @@ export const jsScope: Lesson = {
     intro_en: 'Understanding scope is the key to writing reliable code. Closures enable state encapsulation, and they are used in literally every modern JavaScript framework.',
     blocks: [
       {
+        sectionId: 'global',
+        heading_ru: 'Глобальная область видимости и почему её следует избегать',
+        heading_en: 'Global scope and why to avoid it',
+        text_ru: 'Переменные, объявленные вне любой функции или блока, попадают в глобальную область видимости. В браузере они автоматически становятся свойствами объекта window. Это удобно для небольших скриптов, но в крупных приложениях глобальные переменные быстро становятся источником конфликтов имён и непредсказуемых ошибок.\n\nНаилучшая практика — держать глобальную область видимости чистой. Объявляйте переменные как можно ближе к месту использования, используйте модули или IIFE (немедленно вызываемые функции), чтобы изолировать код. В современных проектах с ES-модулями переменные по умолчанию локальны для модуля.',
+        text_en: 'Variables declared outside any function or block enter the global scope. In the browser they automatically become properties of the window object. This is convenient for small scripts, but in large applications global variables quickly become a source of name conflicts and unpredictable bugs.\n\nBest practice is to keep the global scope clean. Declare variables as close to their usage as possible, and use modules or IIFEs (immediately invoked function expressions) to isolate code. In modern projects with ES modules, variables are local to the module by default.',
+        code: `// Global variable — accessible everywhere
+const APP_VERSION = '1.0.0';
+
+function showVersion() {
+  console.log(APP_VERSION); // accessible
+}
+showVersion(); // '1.0.0'
+
+// var without declaration goes to global (avoid!)
+function badPractice() {
+  undeclaredVar = 'oops'; // becomes window.undeclaredVar
+}
+
+// Better: use const/let and limit scope
+function goodPractice() {
+  const localValue = 'stays here';
+  console.log(localValue);
+}
+// console.log(localValue); // ReferenceError`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'function-scope',
+        heading_ru: 'Функциональная область видимости и приватные переменные',
+        heading_en: 'Function scope and private variables',
+        text_ru: 'Каждая функция создаёт свою собственную область видимости. Переменные, объявленные внутри функции, невидимы снаружи — это делает их «приватными». Каждый вызов функции получает свою отдельную копию локальных переменных, что позволяет функциям работать независимо друг от друга.\n\nЭто фундаментальный принцип инкапсуляции в JavaScript. Функции могут читать переменные из внешних областей видимости (лексическое окружение), но внешний код никогда не сможет случайно изменить локальную переменную функции.',
+        text_en: 'Every function creates its own scope. Variables declared inside a function are invisible outside — this makes them "private". Each function call gets its own separate copy of local variables, allowing functions to work independently from one another.\n\nThis is a fundamental principle of encapsulation in JavaScript. Functions can read variables from outer scopes (lexical environment), but external code can never accidentally modify a function\'s local variable.',
+        code: `function calculateTotal(items) {
+  const TAX_RATE = 0.2; // private to this function
+  let subtotal = 0;
+
+  for (const item of items) {
+    subtotal += item.price;
+  }
+
+  const tax = subtotal * TAX_RATE;
+  return subtotal + tax;
+}
+
+console.log(calculateTotal([{ price: 100 }, { price: 50 }])); // 180
+// console.log(TAX_RATE); // ReferenceError — private!
+// console.log(subtotal); // ReferenceError — private!
+
+// Each call gets its OWN variables
+function counter() {
+  let count = 0;
+  count += 1;
+  return count;
+}
+console.log(counter()); // 1
+console.log(counter()); // 1 (fresh count each call)`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'block-scope',
+        heading_ru: 'Блочная область видимости: let, const и циклы',
+        heading_en: 'Block scope: let, const and loops',
+        text_ru: 'Ключевые слова let и const, введённые в ES6, создают блочную область видимости: переменная существует только внутри ближайшего блока {}. Это относится к блокам if, for, while, switch и любым другим фигурным скобкам.\n\nПрежний способ — var — ограничен только функцией, поэтому var «вытекает» из блоков if и for. Это классический источник ошибок. Использование let в цикле for особенно полезно: каждая итерация получает свою отдельную переменную-счётчик, что критически важно при работе с замыканиями внутри цикла.',
+        text_en: 'The let and const keywords introduced in ES6 create block scope: the variable exists only inside the nearest {} block. This applies to if, for, while, switch blocks and any other curly braces.\n\nThe old way — var — is only bounded by a function, so var "leaks" out of if and for blocks. This is a classic source of bugs. Using let in a for loop is especially useful: each iteration gets its own separate counter variable, which is critical when working with closures inside a loop.',
+        code: `// let and const are block-scoped
+if (true) {
+  let blockOnly = 'inside block';
+  const alsoBlock = 42;
+  var leaksOut = 'I escape!';
+}
+console.log(leaksOut);    // 'I escape!' — var leaks
+// console.log(blockOnly); // ReferenceError
+// console.log(alsoBlock); // ReferenceError
+
+// for loop: let gives each iteration its own variable
+for (let i = 0; i < 3; i++) {
+  setTimeout(() => console.log(i), 100);
+}
+// Prints: 0, 1, 2  (correct with let)
+
+// Same loop with var:
+for (var j = 0; j < 3; j++) {
+  setTimeout(() => console.log(j), 100);
+}
+// Prints: 3, 3, 3  (bug — var is shared!)`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'hoisting',
+        heading_ru: 'Поднятие: что происходит до выполнения кода',
+        heading_en: 'Hoisting: what happens before code runs',
+        text_ru: 'Перед выполнением кода JavaScript «сканирует» файл и поднимает (hoist) объявления переменных и функций в начало их области видимости. Объявления var поднимаются со значением undefined, поэтому обращение до объявления не вызывает ошибку, но возвращает undefined.\n\nОбъявления функций (function declaration) поднимаются полностью вместе с телом, поэтому их можно вызывать до объявления. Но функциональные выражения (const fn = function() {}) и стрелочные функции (const fn = () => {}) не поднимаются — они ведут себя как обычные переменные. let и const поднимаются, но не инициализируются: попытка обратиться к ним до объявления вызывает ReferenceError — это называется Temporal Dead Zone (TDZ).',
+        text_en: 'Before executing code, JavaScript "scans" the file and hoists variable and function declarations to the top of their scope. var declarations are hoisted with value undefined, so accessing them before the declaration does not cause an error but returns undefined.\n\nFunction declarations are fully hoisted together with their body, so they can be called before the declaration. But function expressions (const fn = function() {}) and arrow functions (const fn = () => {}) are not hoisted — they behave like regular variables. let and const are hoisted but not initialized: trying to access them before the declaration throws a ReferenceError — this is called the Temporal Dead Zone (TDZ).',
+        code: `// var: hoisted with undefined
+console.log(score); // undefined (no error!)
+var score = 100;
+console.log(score); // 100
+
+// Function declaration: fully hoisted
+greet(); // 'Hello!' — works before declaration
+function greet() { console.log('Hello!'); }
+
+// Function expression: NOT hoisted
+// sayBye(); // TypeError: sayBye is not a function
+const sayBye = function() { console.log('Bye!'); };
+
+// let/const: TDZ — ReferenceError before declaration
+// console.log(level); // ReferenceError: Cannot access 'level' before initialization
+let level = 5;
+
+// Arrow function: same as const — NOT hoisted
+// double(3); // TypeError
+const double = (n) => n * 2;`,
+        codeLang: 'javascript',
+      },
+      {
         sectionId: 'closure',
         heading_ru: 'Модульный паттерн с замыканием',
         heading_en: 'Module pattern with closure',

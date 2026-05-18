@@ -158,6 +158,15 @@ export const cssTextFonts: Lesson = {
     intro_en: 'Typography is the art and science of arranging type so that text is not just readable but expressive. CSS provides a complete set of properties for controlling every aspect: from choosing the typeface to adjusting letter spacing.',
     blocks: [
       {
+        sectionId: 'intro',
+        heading_ru: 'Типографика в вебе',
+        heading_en: 'Web Typography',
+        text_ru: 'Типографика — это искусство работы со шрифтом. В вебе она решает сразу несколько задач: обеспечивает читаемость, создаёт визуальную иерархию и передаёт характер бренда. Исследования показывают, что более 95% информации в интернете передаётся через текст — значит, качество типографики напрямую влияет на восприятие сайта.\n\nCSS управляет типографикой через несколько групп свойств. Первая группа отвечает за шрифт: `font-family` (гарнитура), `font-size` (кегль), `font-weight` (насыщенность), `font-style` (курсив). Вторая — за ритм текста: `line-height` (межстрочный интервал), `letter-spacing` (межбуквенный интервал), `word-spacing` (межсловный интервал). Третья — за расположение и оформление: `text-align`, `text-decoration`, `text-transform`, `text-overflow`.\n\nВ этом уроке вы разберёте каждую из этих групп, поймёте, когда использовать `px` или `rem` для шрифта, как подключать Google Fonts и как выстроить гармоничную типографическую шкалу для всего сайта.',
+        text_en: 'Typography is the art of working with type. On the web it serves several purposes at once: ensuring readability, creating visual hierarchy, and conveying the character of a brand. Research shows that more than 95% of information on the web is delivered through text — meaning the quality of typography directly shapes how a site is perceived.\n\nCSS controls typography through several property groups. The first covers the font itself: `font-family` (typeface), `font-size` (size), `font-weight` (thickness), `font-style` (italic). The second governs text rhythm: `line-height` (leading), `letter-spacing` (tracking), `word-spacing`. The third handles placement and decoration: `text-align`, `text-decoration`, `text-transform`, `text-overflow`.\n\nIn this lesson you will explore each of these groups, understand when to use `px` versus `rem` for font sizes, learn to load Google Fonts, and build a harmonious type scale for an entire site.',
+        code: '/* The core typography properties at a glance */\nbody {\n  font-family: "Inter", system-ui, sans-serif;\n  font-size: 1rem;      /* 16px base */\n  font-weight: 400;     /* normal */\n  line-height: 1.6;     /* comfortable reading rhythm */\n  color: #1a1a2e;\n}\n\nh1 {\n  font-size: 2.5rem;\n  font-weight: 700;\n  line-height: 1.15;\n  letter-spacing: -0.02em;\n}',
+        codeLang: 'css',
+      },
+      {
         sectionId: 'font-family',
         heading_ru: 'Подключение шрифтов Google Fonts',
         heading_en: 'Loading Google Fonts',

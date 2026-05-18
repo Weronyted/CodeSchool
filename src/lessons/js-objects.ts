@@ -177,6 +177,153 @@ export const jsObjects: Lesson = {
     intro_en: 'Objects are the foundation of JavaScript. Almost everything in JS is an object: arrays, functions, DOM elements. Understanding objects opens the path to advanced programming.',
     blocks: [
       {
+        sectionId: 'literals',
+        heading_ru: 'Создание объектов: литералы и вычисляемые ключи',
+        heading_en: 'Creating objects: literals and computed keys',
+        text_ru: 'Объектный литерал — самый удобный способ создать объект в JavaScript. Вы просто перечисляете пары «ключ: значение» в фигурных скобках. Значениями могут быть любые типы данных: строки, числа, булевы значения, массивы, другие объекты и даже функции.\n\nES6 добавил несколько удобных сокращений. Сокращённые свойства позволяют не повторять имя переменной: если переменная называется так же, как ключ, достаточно написать просто имя. Вычисляемые ключи в квадратных скобках позволяют динамически задавать имя поля во время создания объекта.',
+        text_en: 'An object literal is the most convenient way to create an object in JavaScript. You simply list key-value pairs inside curly braces. Values can be any data type: strings, numbers, booleans, arrays, other objects, and even functions.\n\nES6 added several handy shorthand notations. Shorthand properties let you avoid repeating a variable name: if the variable has the same name as the key, you can simply write the name alone. Computed keys in square brackets let you dynamically set a field name at the time the object is created.',
+        code: `// Basic object literal
+const person = {
+  name: 'Alice',
+  age: 28,
+  isStudent: false,
+  hobbies: ['reading', 'coding'],
+};
+
+// Shorthand properties (ES6)
+const name = 'Bob';
+const age = 32;
+const user = { name, age }; // same as { name: name, age: age }
+
+// Computed keys (ES6)
+const field = 'score';
+const game = { [field]: 100 };
+console.log(game.score); // 100`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'access',
+        heading_ru: 'Чтение, запись и удаление свойств',
+        heading_en: 'Reading, writing and deleting properties',
+        text_ru: 'Получить значение свойства можно двумя способами: через точку (obj.key) и через квадратные скобки (obj["key"]). Точечная нотация короче и читабельнее — используйте её по умолчанию. Скобочная нотация нужна, когда ключ вычисляется динамически, содержит пробелы или спецсимволы.\n\nДля записи нового или изменения существующего свойства используется обычное присваивание. Оператор delete полностью удаляет свойство из объекта. Оператор in позволяет проверить, существует ли свойство, не обращаясь к его значению.',
+        text_en: 'You can read a property value in two ways: dot notation (obj.key) and bracket notation (obj["key"]). Dot notation is shorter and more readable — use it by default. Bracket notation is needed when the key is computed dynamically, or contains spaces or special characters.\n\nTo write a new or update an existing property, use a simple assignment. The delete operator completely removes a property from the object. The in operator lets you check whether a property exists without accessing its value.',
+        code: `const car = { brand: 'Toyota', model: 'Camry', year: 2022 };
+
+// Read
+console.log(car.brand);     // 'Toyota'
+console.log(car['model']);  // 'Camry'
+
+// Dynamic key
+const prop = 'year';
+console.log(car[prop]);     // 2022
+
+// Write / update
+car.color = 'blue';         // add new property
+car.year = 2023;            // update existing
+
+// Delete
+delete car.color;
+console.log('color' in car); // false
+
+// Check existence
+console.log('brand' in car); // true`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'methods',
+        heading_ru: 'Методы и ключевое слово this',
+        heading_en: 'Methods and the this keyword',
+        text_ru: 'Метод — это функция, которая является значением свойства объекта. Внутри метода ключевое слово this ссылается на сам объект, что позволяет методу читать и изменять другие его свойства.\n\nES6 ввёл сокращённый синтаксис метода: вместо greet: function() { } можно писать greet() { }. Важно помнить, что стрелочные функции не имеют собственного this — они захватывают this из окружающего контекста, поэтому для методов объекта используйте обычные функции или сокращённый синтаксис.',
+        text_en: 'A method is a function that is the value of an object property. Inside a method, the keyword this refers to the object itself, allowing the method to read and modify its other properties.\n\nES6 introduced shorthand method syntax: instead of greet: function() { } you can write greet() { }. It is important to remember that arrow functions do not have their own this — they capture this from the surrounding context, so for object methods use regular functions or shorthand syntax.',
+        code: `const user = {
+  name: 'Maria',
+  age: 25,
+  // Shorthand method syntax (ES6)
+  greet() {
+    return \`Hi, I'm \${this.name}!\`;
+  },
+  birthday() {
+    this.age += 1;
+    return this.age;
+  },
+};
+
+console.log(user.greet());    // "Hi, I'm Maria!"
+console.log(user.birthday()); // 26
+console.log(user.age);        // 26
+
+// Arrow function: this is NOT the object
+const obj = {
+  val: 42,
+  wrong: () => console.log(this?.val), // undefined
+  correct() { console.log(this.val); }, // 42
+};`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'builtin',
+        heading_ru: 'Итерация по объектам с Object.keys/values/entries',
+        heading_en: 'Iterating over objects with Object.keys/values/entries',
+        text_ru: 'В отличие от массивов, объекты не имеют встроенного итератора. Три статических метода Object решают эту задачу. Object.keys() возвращает массив строк-ключей, Object.values() — массив значений, а Object.entries() — массив пар [ключ, значение].\n\nМетод Object.fromEntries() — обратная операция: он превращает массив пар обратно в объект. Это особенно удобно, когда нужно трансформировать объект через map или filter, которые работают с массивами.',
+        text_en: 'Unlike arrays, objects do not have a built-in iterator. Three static Object methods solve this. Object.keys() returns an array of string keys, Object.values() returns an array of values, and Object.entries() returns an array of [key, value] pairs.\n\nObject.fromEntries() is the reverse operation: it turns an array of pairs back into an object. This is particularly useful when you need to transform an object via map or filter, which work with arrays.',
+        code: `const config = { theme: 'dark', lang: 'ru', fontSize: 16 };
+
+console.log(Object.keys(config));
+// ['theme', 'lang', 'fontSize']
+
+console.log(Object.values(config));
+// ['dark', 'ru', 16]
+
+console.log(Object.entries(config));
+// [['theme','dark'], ['lang','ru'], ['fontSize',16]]
+
+// Iterate with for...of + destructuring
+for (const [key, value] of Object.entries(config)) {
+  console.log(\`\${key} = \${value}\`);
+}
+
+// Transform: double all numeric values
+const scaled = Object.fromEntries(
+  Object.entries(config).map(([k, v]) =>
+    [k, typeof v === 'number' ? v * 2 : v]
+  )
+);
+console.log(scaled.fontSize); // 32`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'optional-chain',
+        heading_ru: 'Опциональная цепочка и оператор нулевого слияния',
+        heading_en: 'Optional chaining and nullish coalescing',
+        text_ru: 'Оператор ?. (optional chaining) позволяет безопасно обращаться к вложенным свойствам, не зная наверняка, существуют ли промежуточные объекты. Вместо того чтобы вызвать TypeError, выражение возвращает undefined.\n\nОператор ?? (nullish coalescing) дополняет ?.: он возвращает правый операнд, если левый равен null или undefined. В отличие от ||, оператор ?? не заменяет ложные значения вроде 0 или пустой строки, что делает его более точным инструментом для задания значений по умолчанию.',
+        text_en: 'The ?. operator (optional chaining) lets you safely access nested properties without knowing whether intermediate objects exist. Instead of throwing a TypeError, the expression returns undefined.\n\nThe ?? operator (nullish coalescing) complements ?.: it returns the right operand when the left is null or undefined. Unlike ||, the ?? operator does not replace falsy values like 0 or empty string, making it a more precise tool for setting default values.',
+        code: `const user = {
+  name: 'Alice',
+  address: { city: 'Berlin' },
+};
+
+// Without ?. → crashes if address is missing
+// user.address.zip.code  // TypeError!
+
+// With ?.  → returns undefined safely
+console.log(user.address?.zip);       // undefined
+console.log(user.address?.zip?.code); // undefined
+console.log(user.profile?.bio);       // undefined
+
+// Optional method call
+const arr = null;
+console.log(arr?.map(x => x * 2));    // undefined (no crash)
+
+// Nullish coalescing ?? for defaults
+const lang = user.settings?.lang ?? 'en'; // 'en'
+const count = user.stats?.count ?? 0;     // 0
+
+// ?? vs ||: difference with falsy values
+console.log(0 || 'default');   // 'default' (wrong!)
+console.log(0 ?? 'default');   // 0          (correct)`,
+        codeLang: 'javascript',
+      },
+      {
         sectionId: 'destructuring',
         heading_ru: 'Деструктуризация в параметрах функции',
         heading_en: 'Destructuring in function parameters',

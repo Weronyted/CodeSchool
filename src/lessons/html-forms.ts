@@ -231,6 +231,23 @@ export const htmlForms: Lesson = {
     intro_en: 'Forms are the primary mechanism for user interaction with a web application. Without forms, login, search, checkout, and sending any data to the server would be impossible.',
     blocks: [
       {
+        sectionId: 'intro',
+        heading_ru: 'Что такое HTML-форма',
+        heading_en: 'What Is an HTML Form',
+        text_ru: 'HTML-форма — это интерактивный элемент страницы, который позволяет пользователю вводить данные и отправлять их на сервер. Без форм невозможны регистрация, авторизация, поиск, оформление заказов и любая другая передача данных от пользователя к приложению.\n\nФорма создаётся тегом <form>. Два ключевых атрибута определяют её поведение: action задаёт URL, куда отправятся данные, а method — способ передачи (GET или POST). Внутри формы размещаются поля ввода: <input>, <textarea>, <select> и кнопки.\n\nКаждое поле формы должно иметь атрибут name — он становится ключом в паре ключ-значение при отправке данных. Без name поле не будет включено в отправляемые данные, даже если пользователь заполнил его.',
+        text_en: 'An HTML form is an interactive page element that lets users enter data and send it to a server. Without forms, registration, login, search, checkout, and any other user-to-application data transfer would be impossible.\n\nA form is created with the <form> tag. Two key attributes define its behaviour: action sets the URL where data is sent, and method sets the transfer method (GET or POST). Inside the form you place input fields: <input>, <textarea>, <select>, and buttons.\n\nEvery form field must have a name attribute — it becomes the key in a key-value pair when data is submitted. Without name, a field is excluded from submitted data even if the user filled it in.',
+        code: `<form action="/register" method="post">
+  <label for="username">Имя пользователя</label>
+  <input type="text" id="username" name="username" required>
+
+  <label for="email">Email</label>
+  <input type="email" id="email" name="email" required>
+
+  <button type="submit">Зарегистрироваться</button>
+</form>`,
+        codeLang: 'html',
+      },
+      {
         sectionId: 'inputs',
         heading_ru: 'Атрибуты тега <input>',
         heading_en: 'Attributes of the <input> Tag',

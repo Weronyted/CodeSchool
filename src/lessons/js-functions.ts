@@ -259,6 +259,33 @@ console.log(divide(10, 0));  // null`,
         codeLang: 'javascript',
       },
       {
+        sectionId: 'scope',
+        heading_ru: 'Область видимости',
+        heading_en: 'Scope',
+        text_ru: 'Область видимости (scope) определяет, откуда в коде можно обратиться к переменной. Переменные, объявленные внутри функции, существуют только внутри неё — это локальная область видимости. Внешний код не имеет доступа к локальным переменным, что защищает от случайных конфликтов имён между разными функциями.\n\nФункции в JavaScript имеют доступ к переменным внешней области видимости — это называется замыканием. Если функция не находит переменную у себя, она ищет её в объемлющей области, затем в ещё более внешней, вплоть до глобальной. Такое «движение вверх по цепочке» называется scope chain.',
+        text_en: 'Scope defines where in the code a variable can be accessed. Variables declared inside a function exist only within it — this is local scope. Code outside cannot access local variables, which protects against accidental name collisions between different functions.\n\nFunctions in JavaScript have access to variables from their outer scope — this is called a closure. If a function does not find a variable locally, it looks in the enclosing scope, then further outward, all the way to the global scope. This upward search is called the scope chain.',
+        code: `const appName = "MyApp"; // глобальная
+
+function showWelcome(user) {
+  const message = \`Добро пожаловать в \${appName}, \${user}!\`;
+  console.log(message); // ОК — message и appName доступны
+}
+
+showWelcome("Алиса");
+// console.log(message); // ReferenceError: message не определена
+
+function outer() {
+  const x = 10;
+  function inner() {
+    const y = 20;
+    console.log(x + y); // 30 — inner видит x из outer
+  }
+  inner();
+}
+outer();`,
+        codeLang: 'javascript',
+      },
+      {
         sectionId: 'arrow',
         heading_ru: 'Когда использовать стрелочные функции',
         heading_en: 'When to Use Arrow Functions',

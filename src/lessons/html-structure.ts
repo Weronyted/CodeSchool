@@ -279,6 +279,36 @@ Memorise this order — it never changes.`,
         codeLang: 'html',
       },
       {
+        sectionId: 'body-section',
+        heading_ru: 'Тег body',
+        heading_en: 'The body tag',
+        text_ru: `Тег <body> — это видимая часть HTML-документа. Всё, что браузер отображает на экране: заголовки, абзацы, изображения, ссылки, кнопки, формы — должно находиться внутри <body>. Если разместить контент вне <body>, браузер попробует исправить ошибку самостоятельно, но результат будет непредсказуемым.
+
+Тег <body> является дочерним элементом <html> и следует сразу за закрывающим тегом </head>. В документе может быть только один <body>. Атрибуты <body> (например, style или class) позволяют применить стили ко всей странице сразу.
+
+Внутри <body> контент располагается в том порядке, в котором он написан в коде — сверху вниз. Браузер строит страницу последовательно: сначала рендерит то, что встретил первым. Именно поэтому важно продумывать порядок элементов: критически важный контент лучше ставить в начало.`,
+        text_en: `The <body> tag is the visible part of an HTML document. Everything the browser displays on screen — headings, paragraphs, images, links, buttons, forms — must live inside <body>. Placing content outside <body> causes the browser to try to fix the error on its own, but the result is unpredictable.
+
+The <body> tag is a child element of <html> and comes immediately after the closing </head> tag. A document can have only one <body>. Attributes on <body> (such as style or class) let you apply styles to the entire page at once.
+
+Inside <body>, content is laid out in the order it appears in code — top to bottom. The browser builds the page sequentially: it renders whatever it encounters first. This is why thinking about element order matters: critical content is best placed near the top.`,
+        code: `<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <title>Моя страница</title>
+  </head>
+  <body>
+    <!-- Всё видимое содержимое — здесь -->
+    <h1>Заголовок страницы</h1>
+    <p>Первый абзац текста.</p>
+    <img src="photo.jpg" alt="Фотография">
+    <a href="/about">Узнать больше</a>
+  </body>
+</html>`,
+        codeLang: 'html',
+      },
+      {
         sectionId: 'semantic',
         heading_ru: 'Семантические теги',
         heading_en: 'Semantic tags',

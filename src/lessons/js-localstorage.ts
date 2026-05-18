@@ -141,6 +141,112 @@ export const jsLocalstorage: Lesson = {
     intro_en: 'localStorage is the simplest way to persist data client-side. Unlike cookies, it has more storage space and is not sent to the server with every request.',
     blocks: [
       {
+        sectionId: 'basics',
+        heading_ru: 'Четыре основных операции localStorage',
+        heading_en: 'The four core localStorage operations',
+        text_ru: 'localStorage предоставляет минималистичный API из четырёх методов. setItem(key, value) сохраняет пару ключ-значение. getItem(key) читает значение по ключу и возвращает null, если ключ не существует. removeItem(key) удаляет конкретный ключ. clear() стирает все данные вашего сайта из хранилища.\n\nВажно понимать: localStorage хранит только строки. Если вы передадите число или булево значение, оно будет автоматически преобразовано в строку. При чтении вы получите строку и должны вручную привести её к нужному типу. Для объектов и массивов используйте JSON.stringify/JSON.parse.',
+        text_en: 'localStorage provides a minimalist API of four methods. setItem(key, value) saves a key-value pair. getItem(key) reads the value by key and returns null if the key does not exist. removeItem(key) deletes a specific key. clear() erases all data for your site from storage.\n\nImportant to understand: localStorage stores only strings. If you pass a number or boolean, it will be automatically converted to a string. When reading you will get a string and must manually cast it to the needed type. For objects and arrays use JSON.stringify/JSON.parse.',
+        code: `// setItem: save a string value
+localStorage.setItem('username', 'Alice');
+localStorage.setItem('theme', 'dark');
+
+// getItem: read back (returns string or null)
+const name = localStorage.getItem('username');
+console.log(name); // 'Alice'
+console.log(typeof name); // 'string'
+
+// Missing key → null (not undefined)
+console.log(localStorage.getItem('missing')); // null
+
+// Numbers are stored as strings
+localStorage.setItem('age', 25);
+const age = localStorage.getItem('age');
+console.log(age, typeof age); // '25' string → need Number(age)
+
+// removeItem: delete one key
+localStorage.removeItem('username');
+
+// clear: wipe all localStorage for this origin
+localStorage.clear();`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'sessionstorage',
+        heading_ru: 'sessionStorage: временное хранилище на время сессии',
+        heading_en: 'sessionStorage: temporary storage for the session',
+        text_ru: 'sessionStorage имеет точно такой же API, что и localStorage, но принципиально отличается временем жизни данных. Данные в sessionStorage существуют только пока открыта вкладка браузера — при закрытии вкладки они исчезают автоматически. Кроме того, каждая вкладка имеет свой изолированный sessionStorage, тогда как localStorage общий для всех вкладок одного домена.\n\nsessionStorage отлично подходит для временных данных, которые не должны сохраняться между сессиями: черновики форм в рамках одного визита, шаги мастера настройки, состояние фильтров на странице каталога. Выбирайте sessionStorage, когда хотите автоматической очистки.',
+        text_en: 'sessionStorage has exactly the same API as localStorage but differs fundamentally in data lifetime. Data in sessionStorage exists only while the browser tab is open — when the tab closes, the data disappears automatically. Additionally, each tab has its own isolated sessionStorage, whereas localStorage is shared across all tabs of the same domain.\n\nsessionStorage is perfect for temporary data that should not persist between sessions: form drafts within a single visit, wizard step state, filter state on a catalog page. Choose sessionStorage when you want automatic cleanup.',
+        code: `// Identical API to localStorage
+sessionStorage.setItem('step', '2');
+const step = sessionStorage.getItem('step');
+console.log(step); // '2'
+
+sessionStorage.removeItem('step');
+sessionStorage.clear();
+
+// Practical: save form progress within the session
+const form = document.querySelector('#signupForm');
+form.addEventListener('input', () => {
+  sessionStorage.setItem('formDraft', JSON.stringify({
+    name: form.name.value,
+    email: form.email.value,
+  }));
+});
+
+// Restore draft if user navigates back
+const draft = sessionStorage.getItem('formDraft');
+if (draft) {
+  const { name, email } = JSON.parse(draft);
+  form.name.value = name;
+  form.email.value = email;
+}
+
+// Key difference:
+// localStorage  → persists after tab/browser close
+// sessionStorage → cleared when tab is closed`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'limits',
+        heading_ru: 'Ограничения и соображения безопасности',
+        heading_en: 'Limitations and security considerations',
+        text_ru: 'localStorage — удобный инструмент, но с важными ограничениями. Лимит объёма составляет около 5 МБ на домен (точное значение зависит от браузера). Не храните в нём изображения в base64 или большие объёмы данных — для этого существует IndexedDB.\n\nAPI localStorage синхронное: оно блокирует главный поток при каждой операции. Для небольших строк это незаметно, но сериализация/десериализация больших объектов может вызвать задержки. Критически важно никогда не хранить в localStorage пароли, токены авторизации или любые чувствительные данные — хранилище полностью доступно через JavaScript, что делает его уязвимым к XSS-атакам.',
+        text_en: 'localStorage is a convenient tool but with important limitations. The storage limit is around 5 MB per domain (exact value depends on the browser). Do not store base64 images or large amounts of data there — IndexedDB exists for that purpose.\n\nThe localStorage API is synchronous: it blocks the main thread on every operation. For small strings this is unnoticeable, but serializing/deserializing large objects can cause delays. It is critically important to never store passwords, auth tokens, or any sensitive data in localStorage — the storage is fully accessible via JavaScript, making it vulnerable to XSS attacks.',
+        code: `// 1. Size limit: ~5 MB — check before large writes
+function safeSetItem(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    if (e.name === 'QuotaExceededError') {
+      console.warn('localStorage is full!');
+    }
+  }
+}
+
+// 2. Synchronous — avoid large objects
+// BAD: storing a huge array
+// localStorage.setItem('bigData', JSON.stringify(hugeArray));
+// Use IndexedDB for large/complex data instead
+
+// 3. NEVER store sensitive data
+// localStorage.setItem('password', pwd);  // DANGEROUS!
+// localStorage.setItem('authToken', jwt); // DANGEROUS!
+// Use HttpOnly cookies for auth tokens instead
+
+// 4. Feature detection (old browsers / private mode edge cases)
+function storageAvailable() {
+  try {
+    localStorage.setItem('__test', '1');
+    localStorage.removeItem('__test');
+    return true;
+  } catch {
+    return false;
+  }
+}
+if (storageAvailable()) { /* use localStorage */ }`,
+        codeLang: 'javascript',
+      },
+      {
         sectionId: 'objects',
         heading_ru: 'Утилиты для работы с localStorage',
         heading_en: 'localStorage utility functions',

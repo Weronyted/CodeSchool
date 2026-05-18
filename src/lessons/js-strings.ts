@@ -246,6 +246,25 @@ console.log(\`
         codeLang: 'javascript',
       },
       {
+        sectionId: 'methods-case',
+        heading_ru: 'Методы регистра и пробелов',
+        heading_en: 'Case and Whitespace Methods',
+        text_ru: 'JavaScript предоставляет несколько методов для управления регистром букв и удаления лишних пробелов. toUpperCase и toLowerCase меняют регистр всей строки, а trim, trimStart и trimEnd удаляют пробельные символы с одного или обоих концов. Эти методы незаменимы при обработке пользовательского ввода.\n\nВажно помнить, что все методы строк возвращают новую строку, не изменяя исходную. Чтобы применить несколько операций подряд, их можно объединять в цепочку: str.trim().toLowerCase(). Это делает код компактным и читаемым.',
+        text_en: 'JavaScript provides several methods for controlling letter casing and stripping extra whitespace. toUpperCase and toLowerCase change the case of the entire string, while trim, trimStart, and trimEnd remove whitespace characters from one or both ends. These methods are indispensable when processing user input.\n\nIt is important to remember that all string methods return a new string without modifying the original. To apply several operations in a row, they can be chained: str.trim().toLowerCase(). This keeps the code compact and readable.',
+        code: `const input = "  пРиВеТ, МиР!  ";
+
+console.log(input.trim());           // "пРиВеТ, МиР!"
+console.log(input.trimStart());      // "пРиВеТ, МиР!  "
+console.log(input.trimEnd());        // "  пРиВеТ, МиР!"
+console.log(input.toUpperCase());    // "  ПРИВЕТ, МИР!  "
+console.log(input.toLowerCase());    // "  привет, мир!  "
+
+// Цепочка для нормализации ввода
+const normalized = input.trim().toLowerCase();
+console.log(normalized); // "привет, мир!"`,
+        codeLang: 'javascript',
+      },
+      {
         sectionId: 'methods-search',
         heading_ru: 'Поиск без indexOf',
         heading_en: 'Searching Without indexOf',

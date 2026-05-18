@@ -262,6 +262,30 @@ console.log(good(5)); // { value: 5 }`,
         codeLang: 'javascript',
       },
       {
+        sectionId: 'no-param',
+        heading_ru: 'Без параметров и один параметр',
+        heading_en: 'No Params and One Param',
+        text_ru: 'Правила расстановки скобок вокруг параметров в стрелочных функциях просты: если параметров нет, скобки обязательны — () => expr. Если параметр ровно один, скобки можно опустить — x => expr, хотя многие команды предпочитают всегда их писать для единообразия.\n\nПри наличии двух и более параметров скобки обязательны: (a, b) => expr. То же правило действует при использовании значений по умолчанию или деструктуризации в параметрах. Выбор стиля — без скобок или с ними вокруг одиночного параметра — обычно задаётся правилами линтера в команде.',
+        text_en: 'The rules for parentheses around arrow function parameters are straightforward: when there are no parameters, parentheses are required — () => expr. When there is exactly one parameter, parentheses can be omitted — x => expr, although many teams prefer always including them for consistency.\n\nWith two or more parameters parentheses are required: (a, b) => expr. The same applies when using default values or destructuring in the parameters. Whether to include parentheses around a single parameter is usually dictated by the team\'s linter configuration.',
+        code: `// Без параметров — скобки обязательны
+const getRandom = () => Math.random();
+const greet = () => "Привет!";
+
+// Один параметр — скобки необязательны
+const double = x => x * 2;
+const shout = str => str.toUpperCase() + "!";
+
+// Один параметр со скобками (стиль команды)
+const triple = (x) => x * 3;
+
+console.log(getRandom());     // 0.47... (случайное число)
+console.log(greet());         // "Привет!"
+console.log(double(5));       // 10
+console.log(shout("тихо"));   // "ТИХО!"
+console.log(triple(4));       // 12`,
+        codeLang: 'javascript',
+      },
+      {
         sectionId: 'this-binding',
         heading_ru: 'Лексический this',
         heading_en: 'Lexical this',

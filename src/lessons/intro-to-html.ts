@@ -263,6 +263,27 @@ heading is, where a paragraph is, and where an image is.`,
 
     blocks: [
       {
+        sectionId: 'what-is-html',
+        heading_ru: 'Что такое HTML',
+        heading_en: 'What is HTML',
+        text_ru: `HTML расшифровывается как HyperText Markup Language — «язык разметки гипертекста». Это основа всего интернета: каждая веб-страница, которую ты когда-либо видел, написана на HTML. Браузер получает HTML-файл и превращает его в красивую страницу с заголовками, картинками и ссылками.
+
+Слово «разметка» — ключевое. В отличие от языков программирования, HTML не выполняет вычисления и не принимает решений. Он просто описывает структуру и содержимое страницы: «это заголовок», «это абзац», «это изображение». Браузер читает эти инструкции и отображает всё как положено.
+
+«Гипертекст» означает текст со ссылками. Именно ссылки соединяют страницы в единую сеть — Всемирную паутину (World Wide Web). Тим Бернерс-Ли изобрёл HTML в 1991 году именно для того, чтобы учёные могли легко ссылаться на документы друг друга. Сегодня HTML используется везде — от простых личных страничек до сложнейших веб-приложений.`,
+        text_en: `HTML stands for HyperText Markup Language. It is the foundation of the entire web: every web page you have ever seen is written in HTML. The browser receives an HTML file and turns it into a beautiful page with headings, images and links.
+
+The word "markup" is the key one. Unlike programming languages, HTML does not perform calculations or make decisions. It simply describes the structure and content of a page: "this is a heading", "this is a paragraph", "this is an image". The browser reads these instructions and displays everything as intended.
+
+"Hypertext" means text with links. Links are what connect pages into a single network — the World Wide Web. Tim Berners-Lee invented HTML in 1991 precisely so that scientists could easily link to each other's documents. Today HTML is used everywhere — from simple personal pages to the most complex web applications.`,
+        code: `<!-- HTML описывает смысл содержимого -->
+<h1>Добро пожаловать!</h1>
+<p>Это абзац текста на HTML-странице.</p>
+<a href="https://example.com">Это ссылка</a>
+<img src="photo.jpg" alt="Это изображение">`,
+        codeLang: 'html',
+      },
+      {
         sectionId: 'how-page-works',
         heading_ru: 'Как браузер строит страницу',
         heading_en: 'How the browser builds a page',

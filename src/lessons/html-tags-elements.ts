@@ -191,6 +191,29 @@ export const htmlTagsElements: Lesson = {
         codeLang: 'html',
       },
       {
+        sectionId: 'nesting',
+        heading_ru: 'Вложенность',
+        heading_en: 'Nesting',
+        text_ru: 'Вложенность — это размещение одних HTML-элементов внутри других. Большинство тегов могут содержать дочерние элементы, образуя дерево структуры документа. Например, список <ul> содержит элементы <li>, а каждый <li> может содержать ссылку <a> и другие теги.\n\nГлавное правило вложенности: внутренние теги должны закрываться раньше внешних. Порядок закрытия должен быть обратным порядку открытия — как матрёшка. Если вы открыли <p>, затем <strong>, то сначала нужно закрыть </strong>, а потом </p>. Нарушение этого правила приводит к непредсказуемому поведению в браузерах.\n\nНе все элементы можно вкладывать произвольно. Например, блочные элементы (<div>, <p>, <ul>) нельзя размещать внутри строчных (<a>, <span>). Тег <p> не может содержать другие блочные элементы. Для наглядности используйте отступы при вложенности — они помогают визуально проследить структуру кода.',
+        text_en: 'Nesting is the placement of HTML elements inside other elements. Most tags can contain child elements, forming a document structure tree. For example, a <ul> list contains <li> items, and each <li> can contain an <a> link and other tags.\n\nThe main nesting rule: inner tags must be closed before outer tags. The closing order must be the reverse of the opening order — like Russian dolls. If you open <p> and then <strong>, you must close </strong> first and then </p>. Violating this rule leads to unpredictable browser behaviour.\n\nNot all elements can be nested arbitrarily. For example, block elements (<div>, <p>, <ul>) cannot be placed inside inline elements (<a>, <span>). The <p> tag cannot contain other block elements. Use indentation for nesting — it helps you visually trace the code structure.',
+        code: `<!-- Правильная вложенность -->
+<ul>
+  <li>
+    <a href="/page1">
+      <strong>Первая ссылка</strong>
+    </a>
+  </li>
+  <li>Обычный пункт</li>
+</ul>
+
+<!-- Неправильная вложенность — теги перекрещиваются -->
+<p><strong>Важный текст</p></strong>
+
+<!-- Правильно — внутренний тег закрыт первым -->
+<p><strong>Важный текст</strong></p>`,
+        codeLang: 'html',
+      },
+      {
         sectionId: 'void-elements',
         heading_ru: 'Пустые элементы',
         heading_en: 'Void Elements',

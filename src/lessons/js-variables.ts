@@ -223,6 +223,27 @@ value = undefined;        // undefined`,
         codeLang: 'javascript',
       },
       {
+        sectionId: 'typeof',
+        heading_ru: 'Оператор typeof',
+        heading_en: 'The typeof Operator',
+        text_ru: 'Оператор typeof позволяет узнать тип значения прямо во время выполнения программы. Он возвращает строку: "string", "number", "boolean", "undefined", "object" или "function". Это особенно полезно при отладке и при написании универсальных функций, которые должны работать с данными разных типов.\n\nОдна из известных особенностей JavaScript — typeof null возвращает "object", хотя null не является объектом. Это историческая ошибка языка, сохранённая ради обратной совместимости. Чтобы проверить, является ли значение именно null, всегда используйте строгое сравнение: value === null.',
+        text_en: 'The typeof operator lets you determine the type of a value at runtime. It returns a string such as "string", "number", "boolean", "undefined", "object", or "function". This is especially useful for debugging and writing generic functions that must handle values of different types.\n\nOne well-known quirk of JavaScript is that typeof null returns "object", even though null is not an object. This is a historical bug in the language kept for backward compatibility. To check whether a value is specifically null, always use strict equality: value === null.',
+        code: `const username = "Алиса";
+const score = 42;
+const active = true;
+let draft;
+const nothing = null;
+
+console.log(typeof username); // "string"
+console.log(typeof score);    // "number"
+console.log(typeof active);   // "boolean"
+console.log(typeof draft);    // "undefined"
+console.log(typeof nothing);  // "object" ← баг JS
+console.log(typeof nothing === null); // false — не так!
+console.log(nothing === null);        // true  — правильно`,
+        codeLang: 'javascript',
+      },
+      {
         sectionId: 'template-literals',
         heading_ru: 'Шаблонные строки в деталях',
         heading_en: 'Template Literals in Detail',

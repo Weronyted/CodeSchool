@@ -193,6 +193,28 @@ export const htmlImagesMedia: Lesson = {
     intro_en: 'Images make up over 60% of the average web page\'s weight. Knowing how to correctly embed and optimize media files is a key web developer skill.',
     blocks: [
       {
+        sectionId: 'intro',
+        heading_ru: 'Введение в медиа',
+        heading_en: 'Introduction to Media',
+        text_ru: 'Медиаконтент — изображения, видео и аудио — составляет основную часть веса современных веб-страниц. Правильное встраивание медиафайлов влияет сразу на несколько ключевых характеристик сайта: скорость загрузки, доступность для людей с ограниченными возможностями и поисковую оптимизацию.\n\nHTML предоставляет специализированные теги для каждого типа медиаконтента: <img> для изображений, <video> для видео и <audio> для аудио. Все три тега появились или были значительно улучшены в HTML5 — до этого разработчики были вынуждены использовать Flash и другие плагины.\n\nКлючевой принцип работы с медиа в HTML — всегда предоставлять альтернативное содержимое. Для изображений это атрибут alt, для видео и аудио — текстовое описание или субтитры. Это критично для пользователей скринридеров и тех, у кого не загрузился файл.',
+        text_en: 'Media content — images, video, and audio — makes up the bulk of modern web page weight. Correctly embedding media files affects several key characteristics at once: load speed, accessibility for people with disabilities, and search engine optimisation.\n\nHTML provides specialised tags for each media type: <img> for images, <video> for video, and <audio> for audio. All three tags appeared or were significantly improved in HTML5 — before that, developers had to rely on Flash and other plugins.\n\nThe key principle of working with media in HTML is always providing alternative content. For images this is the alt attribute, for video and audio — a text description or subtitles. This is critical for screen reader users and those whose files fail to load.',
+        code: `<!-- Изображение с обязательным alt -->
+<img src="photo.jpg" alt="Описание фотографии" width="800" height="450">
+
+<!-- Видео с нативными элементами управления -->
+<video controls width="640" height="360">
+  <source src="video.mp4" type="video/mp4">
+  Ваш браузер не поддерживает видео.
+</video>
+
+<!-- Аудио с нативными элементами управления -->
+<audio controls>
+  <source src="audio.mp3" type="audio/mpeg">
+  Ваш браузер не поддерживает аудио.
+</audio>`,
+        codeLang: 'html',
+      },
+      {
         sectionId: 'img-tag',
         heading_ru: 'Атрибуты тега <img>',
         heading_en: 'Attributes of the <img> Tag',

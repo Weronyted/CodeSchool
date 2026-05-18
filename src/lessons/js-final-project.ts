@@ -130,6 +130,163 @@ export const jsFinalProject: Lesson = {
     intro_en: 'The final project brings together everything you have learned: semantic HTML markup, modern CSS with variables and flexbox, and JavaScript with events, localStorage and async code.',
     blocks: [
       {
+        sectionId: 'html-structure',
+        heading_ru: 'Семантическая разметка и доступность',
+        heading_en: 'Semantic markup and accessibility',
+        text_ru: 'Правильная HTML-структура — это не просто красивый код: она напрямую влияет на доступность, SEO и удобство сопровождения. Семантические теги (header, nav, main, section, footer) передают смысл как браузеру, так и вспомогательным технологиям, например экранным читалкам. Поисковые системы также лучше индексируют страницы с выраженной семантикой.\n\nПри построении визитной карточки следуйте структурному принципу: один элемент header с навигацией, один элемент main с секциями по контенту, один footer. Каждой секции дайте уникальный id — это нужно как для якорных ссылок внутри страницы, так и для IntersectionObserver, который отслеживает активные разделы при скролле.',
+        text_en: 'Correct HTML structure is not just beautiful code: it directly affects accessibility, SEO and maintainability. Semantic tags (header, nav, main, section, footer) communicate meaning to both the browser and assistive technologies such as screen readers. Search engines also index pages with clear semantics more effectively.\n\nWhen building a business card, follow the structural principle: one header element with navigation, one main element with content sections, one footer. Give each section a unique id — this is needed both for in-page anchor links and for the IntersectionObserver that tracks active sections while scrolling.',
+        code: `<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alex Johnson — Frontend Developer</title>
+</head>
+<body>
+
+  <header class="header">
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+    </nav>
+    <!-- aria-label is required for icon-only buttons -->
+    <button id="themeToggle" aria-label="Toggle dark/light theme">🌙</button>
+  </header>
+
+  <main>
+    <section id="about" aria-labelledby="about-heading">
+      <h1 id="about-heading">Alex Johnson</h1>
+    </section>
+    <section id="skills" aria-labelledby="skills-heading">
+      <h2 id="skills-heading">Skills</h2>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 Alex Johnson</p>
+  </footer>
+
+</body>
+</html>`,
+        codeLang: 'html',
+      },
+      {
+        sectionId: 'theme-toggle',
+        heading_ru: 'Реализация переключателя темы с localStorage',
+        heading_en: 'Implementing the theme toggle with localStorage',
+        text_ru: 'Переключатель темы — это классический пример совместной работы трёх технологий: CSS-переменных для стилей, атрибута data-theme на корневом элементе для переключения между наборами переменных и localStorage для сохранения выбора между визитами.\n\nКлючевой момент — применять сохранённую тему как можно раньше при загрузке страницы, чтобы избежать «вспышки» неправильной темы (FOUC — Flash Of Unstyled Content). Лучше всего сделать это в теге script в head, до отрисовки тела страницы. В нашем проекте тема применяется в начале основного JS-файла, что достаточно для учебного проекта.',
+        text_en: 'The theme toggle is a classic example of three technologies working together: CSS variables for styles, the data-theme attribute on the root element to switch between variable sets, and localStorage to persist the user\'s choice between visits.\n\nThe key point is to apply the saved theme as early as possible on page load to avoid a flash of the wrong theme (FOUC — Flash Of Unstyled Content). Ideally this is done in a script tag in the head before the page body is rendered. In our project the theme is applied at the start of the main JS file, which is sufficient for a learning project.',
+        code: `// === THEME TOGGLE ===
+const themeToggle = document.querySelector('#themeToggle');
+const html = document.documentElement; // <html> element
+
+// 1. Restore saved theme immediately on load
+const savedTheme = localStorage.getItem('theme') || 'light';
+html.setAttribute('data-theme', savedTheme);
+themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+// 2. Toggle on button click
+themeToggle.addEventListener('click', () => {
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+
+  // Update the DOM — CSS variables switch automatically
+  html.setAttribute('data-theme', next);
+
+  // Persist the choice
+  localStorage.setItem('theme', next);
+
+  // Update button icon
+  themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+});`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'smooth-scroll',
+        heading_ru: 'Плавный скролл через делегирование событий',
+        heading_en: 'Smooth scroll via event delegation',
+        text_ru: 'Наивный подход — повесить слушатель click на каждую ссылку навигации по отдельности. Лучший подход — делегирование событий: один слушатель на родительском элементе перехватывает клики по всем дочерним ссылкам. Это эффективнее по памяти и автоматически охватывает ссылки, добавленные динамически.\n\nМетод element.closest(selector) незаменим здесь: клик может попасть на дочерний элемент ссылки (например, иконку внутри тега a), а closest поднимается по дереву DOM до ближайшего предка, соответствующего селектору. Атрибут href^="#" в качестве CSS-селектора фильтрует только якорные ссылки, оставляя внешние ссылки работать обычным образом.',
+        text_en: 'The naive approach is to attach a click listener to each navigation link individually. A better approach is event delegation: one listener on the parent element intercepts clicks on all child links. This is more memory-efficient and automatically covers links added dynamically.\n\nThe element.closest(selector) method is indispensable here: a click may land on a child element of the link (for example an icon inside an anchor tag), and closest walks up the DOM tree to the nearest ancestor matching the selector. Using href^="#" as a CSS selector filters only anchor links, leaving external links to work normally.',
+        code: `// Single listener on the nav — covers ALL links inside it
+document.querySelector('.nav').addEventListener('click', (e) => {
+  // Walk up from click target to find the nearest <a href="#...">
+  const link = e.target.closest('a[href^="#"]');
+  if (!link) return; // click was not on (or inside) a link
+
+  e.preventDefault(); // stop the default jump/hash change
+
+  const targetId = link.getAttribute('href'); // e.g. '#skills'
+  const target = document.querySelector(targetId);
+
+  if (target) {
+    target.scrollIntoView({
+      behavior: 'smooth', // animated scroll
+      block: 'start',     // align top of section to top of viewport
+    });
+  }
+});
+
+// Also handle hero CTA buttons (they are outside .nav)
+document.querySelector('.hero-links').addEventListener('click', (e) => {
+  const link = e.target.closest('a[href^="#"]');
+  if (!link) return;
+  e.preventDefault();
+  document.querySelector(link.getAttribute('href'))
+    ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'finishing-touches',
+        heading_ru: 'Финальные штрихи: форма, анимации и активная навигация',
+        heading_en: 'Finishing touches: form, animations and active nav',
+        text_ru: 'Профессиональный сайт-визитка отличается от учебного проекта вниманием к деталям. Три ключевых улучшения: обработка формы контактов с обратной связью пользователю, анимация карточек при появлении в зоне видимости через IntersectionObserver, и подсветка активного пункта меню при скролле.\n\nIntersectionObserver — современная альтернатива прослушиванию события scroll. Он вызывает коллбэк только когда элемент пересекает границу видимости, не нагружая главный поток постоянными вычислениями. Параметр threshold: 0.5 означает, что коллбэк срабатывает, когда 50% элемента видны в окне просмотра.',
+        text_en: 'A professional business card site differs from a student project by attention to detail. Three key improvements: contact form handling with user feedback, card animations when entering the viewport via IntersectionObserver, and active menu item highlighting while scrolling.\n\nIntersectionObserver is a modern alternative to listening to the scroll event. It calls the callback only when an element crosses the visibility boundary, not burdening the main thread with constant calculations. The threshold: 0.5 parameter means the callback fires when 50% of the element is visible in the viewport.',
+        code: `// 1. Contact form — show success message, reset fields
+const form = document.querySelector('#contactForm');
+const formMsg = document.querySelector('#formMsg');
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  formMsg.textContent = '✅ Message sent! I will get back to you soon.';
+  form.reset();
+  setTimeout(() => { formMsg.textContent = ''; }, 4000);
+});
+
+// 2. Scroll-in animation with IntersectionObserver
+const cardObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('animate-in');
+      cardObserver.unobserve(entry.target); // animate once only
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.card').forEach(card => {
+  cardObserver.observe(card);
+});
+
+// 3. Highlight active nav link on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav a');
+
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(link => {
+        const isActive = link.getAttribute('href') === '#' + entry.target.id;
+        link.style.color = isActive ? 'var(--accent)' : '';
+      });
+    }
+  });
+}, { threshold: 0.5 });
+
+sections.forEach(s => navObserver.observe(s));`,
+        codeLang: 'javascript',
+      },
+      {
         sectionId: 'css-styling',
         heading_ru: 'Flexbox для макета',
         heading_en: 'Flexbox for layout',

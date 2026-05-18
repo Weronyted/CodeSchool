@@ -259,6 +259,35 @@ tbody tr:hover {
     intro_en: 'Tables are one of HTML\'s oldest elements. They were once used for layout, but today their purpose is strictly defined: displaying tabular data with rows and columns.',
     blocks: [
       {
+        sectionId: 'intro',
+        heading_ru: 'Когда использовать таблицы',
+        heading_en: 'When to Use Tables',
+        text_ru: 'Таблицы в HTML предназначены исключительно для отображения табличных данных — информации, которая имеет естественную структуру строк и столбцов. Расписание занятий, прайс-лист, сравнение характеристик продуктов, финансовая статистика — всё это хорошие кандидаты для таблицы.\n\nГлавный вопрос при выборе таблицы: «Связаны ли данные в строках и столбцах смысловой связью?» Если да — таблица уместна. Если вы просто хотите расположить блоки в несколько колонок — используйте CSS Flexbox или Grid. Использование таблиц для вёрстки макета — серьёзная ошибка, нарушающая доступность и семантику.\n\nВ эпоху до CSS (1990-е — начало 2000-х) таблицы были стандартным инструментом вёрстки. Сегодня это антипаттерн: скринридеры воспринимают таблицу как набор данных и читают её иначе, чем обычную разметку, что полностью ломает восприятие у незрячих пользователей.',
+        text_en: 'Tables in HTML are exclusively intended for displaying tabular data — information that has a natural structure of rows and columns. A class schedule, price list, product feature comparison, financial statistics — all of these are good candidates for a table.\n\nThe key question when choosing a table: "Do the data in rows and columns have a meaningful relationship?" If yes — a table is appropriate. If you simply want to arrange blocks in multiple columns — use CSS Flexbox or Grid. Using tables for page layout is a serious mistake that breaks accessibility and semantics.\n\nIn the pre-CSS era (1990s — early 2000s) tables were the standard layout tool. Today this is an anti-pattern: screen readers treat a table as a data set and read it differently from regular markup, which completely breaks comprehension for blind users.',
+        code: `<!-- Правильно: таблица для данных -->
+<table>
+  <caption>Расписание уроков</caption>
+  <thead>
+    <tr>
+      <th scope="col">День</th>
+      <th scope="col">Предмет</th>
+      <th scope="col">Время</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Понедельник</td>
+      <td>Математика</td>
+      <td>09:00–10:30</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Неправильно: таблица для макета -->
+<!-- Используйте CSS Grid или Flexbox! -->`,
+        codeLang: 'html',
+      },
+      {
         sectionId: 'basic-structure',
         heading_ru: 'Основные теги таблицы',
         heading_en: 'Core Table Tags',

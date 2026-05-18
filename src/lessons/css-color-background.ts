@@ -156,6 +156,15 @@ export const cssColorBackground: Lesson = {
     intro_en: 'Color is one of the most powerful tools in design. CSS provides several formats for specifying it, each with its own strengths. In this lesson you will explore HEX, RGB, HSL, and learn to create backgrounds of any complexity — from solid fills to layered gradients.',
     blocks: [
       {
+        sectionId: 'intro',
+        heading_ru: 'Цвет в CSS',
+        heading_en: 'Color in CSS',
+        text_ru: 'Цвет — один из первых инструментов, которым мы управляем в CSS. Каждый элемент на странице может получить цвет текста (`color`) и цвет фона (`background-color`). CSS поддерживает несколько форматов записи цвета: именованные слова (`red`, `coral`), шестнадцатеричный формат HEX, функции `rgb()` и `hsl()`, а также их варианты с альфа-каналом для прозрачности.\n\nПравильный выбор цветов влияет не только на эстетику, но и на доступность интерфейса. Контрастность между цветом текста и фоном должна быть достаточной для чтения — стандарт WCAG рекомендует соотношение не ниже 4.5:1 для обычного текста. CSS-переменные позволяют централизованно управлять палитрой всего сайта.\n\nВ этом уроке вы познакомитесь со всеми основными форматами, научитесь работать с прозрачностью и создавать сложные фоны — от сплошных цветов до многослойных градиентов.',
+        text_en: 'Color is one of the first tools we control in CSS. Every element on the page can receive a text color (`color`) and a background color (`background-color`). CSS supports several color formats: named keywords (`red`, `coral`), the hexadecimal HEX format, the `rgb()` and `hsl()` functions, and their alpha-channel variants for transparency.\n\nChoosing colors well affects not only aesthetics but also interface accessibility. The contrast ratio between text and background must be high enough to read — the WCAG standard recommends at least 4.5:1 for normal text. CSS variables let you manage the entire site palette from a single place.\n\nIn this lesson you will learn all the main formats, work with transparency, and create complex backgrounds — from solid fills to layered gradients.',
+        code: '/* The two fundamental color properties */\np {\n  color: #1a1a2e;          /* text color */\n  background-color: #f8fafc; /* background color */\n}\n\n/* Both on one element */\n.alert {\n  color: #842029;\n  background-color: #f8d7da;\n}',
+        codeLang: 'css',
+      },
+      {
         sectionId: 'formats',
         heading_ru: 'Три главных формата',
         heading_en: 'Three Main Formats',

@@ -277,6 +277,31 @@ export const htmlSemantics: Lesson = {
     intro_en: 'Semantic HTML means using tags according to their purpose. Instead of <div> everywhere — the right tag for each meaningful block. This affects search engine optimization, accessibility for people with disabilities, and code readability.',
     blocks: [
       {
+        sectionId: 'intro',
+        heading_ru: 'Что такое семантика',
+        heading_en: 'What Is Semantics',
+        text_ru: 'Семантика в HTML означает использование тегов в соответствии с их смысловым назначением. До HTML5 разработчики использовали теги <div> и <span> для всего подряд: шапок, меню, статей, подвалов. Браузер не мог понять, что означает каждый блок, — он видел просто набор прямоугольников.\n\nHTML5 ввёл десятки тегов с встроенным смыслом: <header>, <nav>, <main>, <article>, <section>, <aside>, <footer>. Каждый тег «говорит» браузеру, поисковику и скринридеру, какую роль играет этот блок на странице. Это называется семантической разметкой.\n\nСемантический HTML решает три задачи одновременно. Первая — доступность: скринридеры предлагают пользователям навигацию по landmark-регионам. Вторая — SEO: поисковые роботы лучше понимают структуру и важность контента. Третья — читаемость кода: другой разработчик (или вы сами через полгода) сразу поймёт структуру страницы.',
+        text_en: 'Semantics in HTML means using tags according to their intended meaning. Before HTML5, developers used <div> and <span> tags for everything: headers, menus, articles, footers. The browser could not understand what each block meant — it saw only a collection of rectangles.\n\nHTML5 introduced dozens of tags with built-in meaning: <header>, <nav>, <main>, <article>, <section>, <aside>, <footer>. Each tag "tells" the browser, search engine, and screen reader what role that block plays on the page. This is called semantic markup.\n\nSemantic HTML solves three problems at once. First — accessibility: screen readers offer users navigation by landmark regions. Second — SEO: search engine crawlers better understand content structure and importance. Third — code readability: another developer (or you yourself six months later) immediately grasps the page structure.',
+        code: `<!-- До HTML5: div-soup без смысла -->
+<div class="header">
+  <div class="nav">...</div>
+</div>
+<div class="main-content">
+  <div class="article">...</div>
+</div>
+<div class="footer">...</div>
+
+<!-- HTML5: семантическая разметка -->
+<header>
+  <nav>...</nav>
+</header>
+<main>
+  <article>...</article>
+</main>
+<footer>...</footer>`,
+        codeLang: 'html',
+      },
+      {
         sectionId: 'structure',
         heading_ru: 'Структурные теги: header, nav, main, footer',
         heading_en: 'Structural Tags: header, nav, main, footer',

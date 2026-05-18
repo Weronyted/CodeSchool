@@ -117,6 +117,21 @@ games, apps, websites and solve all kinds of problems.`,
 
     blocks: [
       {
+        sectionId: 'what-is-programming',
+        heading_ru: 'Что такое программирование',
+        heading_en: 'What is programming',
+        text_ru: `Программирование — это процесс написания точных инструкций для компьютера, чтобы он выполнял нужные задачи. Эти инструкции называются кодом, а написанный набор инструкций — программой. Компьютер — это невероятно быстрая и точная машина, но он не умеет думать самостоятельно: он делает ровно то, что ему говорит программист.
+
+Каждое приложение, сайт, игра или операционная система — это программа. Когда ты открываешь приложение на телефоне, нажимаешь кнопку или смотришь видео онлайн, всё это происходит благодаря чьему-то коду. Программирование — это способ превратить идею в работающий продукт.
+
+Хорошая новость: программирование доступно каждому. Это навык, который можно освоить так же, как чтение или математику. Начинают обычно с простых задач: вывести текст на экран, сложить два числа, показать картинку. Постепенно задачи усложняются — и вместе с ними растёт твой набор инструментов и уверенность.`,
+        text_en: `Programming is the process of writing precise instructions for a computer so it carries out the tasks you need. These instructions are called code, and a written set of instructions is called a program. A computer is an incredibly fast and precise machine, but it cannot think for itself — it does exactly what the programmer tells it to do.
+
+Every app, website, game, or operating system is a program. When you open an app on your phone, press a button, or watch a video online, all of that happens because of someone's code. Programming is the way to turn an idea into a working product.
+
+Good news: programming is accessible to everyone. It is a skill you can learn just like reading or maths. People usually start with simple tasks: print text to the screen, add two numbers, display an image. Gradually the tasks grow more complex — and with them grow your toolkit and confidence.`,
+      },
+      {
         sectionId: 'instructions',
         heading_ru: 'Компьютер и инструкции',
         heading_en: 'Computers and instructions',

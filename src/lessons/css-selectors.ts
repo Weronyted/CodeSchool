@@ -155,6 +155,15 @@ export const cssSelectors: Lesson = {
     intro_en: 'CSS selectors are the heart of cascading style sheets. Without the ability to target the right elements, building a complex and maintainable UI is impossible. In this lesson you will master the full arsenal: from simple tags to specific pseudo-elements.',
     blocks: [
       {
+        sectionId: 'intro',
+        heading_ru: 'Что такое селектор',
+        heading_en: 'What is a Selector',
+        text_ru: 'Селектор — это шаблон, который CSS использует для поиска нужных HTML-элементов и применения к ним стилей. Перед фигурными скобками с объявлениями всегда стоит селектор. Он определяет, какие именно элементы на странице получат заданные свойства — цвет, отступ, шрифт или что-то ещё.\n\nОт выбора правильного селектора зависит, насколько точно и предсказуемо будут применяться стили. Слишком широкий селектор (например, тег `p`) затронет все абзацы — что может быть и задумано, и нежелательно. Слишком конкретный превратит CSS в нечитаемую цепочку вложенностей. Хорошие CSS-практики строятся на балансе между точностью и простотой.\n\nСелекторы — это не только теги, классы и идентификаторы. CSS предоставляет мощный набор инструментов: атрибутные селекторы, псевдоклассы состояний, псевдоэлементы и комбинаторы для описания структурных связей. Освоив их, вы сможете прицельно стилизовать любой элемент страницы.',
+        text_en: 'A selector is a pattern that CSS uses to find the right HTML elements and apply styles to them. Every CSS rule has a selector before the curly braces. It determines exactly which elements on the page receive the declared properties — color, spacing, font, or anything else.\n\nChoosing the right selector determines how precisely and predictably styles are applied. A selector that is too broad (such as the tag `p`) will target all paragraphs — which may or may not be the intention. One that is too specific turns CSS into an unreadable chain of nested qualifiers. Good CSS practice is built on the balance between precision and simplicity.\n\nSelectors are not limited to tags, classes, and IDs. CSS offers a powerful toolkit: attribute selectors, state pseudo-classes, pseudo-elements, and combinators for describing structural relationships. Once you have mastered them, you can pinpoint any element on a page.',
+        code: '/* The anatomy of a CSS rule */\n\n/* selector  */   /* declaration block */\n.card         {   background: white; padding: 16px; }\n\n/* selector      property   value  */\nh1           {   color:     #1a1a2e; }\n\n/* Multiple selectors share one block */\nh1, h2, h3 {\n  font-weight: 700;\n  line-height: 1.2;\n}',
+        codeLang: 'css',
+      },
+      {
         sectionId: 'basic',
         heading_ru: 'Тег, класс и ID',
         heading_en: 'Tag, Class, and ID',

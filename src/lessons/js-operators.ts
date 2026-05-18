@@ -239,6 +239,29 @@ const config = null;
 const timeout = config ?? 3000; // 3000`,
         codeLang: 'javascript',
       },
+      {
+        sectionId: 'strings',
+        heading_ru: 'Строки и оператор +',
+        heading_en: 'Strings and the + Operator',
+        text_ru: 'Когда оператор + применяется к строкам, он выполняет конкатенацию — склеивает их в одну. Достаточно, чтобы хотя бы один из операндов был строкой, и JavaScript автоматически приведёт второй к строковому типу. Это часто приводит к неожиданным результатам при смешивании чисел и строк.\n\nЧтобы явно преобразовать значение в число, используйте функцию Number() или унарный оператор +. В современном коде для формирования строк с переменными предпочтительнее использовать шаблонные литералы с обратными кавычками — они избавляют от неоднозначности оператора +.',
+        text_en: 'When the + operator is applied to strings it performs concatenation — joining them into one. It is enough for just one operand to be a string and JavaScript will automatically coerce the other to a string type. This frequently leads to surprising results when mixing numbers and strings.\n\nTo explicitly convert a value to a number, use the Number() function or the unary + operator. In modern code, template literals with backticks are preferred for building strings with variables — they remove the ambiguity of the + operator.',
+        code: `// Конкатенация строк
+console.log("Привет" + ", " + "мир!"); // "Привет, мир!"
+
+// Скрытое преобразование типов
+console.log("Счёт: " + 42);   // "Счёт: 42"
+console.log("5" + 3);          // "53" (не 8!)
+console.log("10" - 4);         // 6   (вычитание всегда числовое)
+
+// Явное приведение к числу
+console.log(Number("5") + 3);  // 8
+console.log(+"5" + 3);         // 8
+
+// Предпочтительный способ — шаблонный литерал
+const total = 150;
+console.log(\`Итого: \${total} ₽\`); // "Итого: 150 ₽"`,
+        codeLang: 'javascript',
+      },
     ],
   },
 

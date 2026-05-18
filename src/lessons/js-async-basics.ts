@@ -168,12 +168,163 @@ export const jsAsyncBasics: Lesson = {
     intro_en: 'Async allows JavaScript to not freeze while waiting for server responses, timers, or other operations. It is the foundation for any web application that works with data.',
     blocks: [
       {
+        sectionId: 'sync-async',
+        heading_ru: 'Синхронный и асинхронный код: в чём разница',
+        heading_en: 'Synchronous vs asynchronous code: what is the difference',
+        text_ru: 'JavaScript — однопоточный язык: в каждый момент времени выполняется только одна инструкция. Синхронный код выполняется строго последовательно, и пока одна операция не завершится, следующая не начнётся. Если операция занимает много времени (например, чтение большого файла), поток блокируется — браузер «замирает».\n\nАсинхронный код решает эту проблему с помощью Event Loop. Медленная операция отправляется «в фон» (браузерный API или среда Node.js), а основной поток продолжает работу. Когда операция завершается, её коллбэк помещается в очередь задач и выполняется, как только стек вызовов освобождается. Это позволяет JavaScript оставаться отзывчивым, обрабатывая сеть, таймеры и ввод пользователя без блокировки.',
+        text_en: 'JavaScript is single-threaded: only one instruction executes at any given moment. Synchronous code runs strictly in sequence — the next operation cannot start until the current one finishes. If an operation takes a long time (such as reading a large file), the thread is blocked and the browser appears to freeze.\n\nAsynchronous code solves this problem with the Event Loop. A slow operation is handed off to the background (a browser API or the Node.js runtime), and the main thread continues. When the operation completes, its callback is placed in the task queue and runs as soon as the call stack is empty. This keeps JavaScript responsive, handling network requests, timers, and user input without blocking.',
+        code: `// --- Synchronous: blocks the thread ---
+function slowSync() {
+  const start = Date.now();
+  while (Date.now() - start < 2000) {} // busy-wait 2 s
+  return 'done';
+}
+console.log('before');
+const result = slowSync(); // freezes for 2 seconds!
+console.log('after:', result);
+// Output (with 2 s pause): before → after: done
+
+// --- Asynchronous: non-blocking ---
+console.log('1: start');
+
+setTimeout(() => {
+  console.log('3: timer fired'); // runs after current code finishes
+}, 0);
+
+console.log('2: end of synchronous code');
+// Output (immediately): 1: start → 2: end → 3: timer fired
+
+// Even setTimeout(..., 0) runs AFTER the current synchronous block!`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'settimeout',
+        heading_ru: 'setTimeout и setInterval: планирование задач',
+        heading_en: 'setTimeout and setInterval: scheduling tasks',
+        text_ru: 'setTimeout(fn, delay) планирует однократный вызов функции fn через не менее delay миллисекунд. Функция возвращает числовой идентификатор таймера, который можно передать в clearTimeout для отмены. Важно: delay — минимальная задержка, а не гарантированная. Если поток занят, вызов произойдёт позже.\n\nsetInterval(fn, period) вызывает fn повторно через каждые period мс. clearInterval останавливает интервал. setInterval не подходит для точного тайминга: если выполнение fn занимает дольше period, следующий вызов запустится сразу после завершения предыдущего. Для таких случаев предпочтительна рекурсивная цепочка setTimeout.',
+        text_en: 'setTimeout(fn, delay) schedules a one-time call to fn after at least delay milliseconds. The function returns a numeric timer ID that can be passed to clearTimeout to cancel it. Importantly, delay is a minimum delay, not a guarantee — if the thread is busy the call will happen later.\n\nsetInterval(fn, period) calls fn repeatedly every period ms. clearInterval stops the interval. setInterval is not suitable for precise timing: if executing fn takes longer than period, the next call fires immediately after the previous one finishes. For such cases a recursive setTimeout chain is preferred.',
+        code: `// --- setTimeout ---
+const timerId = setTimeout(() => {
+  console.log('Runs once after 1.5 seconds');
+}, 1500);
+
+// Cancel before it fires
+// clearTimeout(timerId);
+
+// --- setInterval ---
+let ticks = 0;
+const intervalId = setInterval(() => {
+  ticks++;
+  console.log(\`Tick \${ticks}\`);
+  if (ticks >= 3) {
+    clearInterval(intervalId);
+    console.log('Interval stopped');
+  }
+}, 1000);
+// Tick 1 → Tick 2 → Tick 3 → Interval stopped
+
+// --- Recursive setTimeout (more precise) ---
+function poll() {
+  console.log('polling...');
+  setTimeout(poll, 1000); // next call only after this one ends
+}
+// poll();
+
+// Useful pattern: debounce with setTimeout
+let debounceTimer;
+function onInput(value) {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    console.log('Search for:', value); // fires 300 ms after last keystroke
+  }, 300);
+}`,
+        codeLang: 'javascript',
+      },
+      {
         sectionId: 'promise',
         heading_ru: 'Promise.allSettled и Promise.race',
         heading_en: 'Promise.allSettled and Promise.race',
         text_ru: 'Помимо Promise.all существуют другие комбинаторы. allSettled ждёт всех (включая отклонённые). race возвращает первый завершившийся.',
         text_en: 'Beyond Promise.all there are other combinators. allSettled waits for all (including rejected). race returns the first to settle.',
         code: `// allSettled — never rejects, returns status of each\nconst results = await Promise.allSettled([\n  fetch('/api/a').then(r => r.json()),\n  fetch('/api/b').then(r => r.json()),  // may fail\n]);\nresults.forEach(r => {\n  if (r.status === 'fulfilled') console.log(r.value);\n  else console.error(r.reason);\n});\n\n// race — resolves/rejects with the first settled promise\nconst fastest = await Promise.race([slowFetch(), fastFetch()]);`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'fetch',
+        heading_ru: 'fetch API: HTTP-запросы из браузера',
+        heading_en: 'fetch API: making HTTP requests from the browser',
+        text_ru: 'fetch — встроенная функция для отправки HTTP-запросов. Она возвращает Promise, который разрешается объектом Response. Получение данных — двухэтапный процесс: сначала ждём объект ответа (заголовки), затем вызываем метод чтения тела (.json(), .text(), .blob()) — он тоже возвращает Promise.\n\nГлавная ловушка fetch: он не выбрасывает ошибку при HTTP-статусах 4xx и 5xx — только при сетевых сбоях (нет соединения, DNS-ошибка). Чтобы корректно обрабатывать ошибки сервера, необходимо вручную проверять свойство response.ok. Для отправки данных (POST/PUT) передайте объект настроек вторым аргументом с полями method, headers и body.',
+        text_en: 'fetch is a built-in function for sending HTTP requests. It returns a Promise that resolves to a Response object. Receiving data is a two-step process: first await the response object (headers), then call a body-reading method (.json(), .text(), .blob()) — which also returns a Promise.\n\nThe main fetch gotcha: it does NOT throw on HTTP 4xx/5xx status codes — only on network failures (no connection, DNS error). To handle server errors correctly you must manually check the response.ok property. To send data (POST/PUT) pass a settings object as the second argument with method, headers, and body fields.',
+        code: `// --- GET request ---
+fetch('https://jsonplaceholder.typicode.com/posts/1')
+  .then(response => {
+    // fetch only rejects on network errors — check HTTP status manually
+    if (!response.ok) {
+      throw new Error(\`HTTP error: \${response.status}\`);
+    }
+    return response.json(); // reads and parses the body
+  })
+  .then(post => {
+    console.log('Title:', post.title);
+  })
+  .catch(err => console.error('Request failed:', err));
+
+// --- POST request ---
+fetch('https://jsonplaceholder.typicode.com/posts', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ title: 'Hello', body: 'World', userId: 1 }),
+})
+  .then(res => res.json())
+  .then(created => console.log('Created post id:', created.id));
+
+// --- Checking response.ok ---
+const res = await fetch('/api/might-fail');
+if (!res.ok) {
+  throw new Error('Server error: ' + res.status); // 404, 500, etc.
+}
+const data = await res.json();`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'async-await',
+        heading_ru: 'async/await: асинхронный код в линейном стиле',
+        heading_en: 'async/await: async code in a linear style',
+        text_ru: 'async/await — синтаксический сахар над Promise, появившийся в ES2017. Ключевое слово async перед функцией делает её асинхронной: она всегда возвращает Promise (обычное возвращаемое значение автоматически оборачивается в Promise.resolve). Внутри async-функции можно использовать await перед любым Promise — выполнение функции приостанавливается до разрешения промиса, но основной поток при этом не блокируется.\n\nГлавное преимущество async/await — код выглядит и читается как синхронный, хотя под капотом остаётся асинхронным. Обработка ошибок выполняется привычным try/catch. await можно использовать не только с fetch, но с любым Promise: задержками, операциями с БД, анимациями и т.д. Для параллельного запуска нескольких операций используйте await Promise.all([...]).',
+        text_en: 'async/await is syntactic sugar over Promises, introduced in ES2017. The async keyword before a function makes it asynchronous: it always returns a Promise (a plain return value is automatically wrapped in Promise.resolve). Inside an async function you can use await before any Promise — function execution pauses until the Promise settles, but the main thread is not blocked.\n\nThe main advantage of async/await is that the code looks and reads like synchronous code, even though it remains asynchronous under the hood. Error handling uses the familiar try/catch syntax. await works with any Promise — not just fetch — including delays, database operations, animations, and more. To run multiple async operations in parallel use await Promise.all([...]).',
+        code: `// Basic async/await
+async function loadUser(id) {
+  const res = await fetch(\`https://jsonplaceholder.typicode.com/users/\${id}\`);
+  if (!res.ok) throw new Error('User not found');
+  const user = await res.json();
+  return user; // wraps value in Promise.resolve automatically
+}
+
+// Call it
+loadUser(1).then(u => console.log(u.name)); // 'Leanne Graham'
+
+// Error handling with try/catch
+async function safeLoad(id) {
+  try {
+    const user = await loadUser(id);
+    console.log('Loaded:', user.name);
+  } catch (err) {
+    console.error('Failed:', err.message);
+  }
+}
+
+// Parallel requests with Promise.all
+async function loadDashboard() {
+  const [user, posts] = await Promise.all([
+    fetch('/api/user').then(r => r.json()),
+    fetch('/api/posts').then(r => r.json()),
+  ]);
+  console.log(user, posts); // both loaded simultaneously
+}
+
+// async function always returns a Promise
+async function getNumber() { return 42; }
+getNumber().then(console.log); // 42`,
         codeLang: 'javascript',
       },
       {

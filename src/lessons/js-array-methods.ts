@@ -176,6 +176,157 @@ export const jsArrayMethods: Lesson = {
         codeLang: 'javascript',
       },
       {
+        sectionId: 'filter',
+        heading_ru: 'filter: отбор элементов по условию',
+        heading_en: 'filter: selecting elements by condition',
+        text_ru: 'filter принимает функцию-предикат и возвращает новый массив, содержащий только те элементы, для которых функция вернула true. Исходный массив при этом не изменяется. Это основной инструмент для выборки данных из коллекций.\n\nПредикат получает три аргумента: текущий элемент, его индекс и сам массив. Чаще всего используется только первый. filter удобно комбинировать с map: сначала отфильтровать нужные записи, затем трансформировать их.',
+        text_en: 'filter accepts a predicate function and returns a new array containing only the elements for which the function returned true. The original array is not modified. It is the primary tool for selecting data from collections.\n\nThe predicate receives three arguments: the current element, its index, and the array itself. Typically only the first is used. filter pairs naturally with map: first filter the relevant records, then transform them.',
+        code: `const scores = [45, 72, 88, 34, 91, 60];
+
+// Keep only passing grades (>= 60)
+const passing = scores.filter(s => s >= 60);
+console.log(passing); // [72, 88, 91, 60]
+
+// Filter objects by a property
+const users = [
+  { name: 'Alice', active: true },
+  { name: 'Bob',   active: false },
+  { name: 'Cara',  active: true },
+];
+const activeUsers = users.filter(u => u.active);
+console.log(activeUsers.map(u => u.name)); // ['Alice', 'Cara']
+
+// Remove falsy values (null, undefined, '', 0, false)
+const mixed = [0, 'hello', null, 42, '', undefined, true];
+const truthy = mixed.filter(Boolean);
+console.log(truthy); // ['hello', 42, true]`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'accumulate',
+        heading_ru: 'reduce: сворачивание массива в одно значение',
+        heading_en: 'reduce: collapsing an array into a single value',
+        text_ru: 'reduce — самый универсальный метод массивов. Он обходит массив слева направо, передавая накопленный результат (аккумулятор) следующей итерации. Сигнатура коллбэка: (accumulator, currentValue, index, array). Второй аргумент reduce — начальное значение аккумулятора.\n\nС помощью reduce можно вычислить сумму, среднее, найти максимум, сгруппировать объекты или даже реализовать map и filter. Если начальное значение не указано, первый элемент массива становится аккумулятором — это может привести к неожиданным результатам, поэтому лучше всегда указывать его явно.',
+        text_en: 'reduce is the most versatile array method. It traverses the array left to right, passing the accumulated result (accumulator) to the next iteration. The callback signature is (accumulator, currentValue, index, array). The second argument to reduce is the initial accumulator value.\n\nWith reduce you can compute a sum, average, find a maximum, group objects, or even implement map and filter. If no initial value is provided, the first element becomes the accumulator — this can produce unexpected results, so it is best to always provide one explicitly.',
+        code: `const prices = [10, 25, 5, 40, 20];
+
+// Sum all prices
+const total = prices.reduce((acc, price) => acc + price, 0);
+console.log(total); // 100
+
+// Find maximum value
+const max = prices.reduce((acc, price) => price > acc ? price : acc, -Infinity);
+console.log(max); // 40
+
+// Group array of objects by a key
+const orders = [
+  { product: 'coffee', qty: 2 },
+  { product: 'tea',    qty: 1 },
+  { product: 'coffee', qty: 3 },
+];
+const grouped = orders.reduce((acc, order) => {
+  const key = order.product;
+  acc[key] = (acc[key] || 0) + order.qty;
+  return acc;
+}, {});
+console.log(grouped); // { coffee: 5, tea: 1 }`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'search',
+        heading_ru: 'find и findIndex: поиск первого совпадения',
+        heading_en: 'find and findIndex: locating the first match',
+        text_ru: 'find возвращает первый элемент массива, для которого предикат вернул true. Если ни один элемент не подошёл, возвращается undefined. findIndex работает аналогично, но возвращает числовой индекс найденного элемента, а при неудаче — -1.\n\nОба метода прекращают обход сразу после первого совпадения, что делает их эффективнее filter, когда нужен только один результат. Для поиска в массиве примитивов лучше использовать indexOf или includes, а find/findIndex предназначены для массивов объектов со сложными условиями.',
+        text_en: 'find returns the first element of the array for which the predicate returns true. If no element matches, it returns undefined. findIndex works the same way but returns the numeric index of the found element, or -1 on failure.\n\nBoth methods stop traversing immediately after the first match, making them more efficient than filter when only one result is needed. For searching arrays of primitives prefer indexOf or includes; find and findIndex are designed for arrays of objects with complex conditions.',
+        code: `const products = [
+  { id: 101, name: 'Laptop',  inStock: false },
+  { id: 102, name: 'Mouse',   inStock: true  },
+  { id: 103, name: 'Monitor', inStock: true  },
+];
+
+// find — returns the element itself
+const firstAvailable = products.find(p => p.inStock);
+console.log(firstAvailable); // { id: 102, name: 'Mouse', inStock: true }
+
+// Returns undefined if nothing matches
+const gpu = products.find(p => p.name === 'GPU');
+console.log(gpu); // undefined
+
+// findIndex — returns the position
+const monitorIdx = products.findIndex(p => p.name === 'Monitor');
+console.log(monitorIdx); // 2
+
+// Useful for updating a specific object in an array
+const idx = products.findIndex(p => p.id === 101);
+if (idx !== -1) {
+  products[idx] = { ...products[idx], inStock: true };
+}`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'check',
+        heading_ru: 'some и every: логические проверки массива',
+        heading_en: 'some and every: boolean checks over an array',
+        text_ru: 'some возвращает true, если хотя бы один элемент удовлетворяет условию, и немедленно останавливает обход (короткое замыкание). every возвращает true только если все элементы удовлетворяют условию — и тоже прекращает обход при первой неудаче.\n\nОба метода возвращают булево значение, поэтому идеально подходят для валидации данных перед их обработкой. Важная граничная ситуация: every([]) возвращает true (принцип «вакуумной истины»), а some([]) возвращает false — поведение согласуется с математической логикой, но может удивить.',
+        text_en: 'some returns true if at least one element satisfies the condition, and immediately stops traversing (short-circuit). every returns true only if all elements satisfy the condition — and also stops at the first failure.\n\nBoth methods return a boolean, making them ideal for validating data before processing. An important edge case: every([]) returns true (vacuous truth), while some([]) returns false — the behavior is consistent with mathematical logic but can be surprising.',
+        code: `const cart = [
+  { name: 'Book',     price: 15, inStock: true  },
+  { name: 'Pen',      price: 2,  inStock: true  },
+  { name: 'Notebook', price: 8,  inStock: false },
+];
+
+// some — is at least one item out of stock?
+const hasOutOfStock = cart.some(item => !item.inStock);
+console.log(hasOutOfStock); // true
+
+// every — are all items affordable (under $20)?
+const allAffordable = cart.every(item => item.price < 20);
+console.log(allAffordable); // true
+
+// Practical: validate a form array
+const fields = ['Alice', 'alice@example.com', '123 Main St'];
+const allFilled = fields.every(f => f.trim().length > 0);
+console.log('Form valid:', allFilled); // true
+
+// Edge cases
+console.log([].every(x => x > 100)); // true  (vacuous truth)
+console.log([].some(x => x > 100));  // false`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'other',
+        heading_ru: 'sort, flat и includes: дополнительные методы',
+        heading_en: 'sort, flat and includes: additional methods',
+        text_ru: 'sort сортирует массив на месте (мутирует его!) и по умолчанию сравнивает элементы как строки. Для числовой сортировки обязательно передавайте компаратор (a, b) => a - b. Чтобы не мутировать исходный массив, создайте копию: [...arr].sort(...).\n\nflat разворачивает вложенные массивы на заданную глубину (по умолчанию 1). flat(Infinity) разворачивает полностью. includes проверяет наличие значения в массиве и возвращает булево — удобная альтернатива indexOf !== -1. Все три метода часто используются в реальных задачах: сортировка таблиц, нормализация вложенных данных с сервера, проверка членства.',
+        text_en: 'sort sorts the array in-place (mutates it!) and by default compares elements as strings. For numeric sorting always pass a comparator (a, b) => a - b. To avoid mutating the original array, create a copy first: [...arr].sort(...).\n\nflat flattens nested arrays to a given depth (default 1). flat(Infinity) flattens completely. includes checks whether a value is present in the array and returns a boolean — a convenient alternative to indexOf !== -1. All three methods appear frequently in real tasks: sorting tables, normalising nested data from a server, and membership checks.',
+        code: `// --- sort ---
+const nums = [10, 1, 21, 3];
+
+// Wrong: lexicographic sort (treats numbers as strings)
+console.log([...nums].sort());          // [1, 10, 21, 3] ← incorrect!
+
+// Correct: numeric comparator
+console.log([...nums].sort((a, b) => a - b)); // [1, 3, 10, 21]
+console.log([...nums].sort((a, b) => b - a)); // [21, 10, 3, 1] descending
+
+// Sort objects by a property
+const people = [{ name: 'Zara', age: 30 }, { name: 'Ana', age: 25 }];
+const byName = [...people].sort((a, b) => a.name.localeCompare(b.name));
+console.log(byName.map(p => p.name)); // ['Ana', 'Zara']
+
+// --- flat ---
+const nested = [1, [2, 3], [4, [5, [6]]]];
+console.log(nested.flat());          // [1, 2, 3, 4, [5, [6]]]
+console.log(nested.flat(2));         // [1, 2, 3, 4, 5, [6]]
+console.log(nested.flat(Infinity));  // [1, 2, 3, 4, 5, 6]
+
+// --- includes ---
+const roles = ['admin', 'editor', 'viewer'];
+console.log(roles.includes('editor')); // true
+console.log(roles.includes('owner'));  // false`,
+        codeLang: 'javascript',
+      },
+      {
         sectionId: 'chaining',
         heading_ru: 'Цепочки методов',
         heading_en: 'Method chaining',

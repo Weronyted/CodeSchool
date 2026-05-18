@@ -215,6 +215,29 @@ export const htmlLinks: Lesson = {
         codeLang: 'html',
       },
       {
+        sectionId: 'mailto',
+        heading_ru: 'Mailto-ссылки',
+        heading_en: 'Mailto Links',
+        text_ru: 'Mailto-ссылки используют специальную схему mailto: в атрибуте href вместо обычного URL. При клике браузер открывает почтовый клиент пользователя с предзаполненным адресом получателя. Это удобный способ добавить кнопку «Написать нам» без необходимости создавать форму и серверный обработчик.\n\nСхема mailto: поддерживает дополнительные параметры в строке запроса: subject задаёт тему письма, body — текст письма, cc — адрес копии, bcc — скрытой копии. Несколько параметров разделяются символом &. Значения должны быть закодированы по правилам URL (пробелы заменяются на %20).\n\nАналогично работает схема tel: — при клике на такую ссылку на мобильном устройстве открывается приложение для звонков. Номер телефона записывается в международном формате: tel:+74951234567.',
+        text_en: 'Mailto links use the special mailto: scheme in the href attribute instead of a regular URL. On click, the browser opens the user\'s email client with the recipient address pre-filled. This is a convenient way to add a "Contact Us" button without needing a form and server-side handler.\n\nThe mailto: scheme supports additional query parameters: subject sets the email subject, body sets the message body, cc sets the copy address, and bcc sets the blind copy address. Multiple parameters are separated by &. Values must be URL-encoded (spaces replaced with %20).\n\nThe tel: scheme works similarly — clicking such a link on a mobile device opens the phone app. The number is written in international format: tel:+14155552671.',
+        code: `<!-- Простая mailto-ссылка -->
+<a href="mailto:info@example.com">Написать нам</a>
+
+<!-- С темой и телом письма -->
+<a href="mailto:support@example.com?subject=Вопрос%20по%20заказу&body=Здравствуйте%2C%0Aу%20меня%20вопрос...">
+  Задать вопрос в поддержку
+</a>
+
+<!-- С копией -->
+<a href="mailto:info@example.com?cc=manager@example.com">
+  Написать с копией менеджеру
+</a>
+
+<!-- Телефонная ссылка -->
+<a href="tel:+74951234567">+7 (495) 123-45-67</a>`,
+        codeLang: 'html',
+      },
+      {
         sectionId: 'anchor',
         heading_ru: 'Якорные ссылки и навигация по странице',
         heading_en: 'Anchor Links and In-page Navigation',
