@@ -397,7 +397,10 @@ export default function LessonPage() {
   const lang = language
 
   // ── New format: sections with bilingual titles
-  const newSections = newLesson?.sections ?? []
+  const newSections = (newLesson?.sections ?? []).filter((sec) =>
+    sec.id === 'key-terms' ||
+    (newLesson?.content.blocks ?? []).some((b: ContentBlock) => b.sectionId === sec.id)
+  )
   // ── Old format: sections with single title
   const oldSections = !isNew ? (lesson.sections as Array<{ id: string; title: string }>) : []
 
