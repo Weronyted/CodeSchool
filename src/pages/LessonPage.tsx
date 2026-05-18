@@ -263,7 +263,7 @@ function EditorTask({ lesson, lang }: { lesson: Lesson; lang: 'ru' | 'en' }) {
         </AnimatePresence>
 
         {/* Split: editor + preview */}
-        <div className="grid md:grid-cols-2 min-h-[260px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 min-h-[260px]">
           <div className="border-r border-gray-200 dark:border-gray-700">
             <CodeMirror
               value={code}
@@ -451,7 +451,7 @@ export default function LessonPage() {
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="flex gap-8">
+          <div className="flex gap-4 lg:gap-8">
 
             {/* Sidebar */}
             <aside className="hidden lg:flex flex-col w-64 flex-shrink-0">

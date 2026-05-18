@@ -61,30 +61,30 @@ export default function Landing() {
       </div>
 
       {/* Hero */}
-      <section className="relative z-10 text-center px-4 pt-16 pb-24 max-w-4xl mx-auto">
+      <section className="relative z-10 text-center px-4 pt-10 sm:pt-16 pb-16 sm:pb-24 max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-          <h1 className="font-heading text-5xl md:text-7xl font-extrabold text-gray-900 dark:text-white leading-tight mb-6">
+          <h1 className="font-heading text-3xl sm:text-5xl md:text-7xl font-extrabold text-gray-900 dark:text-white leading-snug sm:leading-tight mb-4 sm:mb-6">
             {t('landing.hero.title')}{' '}
             <span className="text-primary-600 dark:text-primary-400">{t('landing.hero.titleHighlight')}</span>
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-xl text-gray-600 dark:text-gray-400 mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed">
             {t('landing.hero.subtitle')}
           </p>
-          <div className="flex items-center justify-center gap-4 flex-wrap">
+          <div className="flex items-center justify-center gap-3 flex-wrap">
             <button
               onClick={handleStart}
-              className="px-8 py-4 rounded-2xl font-bold text-lg transition-colors shadow-xl"
+              className="px-5 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold text-base sm:text-lg transition-colors shadow-xl"
               style={{ backgroundColor: '#3B5BDB', color: '#ffffff' }}
             >
               {t('landing.hero.cta')}
             </button>
             <Link
               to="/lessons"
-              className="px-8 py-4 border-2 border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-300 rounded-2xl font-bold text-lg hover:border-primary-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors bg-white/70 dark:bg-transparent backdrop-blur-sm"
+              className="px-5 sm:px-8 py-3 sm:py-4 border-2 border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-300 rounded-2xl font-bold text-base sm:text-lg hover:border-primary-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors bg-white/70 dark:bg-transparent backdrop-blur-sm"
             >
               {t('landing.hero.ctaSecondary')}
             </Link>
@@ -111,20 +111,20 @@ export default function Landing() {
       </section>
 
       {/* Features */}
-      <section className="relative z-10 py-20 px-4 max-w-7xl mx-auto">
+      <section className="relative z-10 py-12 sm:py-20 px-4 max-w-7xl mx-auto">
         <motion.h2
-          className="font-heading text-3xl md:text-4xl font-extrabold text-center text-gray-900 dark:text-white mb-12"
+          className="font-heading text-2xl sm:text-3xl md:text-4xl font-extrabold text-center text-gray-900 dark:text-white mb-8 sm:mb-12"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
           {t('landing.features.title')}
         </motion.h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 max-w-3xl mx-auto">
           {FEATURES.map((f, i) => (
             <motion.div
               key={f.titleKey}
-              className="bg-white/80 dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-cream-200 dark:border-gray-700 hover:shadow-md transition-shadow backdrop-blur-sm"
+              className="bg-white/80 dark:bg-gray-800 rounded-2xl p-4 sm:p-6 shadow-sm border border-cream-200 dark:border-gray-700 hover:shadow-md transition-shadow backdrop-blur-sm"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -139,9 +139,9 @@ export default function Landing() {
       </section>
 
       {/* Lessons grid */}
-      <section className="relative z-10 py-20 px-4 max-w-7xl mx-auto">
+      <section className="relative z-10 py-12 sm:py-20 px-4 max-w-7xl mx-auto">
         <motion.h2
-          className="font-heading text-3xl md:text-4xl font-extrabold text-center text-gray-900 dark:text-white mb-4"
+          className="font-heading text-2xl sm:text-3xl md:text-4xl font-extrabold text-center text-gray-900 dark:text-white mb-4"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -156,13 +156,13 @@ export default function Landing() {
         >
           {t('landing.topics.subtitle')}
         </motion.p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
           {LESSON_SLUGS.map((slug, i) => {
             const meta = LESSON_META[slug]
             return (
               <motion.div
                 key={slug}
-                className="bg-white/80 dark:bg-gray-800 rounded-2xl p-5 border border-cream-200 dark:border-gray-700 flex items-start gap-4 hover:border-primary-300 dark:hover:border-primary-600 transition-colors backdrop-blur-sm"
+                className="bg-white/80 dark:bg-gray-800 rounded-2xl p-4 sm:p-5 border border-cream-200 dark:border-gray-700 flex items-start gap-3 sm:gap-4 hover:border-primary-300 dark:hover:border-primary-600 transition-colors backdrop-blur-sm"
                 initial={{ opacity: 0, scale: 0.97 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
@@ -187,16 +187,16 @@ export default function Landing() {
       </section>
 
       {/* CTA */}
-      <section className="relative z-10 py-24 px-4">
+      <section className="relative z-10 py-14 sm:py-24 px-4">
         <motion.div
-          className="max-w-3xl mx-auto rounded-3xl p-12 text-center text-white shadow-2xl"
+          className="max-w-3xl mx-auto rounded-2xl sm:rounded-3xl p-6 sm:p-12 text-center text-white shadow-2xl"
           style={{ background: 'linear-gradient(135deg, #3B5BDB, #7950F2)' }}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="font-heading text-4xl font-extrabold mb-4">{t('landing.cta.title')}</h2>
-          <p className="text-indigo-100 text-lg mb-8">{t('landing.cta.subtitle')}</p>
+          <h2 className="font-heading text-2xl sm:text-4xl font-extrabold mb-3 sm:mb-4">{t('landing.cta.title')}</h2>
+          <p className="text-indigo-100 text-base sm:text-lg mb-6 sm:mb-8">{t('landing.cta.subtitle')}</p>
           <button
             onClick={handleStart}
             className="px-8 py-4 bg-white rounded-2xl font-bold text-lg hover:bg-indigo-50 transition-colors shadow-lg"
