@@ -17,24 +17,27 @@ export default function MyClassPage() {
     if (!user) { setLoading(false); return }
     const findClass = async () => {
       try {
-        // Teachers/owners: find a class they created
-        const teacherSnap = await getDocs(
-          query(collection(db, 'classes'), where('teacherId', '==', user.uid))
-        )
-        if (!teacherSnap.empty) {
-          navigate(`/class/${teacherSnap.docs[0].id}`, { replace: true })
-          return
-        }
-
-        // Students: check if user's own member document exists in any class
-        const allSnap = await getDocs(collection(db, 'classes'))
-        for (const classDoc of allSnap.docs) {
-          const memberDoc = await getDoc(
-            doc(db, 'classes', classDoc.id, 'members', user.uid)
+        // Check both collection names
+        for (const col of ['classes', 'classGroups']) {
+          // Teachers/owners: find a class they created
+          const teacherSnap = await getDocs(
+            query(collection(db, col), where('teacherId', '==', user.uid))
           )
-          if (memberDoc.exists()) {
-            navigate(`/class/${classDoc.id}`, { replace: true })
+          if (!teacherSnap.empty) {
+            navigate(`/class/${teacherSnap.docs[0].id}`, { replace: true })
             return
+          }
+
+          // Students: check if user's own member document exists in any class
+          const allSnap = await getDocs(collection(db, col))
+          for (const classDoc of allSnap.docs) {
+            const memberDoc = await getDoc(
+              doc(db, col, classDoc.id, 'members', user.uid)
+            )
+            if (memberDoc.exists()) {
+              navigate(`/class/${classDoc.id}`, { replace: true })
+              return
+            }
           }
         }
       } catch {

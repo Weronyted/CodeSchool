@@ -34,7 +34,7 @@ function formatDate(ts?: number) {
 export default function ClassPage() {
   const { id } = useParams<{ id: string }>()
   const { t } = useTranslation()
-  const { user } = useAuthStore()
+  const { user, loading: authLoading } = useAuthStore()
   const { isTeacher, isAdmin } = useRoleStore()
   const { confirm } = useConfirmStore()
   const navigate = useNavigate()
@@ -48,17 +48,27 @@ export default function ClassPage() {
   const isOwner = classGroup?.teacherId === user?.uid
 
   useEffect(() => {
+    if (authLoading) return
     if (!id) { setLoading(false); return }
     const timeout = setTimeout(() => setLoading(false), 8000)
-    Promise.all([
-      getDoc(doc(db, 'classes', id)),
-      getClassMembers(id).catch(() => [] as ClassMember[]),
-    ]).then(([snap, mems]) => {
-      if (snap.exists()) setClassGroup({ id: snap.id, ...snap.data() } as ClassGroup)
+    const fetchClass = async () => {
+      // Try both collection names — classes (admin.service) and classGroups (class.service)
+      let snap = await getDoc(doc(db, 'classes', id)).catch(() => null)
+      if (!snap?.exists()) {
+        snap = await getDoc(doc(db, 'classGroups', id)).catch(() => null)
+      }
+      const mems = await getClassMembers(id).catch(async () => {
+        // fallback: try classGroups members subcollection
+        const { getDocs, collection } = await import('firebase/firestore')
+        const s = await getDocs(collection(db, 'classGroups', id, 'members')).catch(() => null)
+        return s ? s.docs.map((d) => ({ uid: d.id, ...d.data() } as ClassMember)) : []
+      })
+      if (snap?.exists()) setClassGroup({ id: snap.id, ...snap.data() } as ClassGroup)
       setMembers(mems)
-    }).catch(() => {}).finally(() => { clearTimeout(timeout); setLoading(false) })
+    }
+    fetchClass().finally(() => { clearTimeout(timeout); setLoading(false) })
     return () => clearTimeout(timeout)
-  }, [id])
+  }, [id, authLoading])
 
   function copyCode() {
     if (!classGroup) return

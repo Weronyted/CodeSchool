@@ -128,6 +128,22 @@ service cloud.firestore {
       }
     }
 
+    // ─── ClassGroups (legacy collection name) ────────────────────────────────
+    match /classGroups/{classId} {
+      allow get: if isAuth();
+      allow list: if isAuth();
+      allow create, update, delete: if isTeacherOrAbove();
+
+      match /members/{memberId} {
+        allow read, list: if isAuth() && (
+          request.auth.uid == memberId || isTeacherOrAbove()
+          || exists(/databases/$(database)/documents/classGroups/$(classId)/members/$(request.auth.uid))
+        );
+        allow create: if isAuth() && request.auth.uid == memberId;
+        allow delete: if isAuth() && (request.auth.uid == memberId || isTeacherOrAbove());
+      }
+    }
+
     // ─── Deny everything else ────────────────────────────────────────────────
     match /{document=**} {
       allow read, write: if false;
