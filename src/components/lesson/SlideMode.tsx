@@ -307,7 +307,7 @@ export function SlideMode({ slides, lessonTitle, onClose, onGoToPractice }: Slid
 
                 {/* ── CODE-ANIM: terminal animation ────────────────────────── */}
                 {slide.type === 'code-anim' && slide.animSteps && (
-                  <div className="mt-3" style={{ height: '230px' }}>
+                  <div className="mt-3" style={{ height: slide.animMode === 'preview' ? '380px' : '270px' }}>
                     <TerminalAnim
                       steps={slide.animSteps}
                       demoMode={slide.animMode ?? 'console'}

@@ -267,7 +267,7 @@ export default function TerminalAnim({ steps, demoMode, lang }: Props) {
                 key={previewHtml}
                 srcDoc={previewHtml}
                 className="w-full rounded border border-[#3d3d3d] bg-white"
-                style={{ height: '90px' }}
+                style={{ height: '110px' }}
                 sandbox="allow-scripts"
                 title="preview"
               />
