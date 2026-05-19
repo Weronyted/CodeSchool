@@ -48,14 +48,16 @@ export default function ClassPage() {
   const isOwner = classGroup?.teacherId === user?.uid
 
   useEffect(() => {
-    if (!id) return
+    if (!id) { setLoading(false); return }
+    const timeout = setTimeout(() => setLoading(false), 8000)
     Promise.all([
       getDoc(doc(db, 'classes', id)),
       getClassMembers(id).catch(() => [] as ClassMember[]),
     ]).then(([snap, mems]) => {
       if (snap.exists()) setClassGroup({ id: snap.id, ...snap.data() } as ClassGroup)
       setMembers(mems)
-    }).catch(() => {}).finally(() => setLoading(false))
+    }).catch(() => {}).finally(() => { clearTimeout(timeout); setLoading(false) })
+    return () => clearTimeout(timeout)
   }, [id])
 
   function copyCode() {

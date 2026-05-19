@@ -8,12 +8,13 @@ import { useAuthStore } from '@/store/useAuthStore'
 
 export default function MyClassPage() {
   const { t } = useTranslation()
-  const { user } = useAuthStore()
+  const { user, loading: authLoading } = useAuthStore()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!user) return
+    if (authLoading) return
+    if (!user) { setLoading(false); return }
     const findClass = async () => {
       try {
         // Teachers/owners: find a class they created
@@ -42,7 +43,7 @@ export default function MyClassPage() {
       setLoading(false)
     }
     findClass()
-  }, [user, navigate])
+  }, [user, authLoading, navigate])
 
   if (loading) {
     return (
