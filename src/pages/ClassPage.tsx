@@ -43,6 +43,7 @@ export default function ClassPage() {
   const [members, setMembers] = useState<ClassMember[]>([])
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)
+  const [debugInfo, setDebugInfo] = useState('')
 
   const isPrivileged = isTeacher() || isAdmin()
   const isOwner = classGroup?.teacherId === user?.uid
@@ -52,13 +53,15 @@ export default function ClassPage() {
     if (!id) { setLoading(false); return }
     const timeout = setTimeout(() => setLoading(false), 8000)
     const fetchClass = async () => {
-      // Try both collection names, bypass local cache to get fresh data
-      let snap = await getDocFromServer(doc(db, 'classes', id)).catch(() => null)
+      let info = `id=${id} uid=${user?.uid ?? 'none'}\n`
+      let snap = await getDocFromServer(doc(db, 'classes', id)).catch((e) => { info += `classes err: ${e}\n`; return null })
+      info += `classes exists: ${snap?.exists()}\n`
       if (!snap?.exists()) {
-        snap = await getDocFromServer(doc(db, 'classGroups', id)).catch(() => null)
+        snap = await getDocFromServer(doc(db, 'classGroups', id)).catch((e) => { info += `classGroups err: ${e}\n`; return null })
+        info += `classGroups exists: ${snap?.exists()}\n`
       }
+      setDebugInfo(info)
       const mems = await getClassMembers(id).catch(async () => {
-        // fallback: try classGroups members subcollection
         const { getDocs, collection } = await import('firebase/firestore')
         const s = await getDocs(collection(db, 'classGroups', id, 'members')).catch(() => null)
         return s ? s.docs.map((d) => ({ uid: d.id, ...d.data() } as ClassMember)) : []
@@ -123,6 +126,11 @@ export default function ClassPage() {
         <div className="text-6xl">😕</div>
         <h2 className="font-heading text-xl font-bold text-gray-900 dark:text-white">Класс не найден</h2>
         <p className="text-gray-500 text-sm">Возможно, ты попал по неверной ссылке</p>
+        {debugInfo && (
+          <pre className="mt-4 text-left text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl p-4 max-w-lg w-full overflow-auto whitespace-pre-wrap">
+            {debugInfo}
+          </pre>
+        )}
       </div>
     )
   }
