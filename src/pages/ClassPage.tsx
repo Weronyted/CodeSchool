@@ -50,7 +50,7 @@ export default function ClassPage() {
 
   useEffect(() => {
     if (authLoading) return
-    if (!id) { setLoading(false); return }
+    if (!id) { setDebugInfo(`NO ID — path: ${window.location.pathname} | uid: ${user?.uid ?? 'none'}`); setLoading(false); return }
     const timeout = setTimeout(() => setLoading(false), 8000)
     const fetchClass = async () => {
       let info = `id=${id} uid=${user?.uid ?? 'none'}\n`
