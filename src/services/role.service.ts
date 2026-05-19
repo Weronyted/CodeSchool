@@ -24,7 +24,14 @@ export async function ensureUserRole(uid: string, displayName: string, email: st
     return 'owner'
   }
   const snap = await getDoc(doc(db, 'userRoles', uid))
-  if (snap.exists()) return (snap.data() as UserRoleRecord).role
+  if (snap.exists()) {
+    const existing = snap.data() as UserRoleRecord
+    // Always sync displayName and email in case user updated their profile
+    if (existing.displayName !== displayName || existing.email !== email) {
+      await setDoc(doc(db, 'userRoles', uid), { displayName, email }, { merge: true })
+    }
+    return existing.role
+  }
   const record: UserRoleRecord = { role: 'student', displayName, email }
   await setDoc(doc(db, 'userRoles', uid), record)
   return 'student'
