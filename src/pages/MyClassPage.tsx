@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { collection, getDocs, query, where } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore'
 import { db } from '@/services/firebase'
 import { useAuthStore } from '@/store/useAuthStore'
 
@@ -25,13 +25,13 @@ export default function MyClassPage() {
           return
         }
 
-        // Students: find a class they're a member of
+        // Students: check if user's own member document exists in any class
         const allSnap = await getDocs(collection(db, 'classes'))
         for (const classDoc of allSnap.docs) {
-          const memberSnap = await getDocs(
-            collection(db, 'classes', classDoc.id, 'members')
+          const memberDoc = await getDoc(
+            doc(db, 'classes', classDoc.id, 'members', user.uid)
           )
-          if (memberSnap.docs.some((m) => m.id === user.uid)) {
+          if (memberDoc.exists()) {
             navigate(`/class/${classDoc.id}`, { replace: true })
             return
           }
