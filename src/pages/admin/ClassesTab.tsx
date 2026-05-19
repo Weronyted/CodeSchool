@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getClasses, createClass, deleteClass } from '@/services/admin.service'
@@ -161,12 +162,20 @@ export default function ClassesTab() {
                   </button>
                 </div>
               </div>
-              <button
-                onClick={() => handleDelete(c.id, c.name)}
-                className="text-red-400 hover:text-red-600 transition-colors"
-              >
-                🗑️
-              </button>
+              <div className="flex items-center gap-3">
+                <Link
+                  to={`/class/${c.id}`}
+                  className="text-xs text-indigo-500 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium transition-colors"
+                >
+                  Открыть →
+                </Link>
+                <button
+                  onClick={() => handleDelete(c.id, c.name)}
+                  className="text-red-400 hover:text-red-600 transition-colors"
+                >
+                  🗑️
+                </button>
+              </div>
             </div>
           ))}
         </div>

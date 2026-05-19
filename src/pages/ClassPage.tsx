@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDocFromServer } from 'firebase/firestore'
 import { db } from '@/services/firebase'
 import { getClassMembers } from '@/services/admin.service'
 import { useAuthStore } from '@/store/useAuthStore'
@@ -52,10 +52,10 @@ export default function ClassPage() {
     if (!id) { setLoading(false); return }
     const timeout = setTimeout(() => setLoading(false), 8000)
     const fetchClass = async () => {
-      // Try both collection names — classes (admin.service) and classGroups (class.service)
-      let snap = await getDoc(doc(db, 'classes', id)).catch(() => null)
+      // Try both collection names, bypass local cache to get fresh data
+      let snap = await getDocFromServer(doc(db, 'classes', id)).catch(() => null)
       if (!snap?.exists()) {
-        snap = await getDoc(doc(db, 'classGroups', id)).catch(() => null)
+        snap = await getDocFromServer(doc(db, 'classGroups', id)).catch(() => null)
       }
       const mems = await getClassMembers(id).catch(async () => {
         // fallback: try classGroups members subcollection
