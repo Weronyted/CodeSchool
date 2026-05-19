@@ -2,13 +2,11 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { doc, getDocFromServer } from 'firebase/firestore'
+import { doc, deleteDoc, getDoc, getDocFromServer } from 'firebase/firestore'
 import { db } from '@/services/firebase'
-import { getClassMembers } from '@/services/admin.service'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useRoleStore } from '@/store/useRoleStore'
 import { useConfirmStore } from '@/store/useConfirmStore'
-import { removeClassMember } from '@/services/class.service'
 import type { ClassGroup, ClassMember } from '@/types/roles'
 
 const AVATAR_COLORS = [
@@ -43,6 +41,7 @@ export default function ClassPage() {
   const navigate = useNavigate()
 
   const [classGroup, setClassGroup] = useState<ClassGroup | null>(null)
+  const [classCol, setClassCol] = useState<'classes' | 'classGroups'>('classes')
   const [members, setMembers] = useState<ClassMember[]>([])
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)
@@ -54,17 +53,26 @@ export default function ClassPage() {
     if (authLoading) return
     if (!id) { setLoading(false); return }
     const timeout = setTimeout(() => setLoading(false), 8000)
+    const tryGet = async (col: string) => {
+      let s = await getDoc(doc(db, col, id)).catch(() => null)
+      if (!s?.exists()) s = await getDocFromServer(doc(db, col, id)).catch(() => null)
+      return s?.exists() ? s : null
+    }
     const fetchClass = async () => {
-      let snap = await getDocFromServer(doc(db, 'classes', id)).catch(() => null)
-      if (!snap?.exists()) {
-        snap = await getDocFromServer(doc(db, 'classGroups', id)).catch(() => null)
+      const snap = (await tryGet('classes')) ?? (await tryGet('classGroups'))
+      const { getDocs, collection } = await import('firebase/firestore')
+      const snapCol: 'classes' | 'classGroups' = snap?.ref.path.startsWith('classGroups') ? 'classGroups' : 'classes'
+      const mems = await (async () => {
+        for (const c of [snapCol, snapCol === 'classes' ? 'classGroups' : 'classes'] as const) {
+          const s = await getDocs(collection(db, c, id, 'members')).catch(() => null)
+          if (s && s.docs.length > 0) return s.docs.map((d) => ({ uid: d.id, ...d.data() } as ClassMember))
+        }
+        return [] as ClassMember[]
+      })()
+      if (snap) {
+        setClassGroup({ id: snap.id, ...snap.data() } as ClassGroup)
+        setClassCol(snapCol)
       }
-      const mems = await getClassMembers(id).catch(async () => {
-        const { getDocs, collection } = await import('firebase/firestore')
-        const s = await getDocs(collection(db, 'classGroups', id, 'members')).catch(() => null)
-        return s ? s.docs.map((d) => ({ uid: d.id, ...d.data() } as ClassMember)) : []
-      })
-      if (snap?.exists()) setClassGroup({ id: snap.id, ...snap.data() } as ClassGroup)
       setMembers(mems)
     }
     fetchClass().finally(() => { clearTimeout(timeout); setLoading(false) })
@@ -87,7 +95,7 @@ export default function ClassPage() {
       danger: true,
     })
     if (!ok) return
-    await removeClassMember(id, user.uid).catch(() => {})
+    await deleteDoc(doc(db, classCol, id, 'members', user.uid)).catch(() => {})
     navigate('/dashboard')
   }
 
@@ -100,7 +108,7 @@ export default function ClassPage() {
       danger: true,
     })
     if (!ok) return
-    await removeClassMember(id, member.uid).catch(() => {})
+    await deleteDoc(doc(db, classCol, id, 'members', member.uid)).catch(() => {})
     setMembers((prev) => prev.filter((m) => m.uid !== member.uid))
   }
 
@@ -128,8 +136,8 @@ export default function ClassPage() {
     )
   }
 
-  const students = members.filter((m) => m.role === 'student')
-  const teachers = members.filter((m) => m.role === 'teacher')
+  const teachers = members.filter((m) => m.uid === classGroup?.teacherId || m.role === 'teacher')
+  const students = members.filter((m) => m.uid !== classGroup?.teacherId && m.role !== 'teacher')
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -249,8 +257,8 @@ export default function ClassPage() {
             <div className="divide-y divide-gray-50 dark:divide-gray-700/50">
               {members.map((m, i) => {
                 const isMe = m.uid === user?.uid
-                const isTeacherMember = m.role === 'teacher'
-                const canKick = (isOwner || isAdmin()) && !isMe && !isTeacherMember
+                const isTeacherMember = m.uid === classGroup?.teacherId || m.role === 'teacher'
+                const canKick = (isOwner || isAdmin()) && !isMe && m.uid !== classGroup?.teacherId
 
                 return (
                   <motion.div
