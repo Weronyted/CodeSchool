@@ -1,21 +1,51 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '@/services/firebase'
 import { getClassMembers } from '@/services/admin.service'
 import { useAuthStore } from '@/store/useAuthStore'
+import { useRoleStore } from '@/store/useRoleStore'
+import { useConfirmStore } from '@/store/useConfirmStore'
+import { removeClassMember } from '@/services/class.service'
 import type { ClassGroup, ClassMember } from '@/types/roles'
+
+const AVATAR_COLORS = [
+  'from-violet-500 to-purple-600',
+  'from-blue-500 to-cyan-600',
+  'from-emerald-500 to-teal-600',
+  'from-orange-500 to-amber-600',
+  'from-pink-500 to-rose-600',
+  'from-indigo-500 to-blue-600',
+]
+
+function avatarColor(uid: string) {
+  let n = 0
+  for (let i = 0; i < uid.length; i++) n += uid.charCodeAt(i)
+  return AVATAR_COLORS[n % AVATAR_COLORS.length]
+}
+
+function formatDate(ts?: number) {
+  if (!ts) return ''
+  return new Date(ts).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
+}
 
 export default function ClassPage() {
   const { id } = useParams<{ id: string }>()
   const { t } = useTranslation()
   const { user } = useAuthStore()
+  const { isTeacher, isAdmin } = useRoleStore()
+  const { confirm } = useConfirmStore()
+  const navigate = useNavigate()
 
   const [classGroup, setClassGroup] = useState<ClassGroup | null>(null)
   const [members, setMembers] = useState<ClassMember[]>([])
   const [loading, setLoading] = useState(true)
+  const [copied, setCopied] = useState(false)
+
+  const isPrivileged = isTeacher() || isAdmin()
+  const isOwner = classGroup?.teacherId === user?.uid
 
   useEffect(() => {
     if (!id) return
@@ -28,63 +58,262 @@ export default function ClassPage() {
     }).catch(() => {}).finally(() => setLoading(false))
   }, [id])
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-4xl animate-pulse">🏫</div>
-  if (!classGroup) return <div className="min-h-screen flex items-center justify-center text-gray-500">Класс не найден</div>
+  function copyCode() {
+    if (!classGroup) return
+    navigator.clipboard.writeText(classGroup.inviteCode)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  async function handleLeave() {
+    if (!user || !id) return
+    const ok = await confirm({
+      title: 'Покинуть класс?',
+      message: 'Тебя удалят из списка участников. Ты сможешь снова вступить по коду.',
+      confirmLabel: 'Покинуть',
+      danger: true,
+    })
+    if (!ok) return
+    await removeClassMember(id, user.uid).catch(() => {})
+    navigate('/dashboard')
+  }
+
+  async function handleKick(member: ClassMember) {
+    if (!id) return
+    const ok = await confirm({
+      title: `Удалить ${member.displayName}?`,
+      message: 'Участник будет удалён из класса.',
+      confirmLabel: 'Удалить',
+      danger: true,
+    })
+    if (!ok) return
+    await removeClassMember(id, member.uid).catch(() => {})
+    setMembers((prev) => prev.filter((m) => m.uid !== member.uid))
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <motion.div
+          animate={{ scale: [1, 1.15, 1] }}
+          transition={{ repeat: Infinity, duration: 1.2 }}
+          className="text-5xl"
+        >
+          🏫
+        </motion.div>
+      </div>
+    )
+  }
+
+  if (!classGroup) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-center px-4">
+        <div className="text-6xl">😕</div>
+        <h2 className="font-heading text-xl font-bold text-gray-900 dark:text-white">Класс не найден</h2>
+        <p className="text-gray-500 text-sm">Возможно, ты попал по неверной ссылке</p>
+      </div>
+    )
+  }
+
+  const students = members.filter((m) => m.role === 'student')
+  const teachers = members.filter((m) => m.role === 'teacher')
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+      <div className="max-w-4xl mx-auto px-4 py-10 space-y-6">
 
-          {/* Header */}
-          <div className="rounded-3xl p-8 text-white mb-6" style={{ background: 'linear-gradient(135deg, #3B5BDB, #7950F2)' }}>
-            <h1 className="font-heading text-3xl font-extrabold mb-1">{classGroup.name}</h1>
-            {classGroup.description && (
-              <p className="text-primary-200">{classGroup.description}</p>
-            )}
-            <div className="mt-4 inline-flex items-center gap-2 bg-white/20 rounded-xl px-4 py-2 text-sm">
-              <span className="font-mono font-bold tracking-widest">{classGroup.inviteCode}</span>
-              <button
-                onClick={() => navigator.clipboard.writeText(classGroup.inviteCode)}
-                className="text-primary-200 hover:text-white transition-colors"
-                title={t('class.copyCode', 'Скопировать код')}
-              >
-                📋
-              </button>
-            </div>
-          </div>
+        {/* ── Header ───────────────────────────────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-3xl p-8 text-white relative overflow-hidden"
+          style={{ background: 'linear-gradient(135deg, #3B5BDB, #7950F2)' }}
+        >
+          {/* BG decoration */}
+          <div className="absolute right-6 top-6 text-[120px] opacity-[0.07] select-none leading-none">🏫</div>
 
-          {/* Members */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
-            <h2 className="font-heading font-bold text-gray-900 dark:text-white mb-4">
-              👥 {t('class.members', 'Участники')} ({members.length})
-            </h2>
-            <div className="divide-y divide-gray-100 dark:divide-gray-700">
-              {members.map((m) => (
-                <div key={m.uid} className="flex items-center justify-between py-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-sm font-bold text-primary-700 dark:text-primary-300">
-                      {m.displayName?.charAt(0).toUpperCase() ?? '?'}
-                    </div>
-                    <span className="text-gray-900 dark:text-white text-sm font-medium">
-                      {m.displayName}
-                      {m.uid === user?.uid && (
-                        <span className="ml-2 text-xs text-primary-600 dark:text-primary-400">({t('class.you', 'ты')})</span>
-                      )}
-                    </span>
-                  </div>
-                  <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
-                    m.role === 'teacher'
-                      ? 'bg-secondary-100 dark:bg-secondary-900/30 text-secondary-700 dark:text-secondary-300'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
-                  }`}>
-                    {m.role === 'teacher' ? t('roles.teacher', 'Учитель') : t('roles.student', 'Студент')}
+          <div className="relative z-10">
+            <div className="flex items-start justify-between gap-4 flex-wrap">
+              <div className="min-w-0">
+                <p className="text-primary-200 text-sm font-medium mb-1 uppercase tracking-wider">
+                  {t('class.title', 'Класс')}
+                </p>
+                <h1 className="font-heading text-3xl font-extrabold leading-tight break-words">
+                  {classGroup.name}
+                </h1>
+                {classGroup.description && (
+                  <p className="text-primary-200 mt-2 text-sm leading-relaxed max-w-lg">
+                    {classGroup.description}
+                  </p>
+                )}
+                {classGroup.teacherName && (
+                  <p className="text-white/60 text-sm mt-3">
+                    👨‍🏫 {classGroup.teacherName}
+                  </p>
+                )}
+              </div>
+
+              {/* Invite code */}
+              <div className="flex-shrink-0">
+                <p className="text-primary-200 text-xs mb-1.5 text-right">
+                  {t('class.inviteCode', 'Код приглашения')}
+                </p>
+                <button
+                  onClick={copyCode}
+                  className="flex items-center gap-3 bg-white/15 hover:bg-white/25 transition-colors rounded-2xl px-5 py-3"
+                >
+                  <span className="font-mono font-bold text-xl tracking-widest">
+                    {classGroup.inviteCode}
                   </span>
-                </div>
-              ))}
+                  <span className="text-lg">{copied ? '✅' : '📋'}</span>
+                </button>
+                {copied && (
+                  <p className="text-primary-200 text-xs mt-1 text-right">Скопировано!</p>
+                )}
+              </div>
             </div>
+
+            {classGroup.createdAt && (
+              <p className="text-white/40 text-xs mt-5">
+                Создан {formatDate(classGroup.createdAt)}
+              </p>
+            )}
           </div>
         </motion.div>
+
+        {/* ── Stats ────────────────────────────────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="grid grid-cols-3 gap-4"
+        >
+          {[
+            { icon: '👥', label: t('class.students', 'Учеников'), value: students.length },
+            { icon: '👨‍🏫', label: t('class.teachers', 'Учителей'), value: teachers.length },
+            { icon: '🧑‍💻', label: t('class.total', 'Всего'), value: members.length },
+          ].map((s) => (
+            <div
+              key={s.label}
+              className="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 text-center"
+            >
+              <div className="text-2xl mb-1">{s.icon}</div>
+              <div className="font-heading text-2xl font-extrabold text-gray-900 dark:text-white">
+                {s.value}
+              </div>
+              <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{s.label}</div>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* ── Members ──────────────────────────────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden"
+        >
+          <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+            <h2 className="font-heading font-bold text-gray-900 dark:text-white">
+              👥 {t('class.members', 'Участники')}
+              <span className="ml-2 text-sm font-normal text-gray-400">({members.length})</span>
+            </h2>
+          </div>
+
+          {members.length === 0 ? (
+            <div className="py-16 flex flex-col items-center gap-3 text-center px-4">
+              <div className="text-5xl">🪑</div>
+              <p className="font-heading font-bold text-gray-900 dark:text-white">Пока никого нет</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs">
+                Поделись кодом{' '}
+                <button onClick={copyCode} className="font-mono font-bold text-primary-600 dark:text-primary-400 hover:underline">
+                  {classGroup.inviteCode}
+                </button>{' '}
+                чтобы ученики могли вступить
+              </p>
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-50 dark:divide-gray-700/50">
+              {members.map((m, i) => {
+                const isMe = m.uid === user?.uid
+                const isTeacherMember = m.role === 'teacher'
+                const canKick = (isOwner || isAdmin()) && !isMe && !isTeacherMember
+
+                return (
+                  <motion.div
+                    key={m.uid}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.25 + i * 0.04 }}
+                    className="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors"
+                  >
+                    {/* Avatar */}
+                    <div className={`w-10 h-10 rounded-2xl bg-gradient-to-br ${avatarColor(m.uid)} flex items-center justify-center text-white font-bold text-base flex-shrink-0`}>
+                      {m.displayName?.charAt(0).toUpperCase() ?? '?'}
+                    </div>
+
+                    {/* Name */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-medium text-gray-900 dark:text-white text-sm truncate">
+                          {m.displayName}
+                        </span>
+                        {isMe && (
+                          <span className="text-xs bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 px-2 py-0.5 rounded-full font-semibold">
+                            {t('class.you', 'ты')}
+                          </span>
+                        )}
+                      </div>
+                      {m.joinedAt && (
+                        <p className="text-xs text-gray-400 mt-0.5">
+                          Вступил {formatDate(m.joinedAt)}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Role badge */}
+                    <span className={`text-xs px-2.5 py-1 rounded-full font-semibold flex-shrink-0 ${
+                      isTeacherMember
+                        ? 'bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                    }`}>
+                      {isTeacherMember ? '👨‍🏫 ' + t('roles.teacher', 'Учитель') : t('roles.student', 'Студент')}
+                    </span>
+
+                    {/* Kick button (teacher/admin only) */}
+                    {canKick && (
+                      <button
+                        onClick={() => handleKick(m)}
+                        className="text-gray-300 dark:text-gray-600 hover:text-red-500 dark:hover:text-red-400 transition-colors flex-shrink-0 text-lg"
+                        title="Удалить из класса"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </motion.div>
+                )
+              })}
+            </div>
+          )}
+        </motion.div>
+
+        {/* ── Actions ──────────────────────────────────────────────────────── */}
+        {!isOwner && !isPrivileged && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.35 }}
+            className="flex justify-end"
+          >
+            <button
+              onClick={handleLeave}
+              className="text-sm text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors font-medium"
+            >
+              Покинуть класс →
+            </button>
+          </motion.div>
+        )}
+
       </div>
     </div>
   )
