@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { doc, getDocFromServer } from 'firebase/firestore'
@@ -32,7 +32,10 @@ function formatDate(ts?: number) {
 }
 
 export default function ClassPage() {
-  const { id } = useParams<{ id: string }>()
+  const { id: paramId } = useParams<{ id: string }>()
+  const location = useLocation()
+  // fallback: parse from URL if useParams loses context (AnimatePresence + ProtectedRoute timing)
+  const id = paramId || location.pathname.split('/class/')[1] || undefined
   const { t } = useTranslation()
   const { user, loading: authLoading } = useAuthStore()
   const { isTeacher, isAdmin } = useRoleStore()
@@ -43,24 +46,19 @@ export default function ClassPage() {
   const [members, setMembers] = useState<ClassMember[]>([])
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)
-  const [debugInfo, setDebugInfo] = useState('')
 
   const isPrivileged = isTeacher() || isAdmin()
   const isOwner = classGroup?.teacherId === user?.uid
 
   useEffect(() => {
     if (authLoading) return
-    if (!id) { setDebugInfo(`NO ID — path: ${window.location.pathname} | uid: ${user?.uid ?? 'none'}`); setLoading(false); return }
+    if (!id) { setLoading(false); return }
     const timeout = setTimeout(() => setLoading(false), 8000)
     const fetchClass = async () => {
-      let info = `id=${id} uid=${user?.uid ?? 'none'}\n`
-      let snap = await getDocFromServer(doc(db, 'classes', id)).catch((e) => { info += `classes err: ${e}\n`; return null })
-      info += `classes exists: ${snap?.exists()}\n`
+      let snap = await getDocFromServer(doc(db, 'classes', id)).catch(() => null)
       if (!snap?.exists()) {
-        snap = await getDocFromServer(doc(db, 'classGroups', id)).catch((e) => { info += `classGroups err: ${e}\n`; return null })
-        info += `classGroups exists: ${snap?.exists()}\n`
+        snap = await getDocFromServer(doc(db, 'classGroups', id)).catch(() => null)
       }
-      setDebugInfo(info)
       const mems = await getClassMembers(id).catch(async () => {
         const { getDocs, collection } = await import('firebase/firestore')
         const s = await getDocs(collection(db, 'classGroups', id, 'members')).catch(() => null)
@@ -126,11 +124,6 @@ export default function ClassPage() {
         <div className="text-6xl">😕</div>
         <h2 className="font-heading text-xl font-bold text-gray-900 dark:text-white">Класс не найден</h2>
         <p className="text-gray-500 text-sm">Возможно, ты попал по неверной ссылке</p>
-        {debugInfo && (
-          <pre className="mt-4 text-left text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl p-4 max-w-lg w-full overflow-auto whitespace-pre-wrap">
-            {debugInfo}
-          </pre>
-        )}
       </div>
     )
   }
