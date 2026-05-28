@@ -8,14 +8,14 @@ export function isOwnerUid(uid: string): boolean {
   return uid === OWNER_UID
 }
 
-export async function getUserRole(uid: string): Promise<UserRole> {
+export async function getUserRole(uid: string): Promise<UserRole | null> {
   if (isOwnerUid(uid)) return 'owner'
   const snap = await getDoc(doc(db, 'userRoles', uid))
   if (snap.exists()) return (snap.data() as UserRoleRecord).role
-  return 'student'
+  return null
 }
 
-export async function ensureUserRole(uid: string, displayName: string, email: string): Promise<UserRole> {
+export async function ensureUserRole(uid: string, displayName: string, email: string): Promise<UserRole | null> {
   if (isOwnerUid(uid)) {
     const snap = await getDoc(doc(db, 'userRoles', uid))
     if (!snap.exists() || (snap.data() as UserRoleRecord).role !== 'owner') {
@@ -26,15 +26,13 @@ export async function ensureUserRole(uid: string, displayName: string, email: st
   const snap = await getDoc(doc(db, 'userRoles', uid))
   if (snap.exists()) {
     const existing = snap.data() as UserRoleRecord
-    // Always sync displayName and email in case user updated their profile
     if (existing.displayName !== displayName || existing.email !== email) {
       await setDoc(doc(db, 'userRoles', uid), { displayName, email }, { merge: true })
     }
     return existing.role
   }
-  const record: UserRoleRecord = { role: 'student', displayName, email }
-  await setDoc(doc(db, 'userRoles', uid), record)
-  return 'student'
+  // Unknown user — no auto-grant. Access denied until added explicitly.
+  return null
 }
 
 export async function setUserRole(targetUid: string, role: UserRole, assignerUid: string): Promise<void> {

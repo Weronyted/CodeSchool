@@ -1,6 +1,6 @@
 import {
   collection, doc, addDoc, getDocs, setDoc, deleteDoc,
-  query, where, updateDoc,
+  query, where, updateDoc, getDoc,
 } from 'firebase/firestore'
 import { db } from './firebase'
 import type { DynamicLesson, Assignment, ClassGroup, ClassMember } from '@/types/roles'
@@ -97,7 +97,7 @@ export async function getClassMembers(classId: string): Promise<ClassMember[]> {
   return snap.docs.map((d) => ({ uid: d.id, ...d.data() } as ClassMember))
 }
 
-export async function joinClassByCode(code: string, uid: string, displayName: string): Promise<string> {
+export async function joinClassByCode(code: string, uid: string, displayName: string, email: string): Promise<string> {
   const snap = await getDocs(query(collection(db, 'classes'), where('inviteCode', '==', code)))
   if (snap.empty) throw new Error('Class not found')
   const classId = snap.docs[0].id
@@ -107,5 +107,10 @@ export async function joinClassByCode(code: string, uid: string, displayName: st
     role: 'student',
     joinedAt: Date.now(),
   })
+  // Grant student access if this user has no role yet
+  const roleSnap = await getDoc(doc(db, 'userRoles', uid))
+  if (!roleSnap.exists()) {
+    await setDoc(doc(db, 'userRoles', uid), { role: 'student', displayName, email })
+  }
   return classId
 }

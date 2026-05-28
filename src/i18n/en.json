@@ -207,6 +207,8 @@
     "guestNote": "Guest progress is stored locally and will be lost if you clear your browser.",
     "requiredTitle": "Sign in to continue",
     "requiredSubtitle": "Create a free account to access lessons, quizzes and track your progress.",
+    "accessDeniedTitle": "Access Denied",
+    "accessDeniedSubtitle": "You don't have access to this platform yet. Ask your teacher to add you, or use the invite link.",
     "back": "← Back to home",
     "backShort": "← Back",
     "displayName": "Username"

@@ -4,11 +4,13 @@ import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { joinClassByCode } from '@/services/admin.service'
 import { useAuthStore } from '@/store/useAuthStore'
+import { useRoleStore } from '@/store/useRoleStore'
 
 export default function JoinClass() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { user } = useAuthStore()
+  const { setRole } = useRoleStore()
   const [code, setCode] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -18,7 +20,13 @@ export default function JoinClass() {
     setLoading(true)
     setError('')
     try {
-      const classId = await joinClassByCode(code.trim().toUpperCase(), user.uid, user.displayName ?? user.email ?? '')
+      const classId = await joinClassByCode(
+        code.trim().toUpperCase(),
+        user.uid,
+        user.displayName ?? user.email ?? '',
+        user.email ?? '',
+      )
+      setRole('student')
       navigate(`/class/${classId}`)
     } catch {
       setError(t('joinClass.error', 'Класс не найден. Проверь код.'))
