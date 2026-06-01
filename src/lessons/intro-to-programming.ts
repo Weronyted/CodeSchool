@@ -17,6 +17,7 @@ export const intrToProgramming: Lesson = {
     { id: 'instructions',        title_ru: 'Компьютер и инструкции',      title_en: 'Computers and instructions' },
     { id: 'algorithm',           title_ru: 'Что такое алгоритм',          title_en: 'What is an algorithm' },
     { id: 'languages',           title_ru: 'Языки программирования',      title_en: 'Programming languages' },
+    { id: 'tools',               title_ru: 'Инструменты разработчика',    title_en: 'Developer tools' },
     { id: 'key-terms',           title_ru: 'Важные слова',                title_en: 'Key terms' },
   ],
 
@@ -78,6 +79,19 @@ export const intrToProgramming: Lesson = {
       body_en: 'Just as people speak Russian, English and other languages, programmers write in different programming languages. HTML builds pages, CSS styles them, JavaScript makes them interactive. Python is used by scientists, Swift for iPhone apps. There are over 700 such languages!',
     },
     {
+      id: 's7b',
+      type: 'concept',
+      title_ru: 'Инструменты разработчика: VSCode, Git, GitHub',
+      title_en: 'Developer tools: VSCode, Git, GitHub',
+      body_ru: 'Программисты пишут код не в обычном блокноте. Самый популярный редактор — Visual Studio Code (VSCode): он подсвечивает код, подсказывает ошибки и имеет тысячи расширений. Чтобы не потерять работу — используют Git: он хранит всю историю изменений. А GitHub — это интернет-платформа, где хранятся проекты миллионов разработчиков.',
+      body_en: 'Programmers do not write code in a basic text editor. The most popular editor is Visual Studio Code (VSCode): it highlights code, points out errors and has thousands of extensions. To never lose work, developers use Git — it stores the full history of changes. And GitHub is an internet platform where millions of developers store their projects.',
+      bullets: [
+        { text_ru: 'VSCode — редактор кода с подсветкой и подсказками', text_en: 'VSCode — a code editor with highlighting and hints' },
+        { text_ru: 'Git — система сохранения истории изменений', text_en: 'Git — a system for saving the history of changes' },
+        { text_ru: 'GitHub — облачное хранилище и портфолио разработчика', text_en: 'GitHub — cloud storage and a developer portfolio' },
+      ],
+    },
+    {
       id: 's8',
       type: 'concept',
       title_ru: 'Зачем учиться программировать?',
@@ -98,8 +112,8 @@ export const intrToProgramming: Lesson = {
       type: 'practice-cta',
       title_ru: 'Ты готов начать!',
       title_en: 'You are ready to start!',
-      body_ru: 'Теперь ты знаешь, что такое программирование, код и алгоритм. В следующем уроке ты напишешь свои первые строки HTML — языка, на котором построены все сайты мира.',
-      body_en: 'Now you know what programming, code and algorithms are. In the next lesson you will write your first lines of HTML — the language every website in the world is built with.',
+      body_ru: 'Теперь ты знаешь, что такое программирование, код и алгоритм. В следующем уроке ты узнаешь про Git и GitHub — инструменты, без которых не обходится ни один разработчик. А потом напишешь свои первые строки HTML!',
+      body_en: 'Now you know what programming, code and algorithms are. In the next lesson you will learn about Git and GitHub — tools no developer can do without. After that you will write your first lines of HTML!',
     },
   ],
 
@@ -176,6 +190,48 @@ analysis and artificial intelligence. Swift and Kotlin build smartphone apps. In
 course you will start with HTML — the simplest and most visual language, whose output
 you can see immediately in the browser.`,
       },
+      {
+        sectionId: 'tools',
+        heading_ru: 'Инструменты разработчика',
+        heading_en: 'Developer tools',
+        text_ru: `Прежде чем писать код, нужно подготовить рабочее место. У программиста
+есть три главных инструмента, которые ты будешь использовать постоянно.
+
+**Visual Studio Code (VSCode)** — бесплатный редактор кода от Microsoft. Он
+подсвечивает синтаксис разными цветами, помогает находить ошибки до запуска,
+автодополняет код и имеет тысячи расширений. Это не просто блокнот — это целая
+мастерская разработчика. Скачать можно с официального сайта code.visualstudio.com.
+
+**Git** — система контроля версий. Она работает прямо на твоём компьютере и
+запоминает каждое «сохранение» проекта (коммит). Если ты случайно удалишь важный
+код — Git поможет его восстановить. Профессионалы делают коммиты несколько раз
+в день, чтобы никогда не терять работу.
+
+**GitHub** — это сайт, где хранятся Git-репозитории. Представь его как Google Диск
+для кода: ты загружаешь проект, и он доступен с любого устройства. Кроме того,
+GitHub — это портфолио разработчика: работодатели смотрят на твои проекты там.
+Миллионы открытых проектов на GitHub можно изучать и использовать бесплатно.
+
+Подробнее о Git и GitHub — в следующем уроке курса.`,
+        text_en: `Before writing code you need to set up your workspace. A developer
+has three main tools you will use constantly.
+
+**Visual Studio Code (VSCode)** — a free code editor by Microsoft. It highlights
+syntax in different colours, helps find errors before running, autocompletes code and
+has thousands of extensions. It is not just a text editor — it is a full developer
+workshop. Download it at code.visualstudio.com.
+
+**Git** — a version control system. It runs right on your computer and remembers
+every project "save" (commit). If you accidentally delete important code — Git helps
+you restore it. Professionals commit several times a day to never lose their work.
+
+**GitHub** — a website that hosts Git repositories. Think of it as Google Drive for
+code: you upload a project and it is accessible from any device. GitHub is also a
+developer portfolio: employers look at your projects there. Millions of open projects
+on GitHub can be studied and used for free.
+
+More about Git and GitHub — in the next lesson of this course.`,
+      },
     ],
   },
 
@@ -211,6 +267,30 @@ you can see immediately in the browser.`,
       definition_en: 'A special language with rules used to write instructions for a computer.',
       example_ru: 'HTML, CSS, JavaScript, Python — всё это языки программирования.',
       example_en: 'HTML, CSS, JavaScript, Python are all programming languages.',
+    },
+    {
+      term_ru: 'VSCode',
+      term_en: 'VSCode',
+      definition_ru: 'Visual Studio Code — бесплатный редактор кода с подсветкой синтаксиса, подсказками и встроенной поддержкой Git.',
+      definition_en: 'Visual Studio Code — a free code editor with syntax highlighting, hints and built-in Git support.',
+      example_ru: 'Большинство веб-разработчиков пишут код в VSCode.',
+      example_en: 'Most web developers write code in VSCode.',
+    },
+    {
+      term_ru: 'Git',
+      term_en: 'Git',
+      definition_ru: 'Система контроля версий: сохраняет историю изменений проекта и позволяет вернуться к любой предыдущей версии.',
+      definition_en: 'A version control system: saves the history of project changes and lets you return to any previous version.',
+      example_ru: 'git commit — сохраняет текущее состояние кода как «точку сохранения».',
+      example_en: 'git commit — saves the current state of the code as a "save point".',
+    },
+    {
+      term_ru: 'GitHub',
+      term_en: 'GitHub',
+      definition_ru: 'Веб-платформа для хранения Git-репозиториев в облаке и совместной работы над проектами.',
+      definition_en: 'A web platform for storing Git repositories in the cloud and collaborating on projects.',
+      example_ru: 'Загрузи проект на GitHub — он будет доступен с любого устройства.',
+      example_en: 'Upload a project to GitHub — it will be accessible from any device.',
     },
   ],
 
