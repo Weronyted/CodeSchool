@@ -1,0 +1,310 @@
+import type { Lesson } from '@/types/lesson'
+
+export const jsLocalstorage: Lesson = {
+  slug: 'js-localstorage',
+  category: 'JS',
+  icon: '💾',
+  readTime: 9,
+  title_ru: 'localStorage и хранилище браузера',
+  title_en: 'localStorage and Browser Storage',
+  description_ru: 'Сохраняйте данные между сессиями с помощью localStorage: тема, настройки, корзина покупок. JSON.stringify/parse для объектов.',
+  description_en: 'Persist data between sessions using localStorage: theme, settings, shopping cart. JSON.stringify/parse for objects.',
+  sections: [
+    { id: 'basics', title_ru: 'Основные методы', title_en: 'Basic methods' },
+    { id: 'objects', title_ru: 'Хранение объектов', title_en: 'Storing objects' },
+    { id: 'sessionstorage', title_ru: 'sessionStorage', title_en: 'sessionStorage' },
+    { id: 'use-cases', title_ru: 'Применения', title_en: 'Use cases' },
+    { id: 'limits', title_ru: 'Ограничения', title_en: 'Limitations' },
+  ],
+  slides: [
+    {
+      id: 'title-slide',
+      type: 'title',
+      title_ru: 'localStorage — хранилище браузера',
+      title_en: 'localStorage — browser storage',
+      body_ru: 'localStorage позволяет сохранять данные прямо в браузере пользователя. Данные сохраняются даже после закрытия вкладки.',
+      body_en: 'localStorage lets you save data directly in the user\'s browser. Data persists even after closing the tab.',
+      visual: { kind: 'emoji', emojis: ['💾', '🔑', '🌐'], caption_ru: 'Сохраняй, читай, сохраняй навсегда', caption_en: 'Save, read, persist forever' },
+    },
+    {
+      id: 'concept-basics',
+      type: 'concept',
+      title_ru: 'Основные методы localStorage',
+      title_en: 'Basic localStorage methods',
+      body_ru: 'localStorage имеет простой API из четырёх операций: setItem, getItem, removeItem и clear. Все ключи и значения — строки.',
+      body_en: 'localStorage has a simple API of four operations: setItem, getItem, removeItem and clear. All keys and values are strings.',
+      code: `// Save a value\nlocalStorage.setItem('username', 'Alice');\nlocalStorage.setItem('theme', 'dark');\n\n// Read a value\nconst name = localStorage.getItem('username');\nconsole.log(name); // 'Alice'\n\n// Read non-existent key → null\nconsole.log(localStorage.getItem('missing')); // null\n\n// Remove one key\nlocalStorage.removeItem('username');\n\n// Clear all localStorage data\nlocalStorage.clear();`,
+      codeLang: 'javascript',
+    },
+    {
+      id: 'concept-objects',
+      type: 'concept',
+      title_ru: 'Хранение объектов через JSON',
+      title_en: 'Storing objects via JSON',
+      body_ru: 'localStorage хранит только строки. Для объектов и массивов используйте JSON.stringify при сохранении и JSON.parse при чтении.',
+      body_en: 'localStorage stores only strings. For objects and arrays use JSON.stringify when saving and JSON.parse when reading.',
+      code: `const userSettings = {\n  theme: 'dark',\n  language: 'ru',\n  fontSize: 16,\n  notifications: true,\n};\n\n// Save object → convert to JSON string\nlocalStorage.setItem('settings', JSON.stringify(userSettings));\n\n// Read back → parse from JSON string\nconst raw = localStorage.getItem('settings');\nconst settings = raw ? JSON.parse(raw) : null;\nconsole.log(settings?.theme); // 'dark'\n\n// Save array\nconst cart = [{ id: 1, qty: 2 }, { id: 5, qty: 1 }];\nlocalStorage.setItem('cart', JSON.stringify(cart));\nconst savedCart = JSON.parse(localStorage.getItem('cart') || '[]');`,
+      codeLang: 'javascript',
+    },
+    {
+      id: 'compare-local-session',
+      type: 'compare',
+      title_ru: 'localStorage vs sessionStorage',
+      title_en: 'localStorage vs sessionStorage',
+      body_ru: 'Оба хранилища имеют одинаковый API, но различаются временем жизни данных.',
+      body_en: 'Both storages have the same API but differ in data lifetime.',
+      compareLeft: {
+        label_ru: 'localStorage — постоянное',
+        label_en: 'localStorage — persistent',
+        items_ru: ['Сохраняется после закрытия вкладки', 'Сохраняется после перезагрузки', 'Сохраняется после закрытия браузера', 'Нужно очищать вручную'],
+        items_en: ['Persists after closing tab', 'Persists after page reload', 'Persists after closing browser', 'Must be cleared manually'],
+        color: 'green',
+      },
+      compareRight: {
+        label_ru: 'sessionStorage — временное',
+        label_en: 'sessionStorage — temporary',
+        items_ru: ['Очищается при закрытии вкладки', 'Сохраняется при перезагрузке', 'Не переносится между вкладками', 'Автоматически очищается'],
+        items_en: ['Cleared when tab is closed', 'Survives page reload', 'Not shared between tabs', 'Automatically cleared'],
+        color: 'blue',
+      },
+    },
+    {
+      id: 'concept-use-cases',
+      type: 'concept',
+      title_ru: 'Когда использовать localStorage',
+      title_en: 'When to use localStorage',
+      body_ru: 'localStorage идеален для данных, которые должны сохраняться между сессиями, но не требуют хранения на сервере.',
+      body_en: 'localStorage is ideal for data that should persist between sessions but does not need to be stored on a server.',
+      code: `// 1. Theme preference\nconst theme = localStorage.getItem('theme') || 'light';\ndocument.body.className = theme;\n\n// 2. Form draft (autosave)\ninput.addEventListener('input', () => {\n  localStorage.setItem('draftMessage', input.value);\n});\nconst draft = localStorage.getItem('draftMessage');\nif (draft) input.value = draft;\n\n// 3. Simple shopping cart\nfunction addToCart(productId) {\n  const cart = JSON.parse(localStorage.getItem('cart') || '[]');\n  cart.push(productId);\n  localStorage.setItem('cart', JSON.stringify(cart));\n}`,
+      codeLang: 'javascript',
+    },
+    {
+      id: 'anim-theme',
+      type: 'code-anim',
+      title_ru: 'Сохранение темы через localStorage',
+      title_en: 'Saving theme via localStorage',
+      body_ru: 'Смотрите, как тема сохраняется и восстанавливается при перезагрузке страницы.',
+      body_en: 'Watch how theme is saved and restored on page reload.',
+      animMode: 'preview',
+      animSteps: [
+        {
+          code: `<button id="themeToggle">Toggle Theme</button>`,
+          comment_ru: 'Кнопка переключения темы',
+          comment_en: 'Theme toggle button',
+          preview: '<div style="background:#fff;padding:20px"><button style="padding:8px 16px">Toggle Theme</button></div>',
+        },
+        {
+          code: `const btn = document.querySelector('#themeToggle');\nconst saved = localStorage.getItem('theme') || 'light';\ndocument.body.dataset.theme = saved;`,
+          comment_ru: 'Читаем тему из localStorage при загрузке',
+          comment_en: 'Read theme from localStorage on load',
+          preview: '<div style="background:#1e1e2e;padding:20px"><button style="padding:8px 16px;background:#cdd6f4">Toggle Theme</button><span style="color:#cdd6f4;margin-left:10px">dark theme loaded</span></div>',
+        },
+        {
+          code: `btn.addEventListener('click', () => {\n  const current = document.body.dataset.theme;\n  const next = current === 'dark' ? 'light' : 'dark';\n  document.body.dataset.theme = next;\n  localStorage.setItem('theme', next);\n});`,
+          comment_ru: 'Сохраняем новую тему при клике',
+          comment_en: 'Save new theme on click',
+          preview: '<div style="background:#eff1f5;padding:20px"><button style="padding:8px 16px">Toggle Theme</button><span style="margin-left:10px">✅ saved "light"</span></div>',
+        },
+      ],
+    },
+    {
+      id: 'concept-limits',
+      type: 'concept',
+      title_ru: 'Ограничения localStorage',
+      title_en: 'localStorage limitations',
+      body_ru: 'localStorage — мощный инструмент, но у него есть ограничения, которые нужно учитывать.',
+      body_en: 'localStorage is powerful but has limitations you should be aware of.',
+      code: `// 1. Limit: ~5MB per origin (varies by browser)\n// Don't store images or large data!\n\n// 2. Synchronous API — blocks the main thread on large data\n// For large data use IndexedDB instead\n\n// 3. Strings only — JSON.parse/stringify needed for objects\n\n// 4. Not secure — never store passwords or tokens!\nconsole.warn('Never store: passwords, JWT tokens, credit cards');\n\n// 5. Same origin only — can't access another domain's storage\n\n// Safe check before use:\nif (typeof Storage !== 'undefined') {\n  localStorage.setItem('test', 'works');\n} else {\n  console.warn('localStorage not supported');\n}`,
+      codeLang: 'javascript',
+    },
+    {
+      id: 'tip-safe-access',
+      type: 'tip',
+      title_ru: 'Совет: безопасное чтение с JSON.parse',
+      title_en: 'Tip: safe reading with JSON.parse',
+      body_ru: 'Оборачивайте JSON.parse в try/catch — сохранённые данные могут быть повреждены.',
+      body_en: 'Wrap JSON.parse in try/catch — stored data might be corrupted.',
+      code: `function getItem(key, fallback = null) {\n  try {\n    const raw = localStorage.getItem(key);\n    return raw !== null ? JSON.parse(raw) : fallback;\n  } catch {\n    return fallback;\n  }\n}`,
+      codeLang: 'javascript',
+    },
+    {
+      id: 'practice-cta',
+      type: 'practice-cta',
+      title_ru: 'Практика',
+      title_en: 'Practice',
+      body_ru: 'Создайте приложение заметок, которое сохраняет текст в localStorage и восстанавливает при перезагрузке.',
+      body_en: 'Build a notes app that saves text to localStorage and restores it on reload.',
+    },
+  ],
+  content: {
+    intro_ru: 'localStorage — самый простой способ сохранить данные на стороне клиента. В отличие от cookie, он имеет больший объём и не отправляется на сервер с каждым запросом.',
+    intro_en: 'localStorage is the simplest way to persist data client-side. Unlike cookies, it has more storage space and is not sent to the server with every request.',
+    blocks: [
+      {
+        sectionId: 'basics',
+        heading_ru: 'Четыре основных операции localStorage',
+        heading_en: 'The four core localStorage operations',
+        text_ru: 'localStorage предоставляет минималистичный API из четырёх методов. setItem(key, value) сохраняет пару ключ-значение. getItem(key) читает значение по ключу и возвращает null, если ключ не существует. removeItem(key) удаляет конкретный ключ. clear() стирает все данные вашего сайта из хранилища.\n\nВажно понимать: localStorage хранит только строки. Если вы передадите число или булево значение, оно будет автоматически преобразовано в строку. При чтении вы получите строку и должны вручную привести её к нужному типу. Для объектов и массивов используйте JSON.stringify/JSON.parse.',
+        text_en: 'localStorage provides a minimalist API of four methods. setItem(key, value) saves a key-value pair. getItem(key) reads the value by key and returns null if the key does not exist. removeItem(key) deletes a specific key. clear() erases all data for your site from storage.\n\nImportant to understand: localStorage stores only strings. If you pass a number or boolean, it will be automatically converted to a string. When reading you will get a string and must manually cast it to the needed type. For objects and arrays use JSON.stringify/JSON.parse.',
+        code: `// setItem: save a string value
+localStorage.setItem('username', 'Alice');
+localStorage.setItem('theme', 'dark');
+
+// getItem: read back (returns string or null)
+const name = localStorage.getItem('username');
+console.log(name); // 'Alice'
+console.log(typeof name); // 'string'
+
+// Missing key → null (not undefined)
+console.log(localStorage.getItem('missing')); // null
+
+// Numbers are stored as strings
+localStorage.setItem('age', 25);
+const age = localStorage.getItem('age');
+console.log(age, typeof age); // '25' string → need Number(age)
+
+// removeItem: delete one key
+localStorage.removeItem('username');
+
+// clear: wipe all localStorage for this origin
+localStorage.clear();`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'sessionstorage',
+        heading_ru: 'sessionStorage: временное хранилище на время сессии',
+        heading_en: 'sessionStorage: temporary storage for the session',
+        text_ru: 'sessionStorage имеет точно такой же API, что и localStorage, но принципиально отличается временем жизни данных. Данные в sessionStorage существуют только пока открыта вкладка браузера — при закрытии вкладки они исчезают автоматически. Кроме того, каждая вкладка имеет свой изолированный sessionStorage, тогда как localStorage общий для всех вкладок одного домена.\n\nsessionStorage отлично подходит для временных данных, которые не должны сохраняться между сессиями: черновики форм в рамках одного визита, шаги мастера настройки, состояние фильтров на странице каталога. Выбирайте sessionStorage, когда хотите автоматической очистки.',
+        text_en: 'sessionStorage has exactly the same API as localStorage but differs fundamentally in data lifetime. Data in sessionStorage exists only while the browser tab is open — when the tab closes, the data disappears automatically. Additionally, each tab has its own isolated sessionStorage, whereas localStorage is shared across all tabs of the same domain.\n\nsessionStorage is perfect for temporary data that should not persist between sessions: form drafts within a single visit, wizard step state, filter state on a catalog page. Choose sessionStorage when you want automatic cleanup.',
+        code: `// Identical API to localStorage
+sessionStorage.setItem('step', '2');
+const step = sessionStorage.getItem('step');
+console.log(step); // '2'
+
+sessionStorage.removeItem('step');
+sessionStorage.clear();
+
+// Practical: save form progress within the session
+const form = document.querySelector('#signupForm');
+form.addEventListener('input', () => {
+  sessionStorage.setItem('formDraft', JSON.stringify({
+    name: form.name.value,
+    email: form.email.value,
+  }));
+});
+
+// Restore draft if user navigates back
+const draft = sessionStorage.getItem('formDraft');
+if (draft) {
+  const { name, email } = JSON.parse(draft);
+  form.name.value = name;
+  form.email.value = email;
+}
+
+// Key difference:
+// localStorage  → persists after tab/browser close
+// sessionStorage → cleared when tab is closed`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'limits',
+        heading_ru: 'Ограничения и соображения безопасности',
+        heading_en: 'Limitations and security considerations',
+        text_ru: 'localStorage — удобный инструмент, но с важными ограничениями. Лимит объёма составляет около 5 МБ на домен (точное значение зависит от браузера). Не храните в нём изображения в base64 или большие объёмы данных — для этого существует IndexedDB.\n\nAPI localStorage синхронное: оно блокирует главный поток при каждой операции. Для небольших строк это незаметно, но сериализация/десериализация больших объектов может вызвать задержки. Критически важно никогда не хранить в localStorage пароли, токены авторизации или любые чувствительные данные — хранилище полностью доступно через JavaScript, что делает его уязвимым к XSS-атакам.',
+        text_en: 'localStorage is a convenient tool but with important limitations. The storage limit is around 5 MB per domain (exact value depends on the browser). Do not store base64 images or large amounts of data there — IndexedDB exists for that purpose.\n\nThe localStorage API is synchronous: it blocks the main thread on every operation. For small strings this is unnoticeable, but serializing/deserializing large objects can cause delays. It is critically important to never store passwords, auth tokens, or any sensitive data in localStorage — the storage is fully accessible via JavaScript, making it vulnerable to XSS attacks.',
+        code: `// 1. Size limit: ~5 MB — check before large writes
+function safeSetItem(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    if (e.name === 'QuotaExceededError') {
+      console.warn('localStorage is full!');
+    }
+  }
+}
+
+// 2. Synchronous — avoid large objects
+// BAD: storing a huge array
+// localStorage.setItem('bigData', JSON.stringify(hugeArray));
+// Use IndexedDB for large/complex data instead
+
+// 3. NEVER store sensitive data
+// localStorage.setItem('password', pwd);  // DANGEROUS!
+// localStorage.setItem('authToken', jwt); // DANGEROUS!
+// Use HttpOnly cookies for auth tokens instead
+
+// 4. Feature detection (old browsers / private mode edge cases)
+function storageAvailable() {
+  try {
+    localStorage.setItem('__test', '1');
+    localStorage.removeItem('__test');
+    return true;
+  } catch {
+    return false;
+  }
+}
+if (storageAvailable()) { /* use localStorage */ }`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'objects',
+        heading_ru: 'Утилиты для работы с localStorage',
+        heading_en: 'localStorage utility functions',
+        text_ru: 'Создание обёрток вокруг localStorage упрощает работу с объектами и обработку ошибок.',
+        text_en: 'Creating wrappers around localStorage simplifies working with objects and error handling.',
+        code: `const storage = {\n  set(key, value) {\n    localStorage.setItem(key, JSON.stringify(value));\n  },\n  get(key, fallback = null) {\n    try {\n      const raw = localStorage.getItem(key);\n      return raw !== null ? JSON.parse(raw) : fallback;\n    } catch {\n      return fallback;\n    }\n  },\n  remove(key) {\n    localStorage.removeItem(key);\n  },\n};\n\nstorage.set('user', { name: 'Alice', age: 25 });\nconsole.log(storage.get('user')); // { name: 'Alice', age: 25 }`,
+        codeLang: 'javascript',
+      },
+      {
+        sectionId: 'use-cases',
+        heading_ru: 'Приложение заметок',
+        heading_en: 'Notes application',
+        text_ru: 'Практический пример: текстовый редактор, автосохраняющий каждое нажатие клавиши.',
+        text_en: 'Practical example: a text editor that autosaves on every keystroke.',
+        code: `const textarea = document.querySelector('#note');\nconst status = document.querySelector('#status');\n\n// Restore on load\ntextarea.value = localStorage.getItem('note') || '';\n\n// Autosave on input\ntextarea.addEventListener('input', () => {\n  localStorage.setItem('note', textarea.value);\n  status.textContent = 'Saved ✓';\n  setTimeout(() => { status.textContent = ''; }, 1500);\n});\n\n// Word count\ntextarea.addEventListener('input', () => {\n  const words = textarea.value.trim().split(/\\s+/).filter(Boolean);\n  document.querySelector('#wc').textContent = words.length + ' words';\n});`,
+        codeLang: 'javascript',
+      },
+    ],
+  },
+  editorTask: {
+    title_ru: 'Переключатель темы с памятью',
+    title_en: 'Theme switcher with memory',
+    instructions_ru: 'Создайте страницу с кнопкой переключения темы (светлая/тёмная). Сохраняйте выбор в localStorage. При загрузке страницы восстанавливайте сохранённую тему.',
+    instructions_en: 'Create a page with a theme toggle button (light/dark). Save the choice to localStorage. On page load restore the saved theme.',
+    activeTabs: ['html', 'javascript'],
+    starterCode: {
+      html: `<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>Theme Switcher</title>\n  <style>\n    body { font-family: sans-serif; padding: 40px; transition: background 0.3s, color 0.3s; }\n    body.light { background: #f9fafb; color: #111; }\n    body.dark  { background: #1e1e2e; color: #cdd6f4; }\n    button { padding: 10px 20px; font-size: 1rem; cursor: pointer; border-radius: 8px; border: none; }\n    body.light button { background: #374151; color: white; }\n    body.dark  button { background: #cdd6f4; color: #1e1e2e; }\n  </style>\n</head>\n<body class="light">\n  <h1>Hello, World!</h1>\n  <p>This page remembers your theme preference.</p>\n  <button id="toggle">Switch to Dark</button>\n  <script src="script.js"></script>\n</body>\n</html>`,
+      javascript: `const toggleBtn = document.querySelector('#toggle');\n\n// TODO: on page load, read saved theme from localStorage\n// Apply it to document.body.className\n// Update button text accordingly\n\n// TODO: on button click:\n// 1. Toggle between 'light' and 'dark'\n// 2. Update document.body.className\n// 3. Save new theme to localStorage\n// 4. Update button text`,
+    },
+    hints_ru: [
+      'Чтение: const saved = localStorage.getItem("theme") || "light";',
+      'Применение: document.body.className = saved;',
+      'Переключение: const next = current === "dark" ? "light" : "dark";',
+      'Сохранение: localStorage.setItem("theme", next);',
+    ],
+    hints_en: [
+      'Reading: const saved = localStorage.getItem("theme") || "light";',
+      'Applying: document.body.className = saved;',
+      'Toggling: const next = current === "dark" ? "light" : "dark";',
+      'Saving: localStorage.setItem("theme", next);',
+    ],
+  },
+  keyTerms: [
+    { term_ru: 'localStorage', term_en: 'localStorage', definition_ru: 'Браузерное хранилище данных без срока действия (~5 МБ)', definition_en: 'Browser storage with no expiration (~5 MB)', example_ru: 'localStorage.setItem("key", "value")', example_en: 'localStorage.setItem("key", "value")' },
+    { term_ru: 'sessionStorage', term_en: 'sessionStorage', definition_ru: 'Браузерное хранилище, очищаемое при закрытии вкладки', definition_en: 'Browser storage cleared when the tab is closed', example_ru: 'sessionStorage.getItem("key")', example_en: 'sessionStorage.getItem("key")' },
+    { term_ru: 'JSON.stringify', term_en: 'JSON.stringify', definition_ru: 'Преобразует объект в JSON-строку для хранения', definition_en: 'Converts an object to a JSON string for storage', example_ru: 'JSON.stringify({ a: 1 }) → \'{"a":1}\'', example_en: 'JSON.stringify({ a: 1 }) → \'{"a":1}\'' },
+    { term_ru: 'JSON.parse', term_en: 'JSON.parse', definition_ru: 'Преобразует JSON-строку обратно в объект', definition_en: 'Converts a JSON string back to an object', example_ru: 'JSON.parse(\'{"a":1}\') → { a: 1 }', example_en: 'JSON.parse(\'{"a":1}\') → { a: 1 }' },
+    { term_ru: 'Источник (origin)', term_en: 'Origin', definition_ru: 'Комбинация протокола, домена и порта. localStorage ограничен одним источником.', definition_en: 'The combination of protocol, domain and port. localStorage is scoped per origin.', example_ru: 'https://example.com:443', example_en: 'https://example.com:443' },
+  ],
+  didYouKnow: [
+    { text_ru: 'localStorage делится между всеми вкладками одного домена! Это позволяет синхронизировать состояние между вкладками через событие window "storage".', text_en: 'localStorage is shared between all tabs of the same domain! This allows syncing state between tabs via the window "storage" event.' },
+    { text_ru: 'В режиме инкогнито localStorage работает, но очищается при закрытии окна — ведёт себя как sessionStorage.', text_en: 'In incognito mode localStorage works, but is cleared when the window is closed — it behaves like sessionStorage.' },
+  ],
+  quiz: [
+    { id: 'q1', text_ru: 'Как сохранить строку "Alice" под ключом "name" в localStorage?', text_en: 'How do you save the string "Alice" under key "name" in localStorage?', options_ru: ['localStorage["name"] = "Alice"', 'localStorage.setItem("name", "Alice")', 'localStorage.save("name", "Alice")', 'localStorage.write("name", "Alice")'], options_en: ['localStorage["name"] = "Alice"', 'localStorage.setItem("name", "Alice")', 'localStorage.save("name", "Alice")', 'localStorage.write("name", "Alice")'], correctIndex: 1, explanation_ru: 'Стандартный метод — setItem(key, value). Можно также писать через скобки, но setItem предпочтительнее.', explanation_en: 'The standard method is setItem(key, value). Bracket notation also works but setItem is preferred.' },
+    { id: 'q2', text_ru: 'Почему нужен JSON.stringify при сохранении объекта в localStorage?', text_en: 'Why is JSON.stringify needed when saving an object to localStorage?', options_ru: ['Для шифрования', 'localStorage хранит только строки', 'Объекты нельзя сохранять вообще', 'Для сжатия данных'], options_en: ['For encryption', 'localStorage only stores strings', 'Objects cannot be stored at all', 'For data compression'], correctIndex: 1, explanation_ru: 'localStorage хранит только строки. JSON.stringify преобразует объект в строку.', explanation_en: 'localStorage only stores strings. JSON.stringify converts an object to a string.' },
+    { id: 'q3', text_ru: 'Чем sessionStorage отличается от localStorage?', text_en: 'How does sessionStorage differ from localStorage?', options_ru: ['sessionStorage быстрее', 'sessionStorage очищается при закрытии вкладки', 'sessionStorage хранит больше данных', 'sessionStorage не поддерживает строки'], options_en: ['sessionStorage is faster', 'sessionStorage clears when the tab closes', 'sessionStorage stores more data', 'sessionStorage does not support strings'], correctIndex: 1, explanation_ru: 'sessionStorage живёт только пока открыта вкладка. localStorage — постоянный.', explanation_en: 'sessionStorage lives only while the tab is open. localStorage is persistent.' },
+    { id: 'q4', text_ru: 'Что вернёт localStorage.getItem("nonExistentKey")?', text_en: 'What does localStorage.getItem("nonExistentKey") return?', options_ru: ['undefined', '""', 'null', 'ReferenceError'], options_en: ['undefined', '""', 'null', 'ReferenceError'], correctIndex: 2, explanation_ru: 'Если ключ не существует, getItem возвращает null — не undefined.', explanation_en: 'If the key does not exist, getItem returns null — not undefined.' },
+    { id: 'q5', text_ru: 'Что НЕ стоит хранить в localStorage?', text_en: 'What should you NOT store in localStorage?', options_ru: ['Тему оформления', 'Предпочтения языка', 'Пароли и токены авторизации', 'Содержимое корзины'], options_en: ['Theme preference', 'Language preference', 'Passwords and auth tokens', 'Shopping cart contents'], correctIndex: 2, explanation_ru: 'localStorage не зашифрован и доступен через JavaScript. Никогда не храните там пароли или токены.', explanation_en: 'localStorage is not encrypted and is accessible via JavaScript. Never store passwords or tokens there.' },
+  ],
+}

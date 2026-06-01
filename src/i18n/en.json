@@ -1,0 +1,282 @@
+{
+  "nav": {
+    "lessons": "Lessons",
+    "assignments": "Assignments",
+    "dashboard": "Dashboard",
+    "glossary": "Glossary",
+    "class": "Class",
+    "profile": "Profile",
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "signOutConfirmTitle": "Sign out?",
+    "signOutConfirmMsg": "Your progress is saved in the cloud. You can sign back in any time.",
+    "search": "Search...",
+    "searchPlaceholder": "Search lessons, terms...",
+    "admin": "Admin Panel",
+    "theme": {
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "lang": "RU"
+  },
+  "landing": {
+    "hero": {
+      "badge": "Free Programming Education",
+      "title": "Learn to code",
+      "titleHighlight": "step by step",
+      "subtitle": "Interactive lessons on HTML, CSS and JavaScript. Write real code, see instant results — right in your browser.",
+      "cta": "Start",
+      "ctaSecondary": "All Topics",
+      "stat1": "Lessons",
+      "stat2": "Exercises",
+      "stat3": "Free",
+      "stats": {
+        "lessons": "40 lessons",
+        "lessonsDesc": "Structured topics",
+        "quizzes": "100+ exercises",
+        "quizzesDesc": "Hands-on practice",
+        "free": "100% Free",
+        "freeDesc": "No card required"
+      }
+    },
+    "features": {
+      "title": "Everything you need to learn web programming",
+      "interactive": {
+        "title": "Live Code Editor",
+        "desc": "Write HTML, CSS and JS directly in the browser and see results instantly. No setup needed."
+      },
+      "quizzes": {
+        "title": "Practice Quizzes",
+        "desc": "Reinforce knowledge through multiple-choice tests and code-writing exercises."
+      },
+      "progress": {
+        "title": "Track Progress",
+        "desc": "Dashboard with radar charts, badges and day streaks to keep you motivated."
+      },
+      "free": {
+        "title": "Completely Free",
+        "desc": "All lessons, quizzes and the code editor are available without payment or ads."
+      }
+    },
+    "topics": {
+      "title": "40 lessons — from zero to your first website",
+      "subtitle": "Start with HTML basics and work your way up to interactive JavaScript pages."
+    },
+    "lesson": "Lesson",
+    "cta": {
+      "title": "Ready to start coding?",
+      "subtitle": "Join thousands of learners already building their first websites.",
+      "button": "Start"
+    }
+  },
+  "lessons": {
+    "title": "All Lessons",
+    "subtitle": "{{count}} lessons on HTML, CSS and JavaScript",
+    "done": "Passed",
+    "readTime": "{{min}} min read",
+    "sections": "Contents",
+    "yourScore": "Your score",
+    "notAttempted": "Not attempted",
+    "nextLesson": "Next lesson",
+    "prevLesson": "Previous lesson",
+    "bookmark": "Bookmarks",
+    "bookmarked": "Bookmarked",
+    "cheatsheet": "Cheatsheet",
+    "keyTerms": "Key Terms",
+    "didYouKnow": "Did You Know?",
+    "workedExample": "Worked Example",
+    "quizMultiple": "Quiz — Choose the correct answer",
+    "quizCode": "Practice — Write some code",
+    "home": "Home",
+    "contentsButton": "Contents",
+    "tryInEditor": "Try in editor"
+  },
+  "quiz": {
+    "title": "Quiz",
+    "submit": "Check answers",
+    "tryAgain": "Try again",
+    "nextTopic": "Next topic",
+    "showSolution": "Show solution",
+    "hideSolution": "Hide solution",
+    "score": "Correct: {{correct}} of {{total}} ({{percent}}%)",
+    "perfect": "Perfect! Excellent work!",
+    "great": "Great result! Keep it up!",
+    "good": "Good effort. Review the mistakes and try again.",
+    "keepTrying": "Don't give up — practice makes perfect!",
+    "question": "Question",
+    "of": "of",
+    "yourAnswer": "Your answer:",
+    "correctAnswer": "Correct:",
+    "answerReview": "Answer review",
+    "runCode": "Run code",
+    "resetCode": "Reset",
+    "output": "Output",
+    "codeInstruction": "Instructions",
+    "checkCode": "Check"
+  },
+  "dashboard": {
+    "welcome": "Welcome back, {{name}}!",
+    "progress": "Your progress",
+    "topicsCompleted": "{{completed}} / {{total}} topics completed",
+    "recentActivity": "Recent activity",
+    "badgesTitle": "Your badges",
+    "streak": "Day streak",
+    "streakDesc": "days in a row",
+    "noActivity": "No activity yet. Start your first lesson!",
+    "radarTitle": "Score radar",
+    "student": "Student",
+    "lessonsCompleted": "Lessons completed",
+    "yourLessons": "Lessons",
+    "notStarted": "Not started",
+    "quickActions": "Quick actions",
+    "allLessons": "All lessons",
+    "glossary": "Glossary",
+    "assignments": "Assignments",
+    "skills": "Skills",
+    "status": {
+      "notStarted": "Not started",
+      "inProgress": "In progress",
+      "completed": "Completed"
+    },
+    "buttons": {
+      "start": "Start",
+      "continue": "Continue",
+      "review": "Review"
+    },
+    "badges": {
+      "firstTag": "First Tag",
+      "firstTagDesc": "Complete your first topic",
+      "stylist": "Stylist",
+      "stylistDesc": "Complete 3 topics",
+      "coder": "Coder",
+      "coderDesc": "Complete 6 topics",
+      "developer": "Developer",
+      "developerDesc": "Complete 9 topics",
+      "fullStack": "Full-Stack",
+      "fullStackDesc": "Complete all 40 lessons with 80%+",
+      "perfectScore": "Perfect Score",
+      "perfectScoreDesc": "Score 100% on any quiz",
+      "persistent": "Persistent",
+      "persistentDesc": "Attempt any quiz 3+ times"
+    }
+  },
+  "glossary": {
+    "title": "Programming Glossary",
+    "subtitle": "50+ terms with definitions and code examples",
+    "search": "Search terms...",
+    "filterByTopic": "Filter by topic",
+    "allTopics": "All topics",
+    "noResults": "No terms found for your query.",
+    "example": "Example",
+    "topic": "Topic"
+  },
+  "profile": {
+    "title": "My Profile",
+    "editProfile": "Edit Profile",
+    "quizHistory": "Quiz History",
+    "bookmarks": "Bookmarks",
+    "noBookmarks": "No bookmarks yet.",
+    "noHistory": "Quiz history is empty.",
+    "takeQuiz": "Take quiz",
+    "score": "Score",
+    "date": "Date",
+    "attempts": "Attempts",
+    "language": "Language",
+    "theme": "Theme",
+    "languageLabel": "Interface language",
+    "setupTitle": "What's your name?",
+    "setupSubtitle": "Enter your first and last name to complete your registration.",
+    "setupDone": "Profile saved!",
+    "setupSkip": "Skip (you can fill it in later from your profile)",
+    "firstName": "First name",
+    "lastName": "Last name"
+  },
+  "auth": {
+    "signInTitle": "Sign in to CodeSchool",
+    "signInSubtitle": "Save your progress and access from any device.",
+    "continueWithGoogle": "Continue with Google",
+    "orSignInWithEmail": "Or sign in with email",
+    "email": "Email address",
+    "password": "Password",
+    "signIn": "Sign In",
+    "signUp": "Create account",
+    "noAccount": "No account?",
+    "hasAccount": "Already have an account?",
+    "forgotPassword": "Forgot password?",
+    "guestMode": "Continue as guest",
+    "guestNote": "Guest progress is stored locally and will be lost if you clear your browser.",
+    "requiredTitle": "Sign in to continue",
+    "requiredSubtitle": "Create a free account to access lessons, quizzes and track your progress.",
+    "accessDeniedTitle": "Access Denied",
+    "accessDeniedSubtitle": "You don't have access to this platform yet. Ask your teacher to add you, or use the invite link.",
+    "back": "← Back to home",
+    "backShort": "← Back",
+    "displayName": "Username"
+  },
+  "errors": {
+    "notFound": "Page not found",
+    "notFoundDesc": "The page you are looking for does not exist.",
+    "backHome": "Back to home",
+    "loadFailed": "Loading failed. Please try again.",
+    "authFailed": "Authentication failed. Please try again.",
+    "saveFailed": "Failed to save progress."
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "yes": "Yes",
+    "no": "No",
+    "of": "of",
+    "by": "by",
+    "home": "Home",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "publish": "Publish",
+    "unpublish": "Unpublish"
+  },
+  "footer": {
+    "madeWith": "Made with",
+    "forLearners": "for young coders"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "ownerDesc": "Full access",
+    "adminDesc": "Administrator",
+    "tabs": {
+      "lessons": "Lessons",
+      "assignments": "Assignments",
+      "classes": "Classes",
+      "users": "Users"
+    }
+  },
+  "assignments": {
+    "title": "Assignments",
+    "subtitle": "Assignments from your teacher",
+    "empty": "No assignments yet.",
+    "noAssignments": "No assignments yet.",
+    "dueDate": "Due date",
+    "teacher": "Teacher",
+    "questions": "questions",
+    "start": "Start assignment",
+    "submitted": "Assignment submitted",
+    "yourScore": "Your score",
+    "submitTitle": "Submit assignment",
+    "submit": "Submit"
+  },
+  "classes": {
+    "title": "My Class",
+    "joinCode": "Join code",
+    "members": "Members",
+    "noMembers": "No students in class yet.",
+    "join": "Join a class",
+    "joinPlaceholder": "Enter class code",
+    "joinButton": "Join",
+    "leaveClass": "Leave class"
+  }
+}

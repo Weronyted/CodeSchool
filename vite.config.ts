@@ -1,0 +1,24 @@
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/analytics'],
+          charts: ['recharts'],
+          motion: ['framer-motion'],
+          codemirror: ['@uiw/react-codemirror', '@codemirror/lang-html', '@codemirror/lang-css', '@codemirror/lang-javascript'],
+        },
+      },
+    },
+  },
+})
