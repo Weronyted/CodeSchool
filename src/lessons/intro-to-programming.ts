@@ -128,6 +128,19 @@ console.log("Ты родился в " + birthYear + " году.");
       ],
     },
     {
+      id: 's7b',
+      type: 'concept',
+      title_ru: 'Инструменты разработчика: VSCode, Git, GitHub',
+      title_en: 'Developer tools: VSCode, Git, GitHub',
+      body_ru: 'Программисты пишут код не в обычном блокноте. Самый популярный редактор — Visual Studio Code (VSCode): он подсвечивает код, подсказывает ошибки и имеет тысячи расширений. Чтобы не потерять работу — используют Git: он хранит всю историю изменений. А GitHub — это интернет-платформа, где хранятся проекты миллионов разработчиков.',
+      body_en: 'Programmers do not write code in a basic text editor. The most popular editor is Visual Studio Code (VSCode): it highlights code, points out errors and has thousands of extensions. To never lose work, developers use Git — it stores the full history of changes. And GitHub is an internet platform where millions of developers store their projects.',
+      bullets: [
+        { text_ru: 'VSCode — редактор кода с подсветкой и подсказками', text_en: 'VSCode — a code editor with highlighting and hints' },
+        { text_ru: 'Git — система сохранения истории изменений', text_en: 'Git — a system for saving the history of changes' },
+        { text_ru: 'GitHub — облачное хранилище и портфолио разработчика', text_en: 'GitHub — cloud storage and a developer portfolio' },
+      ],
+    },
+    {
       id: 's8',
       type: 'concept',
       title_ru: 'Языки программирования',
@@ -338,6 +351,48 @@ Important: all four Stolyarov volumes are available free as PDFs on the author's
 
 Other recommended books: «Grokking Algorithms» by Aditya Bhargava — an excellent starting point for understanding algorithms with clear illustrations; «Clean Code» by Robert Martin — a classic on writing professional, readable code.`,
       },
+      {
+        sectionId: 'tools',
+        heading_ru: 'Инструменты разработчика',
+        heading_en: 'Developer tools',
+        text_ru: `Прежде чем писать код, нужно подготовить рабочее место. У программиста
+есть три главных инструмента, которые ты будешь использовать постоянно.
+
+**Visual Studio Code (VSCode)** — бесплатный редактор кода от Microsoft. Он
+подсвечивает синтаксис разными цветами, помогает находить ошибки до запуска,
+автодополняет код и имеет тысячи расширений. Это не просто блокнот — это целая
+мастерская разработчика. Скачать можно с официального сайта code.visualstudio.com.
+
+**Git** — система контроля версий. Она работает прямо на твоём компьютере и
+запоминает каждое «сохранение» проекта (коммит). Если ты случайно удалишь важный
+код — Git поможет его восстановить. Профессионалы делают коммиты несколько раз
+в день, чтобы никогда не терять работу.
+
+**GitHub** — это сайт, где хранятся Git-репозитории. Представь его как Google Диск
+для кода: ты загружаешь проект, и он доступен с любого устройства. Кроме того,
+GitHub — это портфолио разработчика: работодатели смотрят на твои проекты там.
+Миллионы открытых проектов на GitHub можно изучать и использовать бесплатно.
+
+Подробнее о Git и GitHub — в следующем уроке курса.`,
+        text_en: `Before writing code you need to set up your workspace. A developer
+has three main tools you will use constantly.
+
+**Visual Studio Code (VSCode)** — a free code editor by Microsoft. It highlights
+syntax in different colours, helps find errors before running, autocompletes code and
+has thousands of extensions. It is not just a text editor — it is a full developer
+workshop. Download it at code.visualstudio.com.
+
+**Git** — a version control system. It runs right on your computer and remembers
+every project "save" (commit). If you accidentally delete important code — Git helps
+you restore it. Professionals commit several times a day to never lose their work.
+
+**GitHub** — a website that hosts Git repositories. Think of it as Google Drive for
+code: you upload a project and it is accessible from any device. GitHub is also a
+developer portfolio: employers look at your projects there. Millions of open projects
+on GitHub can be studied and used for free.
+
+More about Git and GitHub — in the next lesson of this course.`,
+      },
     ],
   },
 
@@ -390,6 +445,30 @@ Other recommended books: «Grokking Algorithms» by Aditya Bhargava — an excel
       example_ru: 'Программист час занимался дебаггингом, пока не нашёл ошибку.',
       example_en: 'The programmer spent an hour debugging before finding the error.',
     },
+    {
+      term_ru: 'VSCode',
+      term_en: 'VSCode',
+      definition_ru: 'Visual Studio Code — бесплатный редактор кода с подсветкой синтаксиса, подсказками и встроенной поддержкой Git.',
+      definition_en: 'Visual Studio Code — a free code editor with syntax highlighting, hints and built-in Git support.',
+      example_ru: 'Большинство веб-разработчиков пишут код в VSCode.',
+      example_en: 'Most web developers write code in VSCode.',
+    },
+    {
+      term_ru: 'Git',
+      term_en: 'Git',
+      definition_ru: 'Система контроля версий: сохраняет историю изменений проекта и позволяет вернуться к любой предыдущей версии.',
+      definition_en: 'A version control system: saves the history of project changes and lets you return to any previous version.',
+      example_ru: 'git commit — сохраняет текущее состояние кода как «точку сохранения».',
+      example_en: 'git commit — saves the current state of the code as a "save point".',
+    },
+    {
+      term_ru: 'GitHub',
+      term_en: 'GitHub',
+      definition_ru: 'Веб-платформа для хранения Git-репозиториев в облаке и совместной работы над проектами.',
+      definition_en: 'A web platform for storing Git repositories in the cloud and collaborating on projects.',
+      example_ru: 'Загрузи проект на GitHub — он будет доступен с любого устройства.',
+      example_en: 'Upload a project to GitHub — it will be accessible from any device.',
+    },
   ],
 
   didYouKnow: [
@@ -441,18 +520,18 @@ Other recommended books: «Grokking Algorithms» by Aditya Bhargava — an excel
       text_ru: 'Что из этого является примером алгоритма?',
       text_en: 'Which of these is an example of an algorithm?',
       options_ru: [
-        'Рецепт приготовления блюда',
         'Случайный набор слов',
         'Красивая картинка',
         'Имя файла',
+        'Рецепт приготовления блюда',
       ],
       options_en: [
-        'A recipe for cooking a dish',
         'A random set of words',
         'A pretty picture',
         'A file name',
+        'A recipe for cooking a dish',
       ],
-      correctIndex: 0,
+      correctIndex: 3,
       explanation_ru: 'Рецепт — это алгоритм: чёткая последовательность шагов с определённым результатом.',
       explanation_en: 'A recipe is an algorithm: a clear sequence of steps with a defined result.',
     },
@@ -461,18 +540,18 @@ Other recommended books: «Grokking Algorithms» by Aditya Bhargava — an excel
       text_ru: 'Как компьютер обрабатывает инструкции?',
       text_en: 'How does a computer process instructions?',
       options_ru: [
-        'Точно и буквально, шаг за шагом',
         'Угадывает, что имел в виду программист',
         'Выбирает самую лёгкую инструкцию',
+        'Точно и буквально, шаг за шагом',
         'Случайным образом',
       ],
       options_en: [
-        'Precisely and literally, step by step',
         'It guesses what the programmer meant',
         'It picks the easiest instruction',
+        'Precisely and literally, step by step',
         'Randomly',
       ],
-      correctIndex: 0,
+      correctIndex: 2,
       explanation_ru: 'Компьютер выполняет инструкции точно и буквально: он не додумывает и не угадывает.',
       explanation_en: 'A computer executes instructions precisely and literally — it does not guess or improvise.',
     },
@@ -480,9 +559,9 @@ Other recommended books: «Grokking Algorithms» by Aditya Bhargava — an excel
       id: 'q4',
       text_ru: 'Какой язык используют для создания структуры веб-страниц?',
       text_en: 'Which language is used to create the structure of web pages?',
-      options_ru: ['HTML', 'Python', 'Swift', 'Kotlin'],
-      options_en: ['HTML', 'Python', 'Swift', 'Kotlin'],
-      correctIndex: 0,
+      options_ru: ['Python', 'HTML', 'Swift', 'Kotlin'],
+      options_en: ['Python', 'HTML', 'Swift', 'Kotlin'],
+      correctIndex: 1,
       explanation_ru: 'HTML — это язык разметки, с помощью которого создаётся структура любой веб-страницы.',
       explanation_en: 'HTML is the markup language used to create the structure of any web page.',
     },
@@ -491,18 +570,18 @@ Other recommended books: «Grokking Algorithms» by Aditya Bhargava — an excel
       text_ru: 'Что такое «баг» в программировании?',
       text_en: 'What is a "bug" in programming?',
       options_ru: [
-        'Ошибка в программе',
         'Особенность браузера',
         'Специальный файл настроек',
         'Тип данных',
+        'Ошибка в программе',
       ],
       options_en: [
-        'An error in a program',
         'A browser feature',
         'A special settings file',
         'A data type',
+        'An error in a program',
       ],
-      correctIndex: 0,
+      correctIndex: 3,
       explanation_ru: 'Баг — это ошибка в коде. Название пошло от случая 1947 года, когда в компьютере нашли настоящего мотылька.',
       explanation_en: 'A bug is an error in code. The name comes from a 1947 incident when a real moth was found inside a computer.',
     },

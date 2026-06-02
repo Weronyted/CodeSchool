@@ -1,6 +1,7 @@
 export const LESSON_SLUGS = [
   // BASICS
   'intro-to-programming',
+  'git-github',
   // HTML
   'intro-to-html',
   'html-tags-elements',
@@ -55,6 +56,14 @@ export const LESSON_META: Record<LessonSlug, { title: string; title_en: string; 
     description: 'Узнай, что такое код, алгоритм и зачем вообще учиться программировать.',
     description_en: 'Find out what code and algorithms are, and why learning to program matters.',
     icon: '💡',
+    category: 'BASICS',
+  },
+  'git-github': {
+    title: 'Git и GitHub',
+    title_en: 'Git & GitHub',
+    description: 'Контроль версий, история изменений и командная работа над проектами.',
+    description_en: 'Version control, change history and team collaboration on projects.',
+    icon: '🌿',
     category: 'BASICS',
   },
   // HTML
