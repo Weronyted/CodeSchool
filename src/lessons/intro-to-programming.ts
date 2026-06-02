@@ -163,8 +163,8 @@ console.log("Ты родился в " + birthYear + " году.");
       body_ru: 'В 1843 году английский математик Ада Лавлейс написала первый алгоритм для аналитической машины Чарльза Бэббиджа — устройства, которого ещё не существовало в металле. Именно её считают первым программистом в истории человечества.',
       body_en: 'In 1843, English mathematician Ada Lovelace wrote the first algorithm for Charles Babbage\'s Analytical Engine — a device that did not yet physically exist. She is considered the first programmer in the history of humankind.',
       visual: {
-        kind: 'image',
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Ada_Lovelace_portrait.jpg/440px-Ada_Lovelace_portrait.jpg',
+        kind: 'emoji',
+        emojis: ['👩‍💻', '📜', '🔢'],
         caption_ru: 'Ада Лавлейс (1815–1852)',
         caption_en: 'Ada Lovelace (1815–1852)',
       },
@@ -224,7 +224,7 @@ console.log("Ты родился в " + birthYear + " году.");
       body_en: 'Want to go deeper and become a true professional? These books are the best guides on the journey. A special place is held by the fundamental series of A.V. Stolyarov — the most comprehensive Russian-language programming course.',
       visual: {
         kind: 'image',
-        imageUrl: 'https://imo10.labirint.ru/books/809304/cover.jpg/242-0',
+        imageUrl: 'https://covers.openlibrary.org/b/isbn/9785970609453-L.jpg',
         caption_ru: 'А.В. Столяров «Программирование: введение в профессию»',
         caption_en: 'A.V. Stolyarov «Programming: Introduction to the Profession»',
       },

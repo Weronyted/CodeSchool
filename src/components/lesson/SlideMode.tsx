@@ -105,11 +105,13 @@ function VisualBlock({ visual, lang }: { visual: SlideVisual; lang: string }) {
   }
   if (visual.kind === 'image' && visual.imageUrl) {
     return (
-      <div className="mt-4">
+      <div className="mt-4 flex flex-col items-center">
         <img
           src={visual.imageUrl}
           alt={lang === 'ru' ? (visual.caption_ru ?? '') : (visual.caption_en ?? '')}
-          className="w-full rounded-xl"
+          className="max-h-52 w-auto max-w-full rounded-xl object-contain shadow-lg"
+          loading="lazy"
+          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
         />
         {(visual.caption_ru || visual.caption_en) && (
           <p className="text-center text-white/40 text-sm mt-2">

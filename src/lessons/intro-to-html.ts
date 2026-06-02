@@ -197,10 +197,10 @@ export const introToHtml: Lesson = {
       body_ru: 'HTML придумал британский учёный Тим Бернерс-Ли в 1989–1991 годах. Работая в ЦЕРН, он хотел создать способ, которым учёные могли бы легко делиться документами через интернет. Он мог запатентовать изобретение и стать миллиардером — но отдал его миру бесплатно.',
       body_en: 'HTML was invented by British scientist Tim Berners-Lee in 1989–1991. Working at CERN, he wanted to create a way for scientists to easily share documents over the internet. He could have patented the invention and become a billionaire — but gave it to the world for free.',
       visual: {
-        kind: 'image',
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Sir_Tim_Berners-Lee.jpg/440px-Sir_Tim_Berners-Lee.jpg',
-        caption_ru: 'Тим Бернерс-Ли — изобретатель HTML и Всемирной паутины',
-        caption_en: 'Tim Berners-Lee — inventor of HTML and the World Wide Web',
+        kind: 'emoji',
+        emojis: ['👨‍💻', '🌐', '🎁'],
+        caption_ru: 'Тим Бернерс-Ли подарил HTML всему миру бесплатно',
+        caption_en: 'Tim Berners-Lee gave HTML to the whole world for free',
       },
     },
 
