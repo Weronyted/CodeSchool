@@ -29,6 +29,7 @@ export const cssFlexboxBasics: Lesson = {
       title_en: 'Flexbox — smart layout without float',
       body_ru: 'До Flexbox разработчики выравнивали блоки через float и position — это было неудобно. Flexbox решает это одной строкой: display: flex. Элементы выстраиваются в ряд, растягиваются, выравниваются — автоматически.',
       body_en: 'Before Flexbox developers aligned blocks with float and position — painful. Flexbox solves this in one line: display: flex. Elements line up, stretch, align — automatically.',
+      visual: { kind: 'emoji', emojis: ['↔️', '⬆️', '🔄'] },
     },
     {
       id: 's2',

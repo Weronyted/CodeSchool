@@ -29,6 +29,7 @@ export const cssResponsive: Lesson = {
       title_en: 'Responsive design: one site — all devices',
       body_ru: 'Сегодня более 60% трафика — с мобильных устройств. Адаптивный (responsive) дизайн означает, что сайт выглядит хорошо на телефоне, планшете и десктопе. Это стандарт современной веб-разработки.',
       body_en: 'Today more than 60% of traffic is from mobile devices. Responsive design means the site looks good on phones, tablets, and desktops. This is the standard in modern web development.',
+      visual: { kind: 'emoji', emojis: ['📱', '💻', '🖥️'] },
     },
     {
       id: 's2',

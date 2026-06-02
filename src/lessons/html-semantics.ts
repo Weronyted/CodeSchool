@@ -24,6 +24,7 @@ export const htmlSemantics: Lesson = {
       title_en: 'Semantic HTML',
       body_ru: 'Семантика — это смысл. Правильные теги рассказывают браузеру, поисковику и скринридеру, что означает каждый блок страницы.',
       body_en: 'Semantics means meaning. The right tags tell the browser, search engine, and screen reader what each block of the page means.',
+      visual: { kind: 'emoji', emojis: ['🧩', '🏗️', '🔍'] },
     },
     {
       id: 'slide-analogy',

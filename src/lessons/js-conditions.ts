@@ -29,6 +29,7 @@ export const jsConditions: Lesson = {
       title_en: 'Conditions: the program makes decisions',
       body_ru: 'Условия позволяют программе делать разные вещи в зависимости от данных. Без условий все программы делали бы одно и то же. Это самый важный инструмент логики.',
       body_en: 'Conditions let a program do different things depending on data. Without conditions every program would do the same thing every time. This is the most important tool for logic.',
+      visual: { kind: 'emoji', emojis: ['🔀', '✅', '❌'] },
     },
     {
       id: 's2',

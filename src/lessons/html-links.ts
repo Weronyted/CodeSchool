@@ -27,6 +27,7 @@ export const htmlLinks: Lesson = {
       title_en: 'HTML Links',
       body_ru: 'Ссылки — основа интернета. Именно они соединяют страницы и сайты в одну гигантскую сеть. Тег <a> открывает весь этот мир.',
       body_en: 'Links are the backbone of the internet. They connect pages and sites into one giant network. The <a> tag opens up this entire world.',
+      visual: { kind: 'emoji', emojis: ['🔗', '🌐', '↗️'] },
     },
     {
       id: 'slide-2',

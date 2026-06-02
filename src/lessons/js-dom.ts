@@ -25,6 +25,7 @@ const lesson: Lesson = {
       title_en: 'DOM — the Bridge Between JS and HTML',
       body_ru: 'DOM (Document Object Model) — это представление HTML-страницы в виде объектов, которыми может управлять JavaScript. Через DOM JS читает и изменяет содержимое страницы в реальном времени.',
       body_en: 'The DOM (Document Object Model) is a representation of the HTML page as objects that JavaScript can control. Through the DOM, JS reads and changes page content in real time.',
+      visual: { kind: 'emoji', emojis: ['🌳', '🔗', '⚡'] },
     },
     {
       id: 's2',

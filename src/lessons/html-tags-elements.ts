@@ -27,6 +27,7 @@ export const htmlTagsElements: Lesson = {
       title_en: 'HTML Tags & Elements',
       body_ru: 'HTML строится из тегов — специальных меток, которые говорят браузеру, что показывать и как это оформить.',
       body_en: 'HTML is built from tags — special markers that tell the browser what to show and how to structure it.',
+      visual: { kind: 'emoji', emojis: ['🔤', '🏷️', '📦'] },
     },
     {
       id: 'slide-2',

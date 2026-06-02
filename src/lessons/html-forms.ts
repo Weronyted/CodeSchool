@@ -24,6 +24,7 @@ export const htmlForms: Lesson = {
       title_en: 'HTML Forms',
       body_ru: 'Формы — главный способ получить данные от пользователя. Регистрация, поиск, заказ — всё это HTML-формы.',
       body_en: 'Forms are the primary way to collect data from users. Registration, search, checkout — all of these are HTML forms.',
+      visual: { kind: 'emoji', emojis: ['📝', '✍️', '📨'] },
     },
     {
       id: 'slide-analogy',

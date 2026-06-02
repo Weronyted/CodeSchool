@@ -24,6 +24,7 @@ export const htmlTables: Lesson = {
       title_en: 'HTML Tables',
       body_ru: 'Таблицы — мощный инструмент для отображения структурированных данных. Расписание, прайс-лист, статистика — всё это про таблицы.',
       body_en: 'Tables are a powerful tool for displaying structured data. Schedules, price lists, statistics — that\'s what tables are for.',
+      visual: { kind: 'emoji', emojis: ['📊', '🗂️', '📈'] },
     },
     {
       id: 'slide-analogy',

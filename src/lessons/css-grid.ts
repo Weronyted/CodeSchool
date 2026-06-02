@@ -29,6 +29,7 @@ export const cssGrid: Lesson = {
       title_en: 'CSS Grid — the power of two-dimensional layouts',
       body_ru: 'Flexbox отлично справляется с одной осью. Но когда нужна сетка — строки и колонки одновременно — CSS Grid незаменим. Это самая мощная система раскладки в CSS.',
       body_en: 'Flexbox works great for one axis. But when you need a grid — rows and columns at the same time — CSS Grid is indispensable. It is the most powerful layout system in CSS.',
+      visual: { kind: 'emoji', emojis: ['🔲', '🗂️', '📐'] },
     },
     {
       id: 's2',

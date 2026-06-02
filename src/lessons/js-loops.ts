@@ -29,6 +29,7 @@ export const jsLoops: Lesson = {
       title_en: 'Loops: don\'t repeat code — repeat the loop',
       body_ru: 'Цикл выполняет один и тот же блок кода много раз. Вместо 100 строк console.log — один цикл. Циклы — один из самых мощных инструментов программиста.',
       body_en: 'A loop runs the same block of code many times. Instead of 100 console.log lines — one loop. Loops are one of the most powerful tools a programmer has.',
+      visual: { kind: 'emoji', emojis: ['🔄', '♻️', '⚡'] },
     },
     {
       id: 's2',

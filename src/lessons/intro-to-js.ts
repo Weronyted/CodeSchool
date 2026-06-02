@@ -25,6 +25,7 @@ const lesson: Lesson = {
       title_en: 'JavaScript — the Brain of a Website',
       body_ru: 'HTML — скелет, CSS — внешность, а JavaScript — это разум. Он делает страницы живыми: кнопки реагируют на клики, данные проверяются, анимации работают.',
       body_en: 'HTML is the skeleton, CSS is the appearance, and JavaScript is the mind. It makes pages alive: buttons respond to clicks, data gets validated, animations run.',
+      visual: { kind: 'emoji', emojis: ['⚡', '🧠', '🖥️'] },
     },
     {
       id: 's2',

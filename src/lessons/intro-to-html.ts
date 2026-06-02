@@ -27,8 +27,9 @@ export const introToHtml: Lesson = {
       type: 'title',
       title_ru: 'Что такое HTML?',
       title_en: 'What is HTML?',
-      body_ru: 'Сегодня ты узнаешь, на каком языке «разговаривают» все сайты в интернете.',
-      body_en: 'Today you will learn the language that every website on the internet speaks.',
+      body_ru: 'Сегодня ты узнаешь, на каком языке «разговаривают» все сайты в интернете — и напишешь свой первый HTML-код.',
+      body_en: 'Today you will learn the language that every website on the internet speaks — and write your first HTML code.',
+      visual: { kind: 'emoji', emojis: ['🌐', '🏗️', '💻'] },
     },
 
     // ── s2: analogy — сайт как человек (эмодзи + пункты) ────────────────────
@@ -187,14 +188,37 @@ export const introToHtml: Lesson = {
       },
     },
 
-    // ── s7: tip ───────────────────────────────────────────────────────────────
+    // ── s7: tip — Тим Бернерс-Ли ────────────────────────────────────────────
     {
       id: 's7',
       type: 'tip',
-      title_ru: 'А ты знал?',
-      title_en: 'Did you know?',
-      body_ru: 'Самый первый сайт в мире появился в 1991 году. Он до сих пор работает, и на нём всего лишь текст и ссылки — ни одной картинки!',
-      body_en: 'The very first website appeared in 1991. It still works today, and it has only text and links — not a single image!',
+      title_ru: 'Кто придумал HTML?',
+      title_en: 'Who invented HTML?',
+      body_ru: 'HTML придумал британский учёный Тим Бернерс-Ли в 1989–1991 годах. Работая в ЦЕРН, он хотел создать способ, которым учёные могли бы легко делиться документами через интернет. Он мог запатентовать изобретение и стать миллиардером — но отдал его миру бесплатно.',
+      body_en: 'HTML was invented by British scientist Tim Berners-Lee in 1989–1991. Working at CERN, he wanted to create a way for scientists to easily share documents over the internet. He could have patented the invention and become a billionaire — but gave it to the world for free.',
+      visual: {
+        kind: 'image',
+        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Sir_Tim_Berners-Lee.jpg/440px-Sir_Tim_Berners-Lee.jpg',
+        caption_ru: 'Тим Бернерс-Ли — изобретатель HTML и Всемирной паутины',
+        caption_en: 'Tim Berners-Lee — inventor of HTML and the World Wide Web',
+      },
+    },
+
+    // ── s7b: concept — версии HTML ────────────────────────────────────────────
+    {
+      id: 's7b',
+      type: 'concept',
+      title_ru: 'HTML развивается',
+      title_en: 'HTML keeps evolving',
+      body_ru: 'За 30+ лет HTML вырос от простого текстового формата до мощного языка разметки. Сегодня мы используем HTML5 — самую современную версию.',
+      body_en: 'Over 30+ years HTML grew from a simple text format into a powerful markup language. Today we use HTML5 — the most modern version.',
+      bullets: [
+        { text_ru: '1991 — HTML 1.0: только текст и ссылки', text_en: '1991 — HTML 1.0: only text and links' },
+        { text_ru: '1995 — HTML 2.0: добавились формы', text_en: '1995 — HTML 2.0: forms added' },
+        { text_ru: '1997 — HTML 4.0: таблицы, картинки, скрипты', text_en: '1997 — HTML 4.0: tables, images, scripts' },
+        { text_ru: '2014 — HTML5: видео, аудио, canvas, семантика', text_en: '2014 — HTML5: video, audio, canvas, semantics' },
+        { text_ru: '2024 — HTML Living Standard: обновляется постоянно', text_en: '2024 — HTML Living Standard: updated continuously' },
+      ],
     },
 
     // ── s8: concept — каркас страницы (SVG-дерево документа) ─────────────────

@@ -24,6 +24,7 @@ export const htmlImagesMedia: Lesson = {
       title_en: 'Images & Media in HTML',
       body_ru: 'Веб без картинок — это просто текст. Давайте оживим страницы с помощью изображений, видео и аудио!',
       body_en: 'The web without images is just text. Let\'s bring pages to life with images, video, and audio!',
+      visual: { kind: 'emoji', emojis: ['🖼️', '📸', '🎬'] },
     },
     {
       id: 'slide-analogy',

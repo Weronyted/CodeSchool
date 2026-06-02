@@ -28,6 +28,7 @@ export const introToCss: Lesson = {
       title_en: 'CSS — clothes for your website',
       body_ru: 'HTML строит скелет страницы. CSS одевает его: добавляет цвета, шрифты, отступы и красоту. Без CSS весь интернет выглядел бы как скучный текстовый файл.',
       body_en: 'HTML builds the skeleton of a page. CSS dresses it: adds colours, fonts, spacing and beauty. Without CSS the entire internet would look like a boring text file.',
+      visual: { kind: 'emoji', emojis: ['🎨', '👗', '✨'] },
     },
     {
       id: 's2',

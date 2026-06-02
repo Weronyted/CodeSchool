@@ -26,6 +26,7 @@ export const htmlLists: Lesson = {
       title_en: 'HTML Lists',
       body_ru: 'Списки — один из самых часто используемых элементов веба. Навигация, шаги инструкции, каталог товаров — всё это строится на HTML-списках.',
       body_en: 'Lists are among the most-used elements on the web. Navigation menus, instruction steps, product catalogues — all are built on HTML lists.',
+      visual: { kind: 'emoji', emojis: ['📋', '🔢', '✅'] },
     },
     {
       id: 'slide-2',

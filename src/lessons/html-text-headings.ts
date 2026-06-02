@@ -26,6 +26,7 @@ export const htmlTextHeadings: Lesson = {
       title_en: 'HTML Text & Headings',
       body_ru: 'Правильная структура текста — основа любого сайта. Заголовки, абзацы и форматирование делают контент понятным для людей и поисковиков.',
       body_en: 'Proper text structure is the foundation of any website. Headings, paragraphs, and formatting make content clear for both people and search engines.',
+      visual: { kind: 'emoji', emojis: ['📝', '🔖', '📚'] },
     },
     {
       id: 'slide-2',

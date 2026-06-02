@@ -28,6 +28,7 @@ export const cssBoxModel: Lesson = {
       title_en: 'CSS box model: every element is a box',
       body_ru: 'Понимание блочной модели — ключ к правильной вёрстке. Она объясняет, как браузер вычисляет размер и положение каждого элемента.',
       body_en: 'Understanding the box model is the key to proper layout. It explains how the browser calculates the size and position of every element.',
+      visual: { kind: 'emoji', emojis: ['📦', '📐', '🔲'] },
     },
     {
       id: 's2',
