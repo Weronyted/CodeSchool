@@ -63,14 +63,14 @@ export const useProgressStore = create<ProgressStore>()(
 
       updateQuizScore: (slug, score) => {
         set((s) => {
-          const prev = s.progress[slug] ?? defaultTopic()
+          const prev = { ...defaultTopic(), ...(s.progress[slug] ?? {}) }
           return {
             progress: {
               ...s.progress,
               [slug]: {
                 ...prev,
-                quizScore: Math.max(prev.quizScore, score),
-                quizAttempts: prev.quizAttempts + 1,
+                quizScore: Math.max(prev.quizScore ?? 0, score),
+                quizAttempts: (prev.quizAttempts ?? 0) + 1,
                 completed: score >= 60 || prev.completed,
               },
             },
@@ -103,7 +103,14 @@ export const useProgressStore = create<ProgressStore>()(
       },
 
       mergeFromFirestore: (data) => {
-        set((s) => ({ progress: { ...s.progress, ...data } }))
+        set((s) => ({
+          progress: {
+            ...s.progress,
+            ...Object.fromEntries(
+              Object.entries(data).map(([k, v]) => [k, { ...defaultTopic(), ...v }])
+            ),
+          },
+        }))
       },
 
       getTopicProgress: (slug) => get().progress[slug],

@@ -92,7 +92,7 @@ export default function Profile() {
               <div className="space-y-2">
                 {completed.map((slug) => {
                   const meta = LESSON_META[slug]
-                  const score = progress[slug]?.quizScore ?? 0
+                  const score = Number.isFinite(progress[slug]?.quizScore) ? progress[slug].quizScore : 0
                   return (
                     <div key={slug} className="flex items-center justify-between text-sm">
                       <span className="text-gray-700 dark:text-gray-300">
