@@ -43,6 +43,16 @@ export function useProgress(slug?: string) {
     }
   }
 
+  function addTimeSpent(s: string, seconds: number) {
+    store.addTimeSpent(s, seconds)
+    if (user) {
+      const fresh = useProgressStore.getState()
+      saveTopicProgress(user.uid, s, {
+        timeSpentSeconds: fresh.progress[s]?.timeSpentSeconds ?? seconds,
+      }).catch(() => {})
+    }
+  }
+
   return {
     progress,
     bestScore,
@@ -52,5 +62,6 @@ export function useProgress(slug?: string) {
     markVisited,
     updateQuizScore,
     toggleBookmark,
+    addTimeSpent,
   }
 }

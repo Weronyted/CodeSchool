@@ -317,7 +317,7 @@ export default function LessonPage() {
   const { slug } = useParams<{ slug: string }>()
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const { allProgress: progress, toggleBookmark, markVisited } = useProgress(slug)
+  const { allProgress: progress, toggleBookmark, markVisited, addTimeSpent } = useProgress(slug)
   const { language } = useLanguageStore()
 
   const [lesson, setLesson] = useState<Record<string, unknown> | null>(null)
@@ -326,6 +326,18 @@ export default function LessonPage() {
   const [comingSoon, setComingSoon] = useState(false)
   const sectionRefs = useRef<Record<string, HTMLElement>>({})
   const practiceRef = useRef<HTMLElement | null>(null)
+  const sessionStartRef = useRef<number>(Date.now())
+
+  // Track time spent: flush on slug change or unmount
+  useEffect(() => {
+    if (!slug || !isValidSlug(slug)) return
+    sessionStartRef.current = Date.now()
+    return () => {
+      const seconds = Math.round((Date.now() - sessionStartRef.current) / 1000)
+      if (seconds >= 5) addTimeSpent(slug, seconds)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug])
 
   const isValidSlug = (s: string): s is LessonSlug => LESSON_SLUGS.includes(s as LessonSlug)
   const meta = slug && isValidSlug(slug) ? LESSON_META[slug] : null
