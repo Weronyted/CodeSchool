@@ -21,7 +21,8 @@ const BADGES = [
 export default function Dashboard() {
   const { t } = useTranslation()
   const { user } = useAuthStore()
-  const { progress, streak } = useProgressStore((s) => ({ progress: s.progress, streak: s.streak }))
+  const progress = useProgressStore((s) => s.progress)
+  const streak = useProgressStore((s) => s.streak)
   const { language } = useLanguageStore()
   const { theme } = useThemeStore()
   const isDark = theme === 'dark'
