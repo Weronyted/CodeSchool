@@ -58,8 +58,14 @@ service cloud.firestore {
 
     // ─── Progress ────────────────────────────────────────────────────────────
 
-    match /progress/{uid}/{lessonId} {
+    // progress.service.ts writes to users/{uid}/progress/{lessonId}
+    match /users/{uid}/progress/{lessonId} {
       allow read, write: if isAuth() && request.auth.uid == uid;
+    }
+
+    match /users/{uid}/quizHistory/{historyId} {
+      allow read: if isAuth() && request.auth.uid == uid;
+      allow create: if isAuth() && request.auth.uid == uid;
     }
 
     // ─── Lessons (dynamic) ───────────────────────────────────────────────────

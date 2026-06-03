@@ -9,7 +9,7 @@ import { javascript as jsLang } from '@codemirror/lang-javascript'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { githubLight } from '@uiw/codemirror-theme-github'
 import { Lightbulb, Play, SlidersHorizontal } from 'lucide-react'
-import { useProgressStore } from '@/store/useProgressStore'
+import { useProgress } from '@/hooks/useProgress'
 import { useThemeStore } from '@/store/useThemeStore'
 import { useLanguageStore } from '@/store/useLanguageStore'
 import { LESSON_SLUGS, LESSON_META } from '@/lessons'
@@ -300,7 +300,7 @@ export default function LessonPage() {
   const { slug } = useParams<{ slug: string }>()
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const { progress, toggleBookmark } = useProgressStore()
+  const { allProgress: progress, toggleBookmark, markVisited } = useProgress(slug)
   const { language } = useLanguageStore()
 
   const [lesson, setLesson] = useState<Record<string, unknown> | null>(null)
@@ -329,7 +329,10 @@ export default function LessonPage() {
       const record = mod as Record<string, unknown>
       const key = Object.keys(record).find((k) => k !== 'default')
       const data = key ? record[key] : record['default']
-      if (data) setLesson(data as Record<string, unknown>)
+      if (data) {
+        setLesson(data as Record<string, unknown>)
+        markVisited(slug)
+      }
     })
   }, [slug, navigate])
 
