@@ -21,7 +21,7 @@ import { HTMLStructureSVG } from '@/components/diagrams/HTMLStructureSVG'
 import { CSSBoxModelSVG } from '@/components/diagrams/CSSBoxModelSVG'
 import { DOMTreeSVG } from '@/components/diagrams/DOMTreeSVG'
 import type { MultipleChoiceRow } from '@/types/lesson'
-import type { Lesson, ContentBlock, BilingualKeyTerm, DidYouKnowItem, QuizQuestion } from '@/types/lesson'
+import type { Lesson, ContentBlock, BilingualKeyTerm, DidYouKnowItem, QuizQuestion, CodeLang } from '@/types/lesson'
 
 type LessonSlug = typeof LESSON_SLUGS[number]
 
@@ -189,27 +189,30 @@ function NewDidYouKnow({ items, lang }: { items: DidYouKnowItem[]; lang: 'ru' | 
 function EditorTask({ lesson, lang }: { lesson: Lesson; lang: 'ru' | 'en' }) {
   const { theme } = useThemeStore()
   const task = lesson.editorTask
-  const [code, setCode] = useState(task?.starterCode.html ?? task?.starterCode.css ?? task?.starterCode.javascript ?? '')
+
+  const [codes, setCodes] = useState<Partial<Record<CodeLang, string>>>(() => {
+    if (!task) return {}
+    return Object.fromEntries(task.activeTabs.map((tab) => [tab, task.starterCode[tab] ?? '']))
+  })
+  const [activeTab, setActiveTab] = useState<CodeLang>(task?.activeTabs[0] ?? 'html')
   const [preview, setPreview] = useState('')
   const [showHint, setShowHint] = useState(false)
   const [hintIndex, setHintIndex] = useState(0)
 
   if (!task) return null
 
-  const activeLang = task.activeTabs[0] ?? 'html'
-  const ext = activeLang === 'css' ? [cssLang()] : activeLang === 'javascript' ? [jsLang()] : [htmlLang()]
-
+  const ext = activeTab === 'css' ? [cssLang()] : activeTab === 'javascript' ? [jsLang()] : [htmlLang()]
   const instructions = lang === 'ru' ? task.instructions_ru : task.instructions_en
   const hints = lang === 'ru' ? task.hints_ru : task.hints_en
 
   function run() {
-    if (activeLang === 'html') {
-      setPreview(code)
-    } else if (activeLang === 'css') {
-      setPreview(`<style>${code}</style><div class="preview-root">CSS preview</div>`)
-    } else {
-      setPreview(`<script>${code}<\/script>`)
-    }
+    const html = codes.html ?? ''
+    const css  = codes.css  ?? ''
+    const js   = codes.javascript ?? ''
+    setPreview(
+      `<!DOCTYPE html><html><head><style>${css}</style></head>` +
+      `<body>${html}<script>${js}<\/script></body></html>`
+    )
   }
 
   function nextHint() {
@@ -222,9 +225,23 @@ function EditorTask({ lesson, lang }: { lesson: Lesson; lang: 'ru' | 'en' }) {
       <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed whitespace-pre-line">{instructions}</p>
 
       <div className="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-        {/* Editor toolbar */}
+        {/* Editor toolbar with tabs */}
         <div className="flex items-center justify-between px-4 py-2.5 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-          <span className="text-xs font-mono text-gray-500 dark:text-gray-400 uppercase tracking-wide">{activeLang}</span>
+          <div className="flex items-center gap-1">
+            {task.activeTabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-3 py-1 rounded-md text-xs font-mono font-semibold transition-colors ${
+                  activeTab === tab
+                    ? 'bg-primary-600 text-white'
+                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
           <div className="flex items-center gap-2">
             {hints.length > 0 && (
               <button
@@ -266,10 +283,10 @@ function EditorTask({ lesson, lang }: { lesson: Lesson; lang: 'ru' | 'en' }) {
         <div className="grid grid-cols-1 md:grid-cols-2 min-h-[260px]">
           <div className="border-r border-gray-200 dark:border-gray-700">
             <CodeMirror
-              value={code}
+              value={codes[activeTab] ?? ''}
               extensions={ext}
               theme={theme === 'dark' ? oneDark : githubLight}
-              onChange={setCode}
+              onChange={(val) => setCodes((prev) => ({ ...prev, [activeTab]: val }))}
               minHeight="260px"
               basicSetup={{ lineNumbers: true, foldGutter: false, highlightActiveLine: true }}
             />

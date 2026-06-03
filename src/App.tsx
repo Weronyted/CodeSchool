@@ -34,10 +34,10 @@ function AppRoutes() {
     <AnimatePresence mode="wait" initial={false}>
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<PageTransition><Landing /></PageTransition>} />
-        <Route path="/dashboard" element={<PageTransition><Dashboard /></PageTransition>} />
-        <Route path="/lessons" element={<PageTransition><LessonsListPage /></PageTransition>} />
+        <Route path="/dashboard" element={<ProtectedRoute><PageTransition><Dashboard /></PageTransition></ProtectedRoute>} />
+        <Route path="/lessons" element={<ProtectedRoute><PageTransition><LessonsListPage /></PageTransition></ProtectedRoute>} />
         <Route path="/lessons/:slug" element={<ProtectedRoute><PageTransition><LessonPage /></PageTransition></ProtectedRoute>} />
-        <Route path="/assignments" element={<PageTransition><AssignmentsListPage /></PageTransition>} />
+        <Route path="/assignments" element={<ProtectedRoute><PageTransition><AssignmentsListPage /></PageTransition></ProtectedRoute>} />
         <Route path="/assignments/:id" element={<ProtectedRoute><PageTransition><TakeAssignment /></PageTransition></ProtectedRoute>} />
         <Route path="/class/:classId" element={<ProtectedRoute><PageTransition><ClassPage /></PageTransition></ProtectedRoute>} />
         <Route path="/my-class" element={<ProtectedRoute><PageTransition><MyClassPage /></PageTransition></ProtectedRoute>} />

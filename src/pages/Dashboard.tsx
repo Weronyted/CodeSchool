@@ -21,7 +21,7 @@ const BADGES = [
 export default function Dashboard() {
   const { t } = useTranslation()
   const { user } = useAuthStore()
-  const progress = useProgressStore((s) => s.progress)
+  const { progress, streak } = useProgressStore((s) => ({ progress: s.progress, streak: s.streak }))
   const { language } = useLanguageStore()
   const { theme } = useThemeStore()
   const isDark = theme === 'dark'
@@ -30,22 +30,32 @@ export default function Dashboard() {
   const totalCount = LESSON_SLUGS.length
   const overallPct = Math.round((completedCount / totalCount) * 100)
 
-  const radarData = LESSON_SLUGS.map((slug) => {
-    const meta = LESSON_META[slug]
-    const words = meta.title_en.split(' ')
-    const keyWord = words.length >= 3 ? words.slice(-2).join(' ') : words[words.length - 1]
-    return {
-      subject: meta.icon + ' ' + keyWord,
-      score: progress[slug]?.quizScore ?? 0,
-    }
-  })
+  // Radar grouped by category instead of slice(0,8)
+  const avgCategoryScore = (cat: string) => {
+    const slugs = LESSON_SLUGS.filter((s) => LESSON_META[s].category === cat)
+    if (!slugs.length) return 0
+    return Math.round(slugs.reduce((sum, s) => sum + (progress[s]?.quizScore ?? 0), 0) / slugs.length)
+  }
+  const radarData = [
+    { subject: '💡 Основы', score: avgCategoryScore('BASICS') },
+    { subject: '🏗️ HTML',   score: avgCategoryScore('HTML') },
+    { subject: '🎨 CSS',    score: avgCategoryScore('CSS') },
+    { subject: '⚡ JS',     score: avgCategoryScore('JS') },
+  ]
+
+  // "Continue" — last visited incomplete lesson, or first unstarted
+  const continueSlug =
+    LESSON_SLUGS
+      .filter((s) => !progress[s]?.completed && (progress[s]?.lastVisited ?? 0) > 0)
+      .sort((a, b) => (progress[b]?.lastVisited ?? 0) - (progress[a]?.lastVisited ?? 0))[0]
+    ?? LESSON_SLUGS.find((s) => !progress[s]?.completed)
 
   const allValues = Object.values(progress)
   const earnedBadges = new Set<string>([
-    ...(completedCount >= 1  ? ['firstTag']     : []),
-    ...(completedCount >= 3  ? ['stylist']       : []),
-    ...(completedCount >= 6  ? ['coder']         : []),
-    ...(completedCount >= 9  ? ['developer']     : []),
+    ...(completedCount >= 1   ? ['firstTag']     : []),
+    ...(completedCount >= 5   ? ['stylist']       : []),
+    ...(completedCount >= 12  ? ['coder']         : []),
+    ...(completedCount >= 25  ? ['developer']     : []),
     ...(completedCount >= totalCount && allValues.length > 0 &&
         allValues.every((p) => !p.completed || p.quizScore >= 80)
         && allValues.filter((p) => p.completed).length >= totalCount
@@ -74,6 +84,12 @@ export default function Dashboard() {
                 <div className="text-4xl font-extrabold font-heading">{completedCount}/{totalCount}</div>
                 <div className="text-primary-200 text-sm">{t('dashboard.lessonsCompleted', 'Уроков пройдено')}</div>
               </div>
+              {streak > 0 && (
+                <div>
+                  <div className="text-4xl font-extrabold font-heading">🔥 {streak}</div>
+                  <div className="text-primary-200 text-sm">{language === 'ru' ? 'Дней подряд' : 'Day streak'}</div>
+                </div>
+              )}
               <div className="flex-1 max-w-xs">
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-primary-200">{t('dashboard.progress', 'Прогресс')}</span>
@@ -92,6 +108,32 @@ export default function Dashboard() {
           </div>
           <div className="absolute right-4 top-4 text-8xl opacity-10 select-none">💻</div>
         </motion.div>
+
+        {/* Continue card */}
+        {continueSlug && (
+          <motion.div
+            className="mb-6"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+          >
+            <Link
+              to={`/lessons/${continueSlug}`}
+              className="flex items-center gap-4 bg-white dark:bg-gray-800 border border-primary-200 dark:border-primary-700 rounded-2xl p-5 hover:border-primary-400 dark:hover:border-primary-500 hover:shadow-md transition-all group"
+            >
+              <div className="text-4xl flex-shrink-0">{LESSON_META[continueSlug].icon}</div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold text-primary-500 dark:text-primary-400 uppercase tracking-wide mb-0.5">
+                  {language === 'ru' ? '▶ Продолжить' : '▶ Continue'}
+                </p>
+                <p className="font-bold text-gray-900 dark:text-white truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                  {language === 'ru' ? LESSON_META[continueSlug].title : LESSON_META[continueSlug].title_en}
+                </p>
+              </div>
+              <div className="text-primary-400 group-hover:translate-x-1 transition-transform text-xl">→</div>
+            </Link>
+          </motion.div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
@@ -187,7 +229,7 @@ export default function Dashboard() {
                   📊 {t('dashboard.skills', 'Навыки')}
                 </h3>
                 <ResponsiveContainer width="100%" height={220}>
-                  <RadarChart data={radarData.slice(0, 8)}>
+                  <RadarChart data={radarData}>
                     <PolarGrid stroke={isDark ? '#374151' : '#e5e7eb'} />
                     <PolarAngleAxis
                       dataKey="subject"
