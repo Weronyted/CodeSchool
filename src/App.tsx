@@ -20,6 +20,9 @@ import Profile from '@/pages/Profile'
 import AdminPanel from '@/pages/AdminPanel'
 import TakeAssignment from '@/pages/TakeAssignment'
 import NotFound from '@/pages/NotFound'
+import Sandbox from '@/pages/Sandbox'
+import PublicProfile from '@/pages/PublicProfile'
+import StatsPage from '@/pages/StatsPage'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { Toaster } from '@/components/ui/Toaster'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
@@ -45,6 +48,9 @@ function AppRoutes() {
         <Route path="/glossary" element={<ProtectedRoute><PageTransition><Glossary /></PageTransition></ProtectedRoute>} />
         <Route path="/profile" element={<PageTransition><Profile /></PageTransition>} />
         <Route path="/admin" element={<PageTransition><AdminPanel /></PageTransition>} />
+        <Route path="/sandbox" element={<ProtectedRoute><PageTransition><Sandbox /></PageTransition></ProtectedRoute>} />
+        <Route path="/u/:uid" element={<ProtectedRoute><PageTransition><PublicProfile /></PageTransition></ProtectedRoute>} />
+        <Route path="/stats" element={<PageTransition><StatsPage /></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
     </AnimatePresence>

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sun, Moon, Search, Menu, X, Code2, LayoutDashboard, BookMarked, User, LogOut, ShieldCheck, ClipboardList, Globe, School } from 'lucide-react'
+import { Sun, Moon, Search, Menu, X, Code2, LayoutDashboard, BookMarked, User, LogOut, ShieldCheck, ClipboardList, Globe, School, FlaskConical } from 'lucide-react'
 import { useThemeStore } from '@/store/useThemeStore'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useRoleStore } from '@/store/useRoleStore'
@@ -29,6 +29,7 @@ export function Navbar({ onSearchOpen, onSignInOpen }: NavbarProps) {
 
   const navLinks = [
     { href: '/lessons', label: t('nav.lessons'), icon: Code2 },
+    { href: '/sandbox', label: t('nav.sandbox', 'Песочница'), icon: FlaskConical },
     { href: '/assignments', label: t('nav.assignments'), icon: ClipboardList },
     { href: '/dashboard', label: t('nav.dashboard'), icon: LayoutDashboard },
     { href: '/glossary', label: t('nav.glossary'), icon: BookMarked },

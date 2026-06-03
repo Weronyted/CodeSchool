@@ -28,7 +28,8 @@ service cloud.firestore {
     // themselves teacher/admin via the client app.
 
     match /users/{uid} {
-      allow read: if isAuth() && (request.auth.uid == uid || isAdminOrOwner());
+      allow get: if isAuth();
+      allow list: if isAdminOrOwner();
       allow list: if isAdminOrOwner();
 
       // Only 'student' allowed on self-create; whitelisted fields only.
@@ -148,6 +149,18 @@ service cloud.firestore {
         allow create: if isAuth() && request.auth.uid == memberId;
         allow delete: if isAuth() && (request.auth.uid == memberId || isTeacherOrAbove());
       }
+    }
+
+    // ─── Lesson comments ─────────────────────────────────────────────────────
+    match /lessonComments/{slug}/entries/{entryId} {
+      allow read: if isAuth();
+      allow create: if isAuth()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 1000;
+      allow delete: if isAuth()
+        && (resource.data.uid == request.auth.uid || isTeacherOrAbove());
     }
 
     // ─── Deny everything else ────────────────────────────────────────────────

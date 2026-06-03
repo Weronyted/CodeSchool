@@ -15,6 +15,7 @@ import { useLanguageStore } from '@/store/useLanguageStore'
 import { LESSON_SLUGS, LESSON_META } from '@/lessons'
 import { MultipleChoiceQuiz } from '@/components/quiz/MultipleChoiceQuiz'
 import { LessonQuiz } from '@/components/lesson/LessonQuiz'
+import { LessonComments } from '@/components/lesson/LessonComments'
 import { SlideMode } from '@/components/lesson/SlideMode'
 import { CheatSheetDrawer } from '@/components/lesson/CheatSheetDrawer'
 import { HTMLStructureSVG } from '@/components/diagrams/HTMLStructureSVG'
@@ -735,6 +736,9 @@ export default function LessonPage() {
                   )}
                 </>
               )}
+
+              {/* Comments */}
+              <LessonComments slug={slug} />
 
               {/* Navigation */}
               <div className="flex items-center justify-between gap-4 mt-8">
