@@ -1,13 +1,6 @@
 {
   "indexes": [
     {
-      "collectionGroup": "members",
-      "queryScope": "COLLECTION_GROUP",
-      "fields": [
-        { "fieldPath": "uid", "order": "ASCENDING" }
-      ]
-    },
-    {
       "collectionGroup": "assignments",
       "queryScope": "COLLECTION",
       "fields": [
