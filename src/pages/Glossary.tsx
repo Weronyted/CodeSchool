@@ -8,17 +8,19 @@ import { useLanguageStore } from '@/store/useLanguageStore'
 import TermModal from '@/components/glossary/TermModal'
 import type { BilingualGlossaryTerm } from '@/types/glossary'
 
-type Category = 'All' | 'HTML' | 'CSS' | 'JS'
+type Category = 'All' | 'Основы' | 'HTML' | 'CSS' | 'JS'
 
-const CATEGORIES: Category[] = ['All', 'HTML', 'CSS', 'JS']
+const CATEGORIES: Category[] = ['All', 'Основы', 'HTML', 'CSS', 'JS']
 
 const CATEGORY_BADGE: Record<string, string> = {
+  'Основы': 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
   HTML: 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
   CSS: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
   JS: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300',
 }
 
 const CATEGORY_RING: Record<string, string> = {
+  'Основы': 'hover:border-purple-400 dark:hover:border-purple-500',
   HTML: 'hover:border-orange-400 dark:hover:border-orange-500',
   CSS: 'hover:border-blue-400 dark:hover:border-blue-500',
   JS: 'hover:border-yellow-400 dark:hover:border-yellow-500',
@@ -72,6 +74,7 @@ export default function Glossary() {
 
   const catLabel = (c: Category) => {
     if (c === 'All') return L('Все', 'All')
+    if (c === 'Основы') return L('Основы', 'Basics')
     return c
   }
 

@@ -2,6 +2,352 @@ import type { BilingualGlossaryTerm } from '@/types/glossary'
 
 export const BILINGUAL_TERMS: BilingualGlossaryTerm[] = [
 
+  // ─── Основы программирования ──────────────────────────────────────────────
+
+  {
+    id: 'basics-programming',
+    term_ru: 'Программирование',
+    term_en: 'Programming',
+    category: 'Основы',
+    topicSlug: 'intro-to-programming',
+    definition_ru: 'Процесс написания точных инструкций (кода) для компьютера, чтобы он выполнял нужные задачи.',
+    definition_en: 'The process of writing precise instructions (code) for a computer so it carries out the tasks you need.',
+    whyNeeded_ru: 'Программирование превращает идею в работающий продукт. Это навык, который позволяет создавать сайты, приложения, игры и автоматизировать рутину.',
+    whyNeeded_en: 'Programming turns an idea into a working product. It is a skill that lets you create websites, apps, games and automate routine tasks.',
+    commonMistake_ru: 'Думать, что программирование — только для математиков. На самом деле главное — умение думать по шагам, а не знание сложной математики.',
+    commonMistake_en: 'Thinking programming is only for mathematicians. In reality the key skill is thinking in steps, not knowing advanced maths.',
+    example_ru: 'console.log("Привет, мир!")',
+    example_en: 'console.log("Hello, world!")',
+    demoMode: 'console',
+    demo: {
+      steps: [
+        {
+          code: '// Твоя первая программа\nconsole.log("Привет, мир!")',
+          comment_ru: 'Одна инструкция — вывести текст на экран',
+          comment_en: 'One instruction — print text to the screen',
+          output: 'Привет, мир!',
+        },
+        {
+          code: 'const name = "Студент"\nconsole.log("Привет, " + name + "!")',
+          comment_ru: 'Программа может работать с данными',
+          comment_en: 'A program can work with data',
+          output: 'Привет, Студент!',
+        },
+      ],
+    },
+  },
+
+  {
+    id: 'basics-algorithm',
+    term_ru: 'Алгоритм',
+    term_en: 'Algorithm',
+    category: 'Основы',
+    topicSlug: 'intro-to-programming',
+    definition_ru: 'Чёткая конечная последовательность шагов, решающая определённую задачу. Основа любой программы.',
+    definition_en: 'A clear, finite sequence of steps that solves a specific problem. The foundation of any program.',
+    whyNeeded_ru: 'Прежде чем писать код, нужно понять алгоритм решения. Хороший алгоритм делает код понятным и эффективным.',
+    whyNeeded_en: 'Before writing code you need to understand the algorithm. A good algorithm makes code clear and efficient.',
+    commonMistake_ru: 'Начинать писать код без продуманного алгоритма. Это ведёт к запутанному коду и трудноуловимым багам.',
+    commonMistake_en: 'Starting to write code without a thought-out algorithm. This leads to tangled code and hard-to-find bugs.',
+    example_ru: '1. Спросить имя → 2. Вывести "Привет, {имя}"',
+    example_en: '1. Ask for name → 2. Print "Hello, {name}"',
+    demoMode: 'console',
+    demo: {
+      steps: [
+        {
+          code: '// Алгоритм: найти максимум из двух чисел\n// 1. Взять два числа',
+          comment_ru: 'Шаг 1: входные данные',
+          comment_en: 'Step 1: input data',
+          output: '',
+        },
+        {
+          code: 'const a = 5, b = 12\n// 2. Сравнить их\nif (a > b) {\n  console.log(a)\n} else {\n  console.log(b)\n}',
+          comment_ru: 'Шаг 2–3: сравнить и вывести результат',
+          comment_en: 'Steps 2–3: compare and output the result',
+          output: '12',
+        },
+      ],
+    },
+  },
+
+  {
+    id: 'basics-bug',
+    term_ru: 'Баг',
+    term_en: 'Bug',
+    category: 'Основы',
+    topicSlug: 'intro-to-programming',
+    definition_ru: 'Ошибка в программе, из-за которой она работает неправильно или не запускается.',
+    definition_en: 'An error in a program that causes it to behave incorrectly or fail to start.',
+    whyNeeded_ru: 'Понимание природы багов помогает быстрее их находить. Баги — нормальная часть разработки, а не признак некомпетентности.',
+    whyNeeded_en: 'Understanding the nature of bugs helps find them faster. Bugs are a normal part of development, not a sign of incompetence.',
+    commonMistake_ru: 'Слово "баг" появилось в 1947 году, когда инженеры нашли настоящего мотылька внутри компьютера Mark II, вызвавшего сбой.',
+    commonMistake_en: 'The word "bug" appeared in 1947 when engineers found a real moth inside the Mark II computer causing a malfunction.',
+    example_ru: 'console.log("Привет"  // ← баг: нет закрывающей скобки)',
+    example_en: 'console.log("Hello"  // ← bug: missing closing bracket)',
+    demoMode: 'console',
+    demo: {
+      steps: [
+        {
+          code: 'console.log("Привет"',
+          comment_ru: 'Синтаксическая ошибка — программа не запустится',
+          comment_en: 'Syntax error — the program will not run',
+          output: 'SyntaxError: Unexpected end of input',
+          isError: true,
+        },
+        {
+          code: 'console.log("Привет")',
+          comment_ru: 'Баг исправлен — добавлена закрывающая скобка',
+          comment_en: 'Bug fixed — closing bracket added',
+          output: 'Привет',
+        },
+      ],
+    },
+  },
+
+  {
+    id: 'basics-debugging',
+    term_ru: 'Дебаггинг',
+    term_en: 'Debugging',
+    category: 'Основы',
+    topicSlug: 'intro-to-programming',
+    definition_ru: 'Процесс поиска и исправления ошибок (багов) в программе.',
+    definition_en: 'The process of finding and fixing errors (bugs) in a program.',
+    whyNeeded_ru: 'Умение дебаггить — один из важнейших навыков разработчика. console.log, браузерные DevTools и чтение сообщений об ошибках — главные инструменты.',
+    whyNeeded_en: 'The ability to debug is one of the most important developer skills. console.log, browser DevTools and reading error messages are the main tools.',
+    commonMistake_ru: 'Менять код наугад в надежде, что заработает. Правильный подход: сначала понять причину ошибки, потом исправлять.',
+    commonMistake_en: 'Changing code randomly hoping it will work. The right approach: first understand the cause of the error, then fix it.',
+    example_ru: 'console.log(myVar) // проверяем значение',
+    example_en: 'console.log(myVar) // checking the value',
+    demoMode: 'console',
+    demo: {
+      steps: [
+        {
+          code: 'function add(a, b) {\n  return a - b // ← баг!\n}\nconsole.log(add(3, 2))',
+          comment_ru: 'Функция должна складывать, но вычитает',
+          comment_en: 'Function should add but subtracts instead',
+          output: '1',
+        },
+        {
+          code: 'function add(a, b) {\n  console.log("a =", a, "b =", b) // дебаггинг\n  return a + b // исправлено\n}\nconsole.log(add(3, 2))',
+          comment_ru: 'Добавили console.log и нашли ошибку',
+          comment_en: 'Added console.log and found the error',
+          output: 'a = 3 b = 2\n5',
+        },
+      ],
+    },
+  },
+
+  {
+    id: 'basics-syntax',
+    term_ru: 'Синтаксис',
+    term_en: 'Syntax',
+    category: 'Основы',
+    topicSlug: 'intro-to-programming',
+    definition_ru: 'Правила написания кода — как грамматика в языке. Нарушение синтаксиса вызывает ошибку и программа не запускается.',
+    definition_en: 'The rules for writing code — like grammar in a language. Breaking syntax rules causes an error and the program will not run.',
+    whyNeeded_ru: 'Каждый язык программирования имеет свой синтаксис. Знать синтаксис — значит уметь правильно писать инструкции.',
+    whyNeeded_en: 'Every programming language has its own syntax. Knowing the syntax means knowing how to write instructions correctly.',
+    commonMistake_ru: 'Забывать закрывающие скобки, кавычки или точки с запятой. Редактор кода подсвечивает такие ошибки красным.',
+    commonMistake_en: 'Forgetting closing brackets, quotes or semicolons. The code editor highlights such errors in red.',
+    example_ru: 'if (x > 0) { console.log(x) }',
+    example_en: 'if (x > 0) { console.log(x) }',
+    demoMode: 'console',
+    demo: {
+      steps: [
+        {
+          code: 'if x > 0 { console.log(x) }',
+          comment_ru: 'Нарушение синтаксиса — нет скобок вокруг условия',
+          comment_en: 'Syntax violation — no brackets around the condition',
+          output: 'SyntaxError: Unexpected identifier',
+          isError: true,
+        },
+        {
+          code: 'const x = 5\nif (x > 0) { console.log(x) }',
+          comment_ru: 'Правильный синтаксис — скобки на месте',
+          comment_en: 'Correct syntax — brackets in place',
+          output: '5',
+        },
+      ],
+    },
+  },
+
+  {
+    id: 'basics-git',
+    term_ru: 'Git',
+    term_en: 'Git',
+    category: 'Основы',
+    topicSlug: 'intro-to-programming',
+    definition_ru: 'Система контроля версий: сохраняет историю всех изменений проекта и позволяет вернуться к любой предыдущей версии.',
+    definition_en: 'A version control system: saves the history of all project changes and lets you return to any previous version.',
+    whyNeeded_ru: 'Git — стандарт в индустрии. Он защищает от потери кода, позволяет работать в команде и экспериментировать без страха сломать проект.',
+    whyNeeded_en: 'Git is the industry standard. It protects against losing code, enables team collaboration and lets you experiment without fear of breaking the project.',
+    commonMistake_ru: 'Не делать коммиты часто. Нужно фиксировать каждое законченное изменение — так легче найти, где появился баг.',
+    commonMistake_en: 'Not committing often. You should record every completed change — this makes it easier to find where a bug appeared.',
+    example_ru: 'git commit -m "добавил кнопку входа"',
+    example_en: 'git commit -m "added login button"',
+    demoMode: 'console',
+    demo: {
+      steps: [
+        {
+          code: 'git init',
+          comment_ru: 'Создаём репозиторий в текущей папке',
+          comment_en: 'Create a repository in the current folder',
+          output: 'Initialized empty Git repository in ./project/.git/',
+        },
+        {
+          code: 'git add index.html\ngit commit -m "первая страница"',
+          comment_ru: 'Сохраняем первую версию файла',
+          comment_en: 'Save the first version of the file',
+          output: '[main (root-commit)] первая страница\n 1 file changed, 10 insertions(+)',
+        },
+        {
+          code: 'git log --oneline',
+          comment_ru: 'Смотрим историю коммитов',
+          comment_en: 'View the commit history',
+          output: 'a3f2c1b первая страница',
+        },
+      ],
+    },
+  },
+
+  {
+    id: 'basics-github',
+    term_ru: 'GitHub',
+    term_en: 'GitHub',
+    category: 'Основы',
+    topicSlug: 'intro-to-programming',
+    definition_ru: 'Веб-платформа для хранения Git-репозиториев в облаке, совместной работы над кодом и публикации проектов.',
+    definition_en: 'A web platform for storing Git repositories in the cloud, collaborating on code and publishing projects.',
+    whyNeeded_ru: 'GitHub — это "социальная сеть для программистов". Здесь хранят open-source проекты, показывают портфолио и работают в команде.',
+    whyNeeded_en: 'GitHub is the "social network for programmers". Open-source projects live here, portfolios are displayed and teams collaborate.',
+    commonMistake_ru: 'Путать Git и GitHub. Git — локальная программа для контроля версий. GitHub — облачный сервис для хранения Git-репозиториев.',
+    commonMistake_en: 'Confusing Git and GitHub. Git is a local version-control program. GitHub is a cloud service for storing Git repositories.',
+    example_ru: 'git push origin main',
+    example_en: 'git push origin main',
+    demoMode: 'console',
+    demo: {
+      steps: [
+        {
+          code: 'git remote add origin https://github.com/user/repo.git',
+          comment_ru: 'Связываем локальный репозиторий с GitHub',
+          comment_en: 'Connect the local repository to GitHub',
+          output: '',
+        },
+        {
+          code: 'git push origin main',
+          comment_ru: 'Отправляем код на GitHub',
+          comment_en: 'Push code to GitHub',
+          output: 'To https://github.com/user/repo.git\n * [new branch] main -> main',
+        },
+      ],
+    },
+  },
+
+  {
+    id: 'basics-vscode',
+    term_ru: 'VSCode',
+    term_en: 'VSCode',
+    category: 'Основы',
+    topicSlug: 'intro-to-programming',
+    definition_ru: 'Visual Studio Code — бесплатный редактор кода с подсветкой синтаксиса, автодополнением и встроенным Git. Самый популярный редактор среди веб-разработчиков.',
+    definition_en: 'Visual Studio Code — a free code editor with syntax highlighting, autocomplete and built-in Git. The most popular editor among web developers.',
+    whyNeeded_ru: 'VSCode делает написание кода быстрее и удобнее: подсвечивает ошибки, предлагает варианты дополнения и позволяет работать с Git прямо из интерфейса.',
+    whyNeeded_en: 'VSCode makes writing code faster and more comfortable: it highlights errors, suggests completions and lets you work with Git right from the interface.',
+    commonMistake_ru: 'Игнорировать расширения (Extensions). Плагины для Prettier, ESLint и языковые пакеты значительно улучшают опыт разработки.',
+    commonMistake_en: 'Ignoring Extensions. Plugins for Prettier, ESLint and language packs significantly improve the development experience.',
+    example_ru: 'Ctrl+S — сохранить, Ctrl+` — терминал',
+    example_en: 'Ctrl+S — save, Ctrl+` — terminal',
+    demoMode: 'console',
+    demo: {
+      steps: [
+        {
+          code: '// Ctrl+Space — автодополнение\ncon',
+          comment_ru: 'Начинаем вводить — VSCode предлагает варианты',
+          comment_en: 'Start typing — VSCode suggests completions',
+          output: '→ console, const, continue...',
+        },
+        {
+          code: '// Alt+Shift+F — форматирование\nconst x=1;const y=2;console.log(x+y)',
+          comment_ru: 'До форматирования — всё в одну строку',
+          comment_en: 'Before formatting — everything on one line',
+          output: '',
+        },
+        {
+          code: 'const x = 1\nconst y = 2\nconsole.log(x + y)',
+          comment_ru: 'После Alt+Shift+F — код аккуратный',
+          comment_en: 'After Alt+Shift+F — code is tidy',
+          output: '3',
+        },
+      ],
+    },
+  },
+
+  {
+    id: 'basics-repository',
+    term_ru: 'Репозиторий',
+    term_en: 'Repository',
+    category: 'Основы',
+    topicSlug: 'intro-to-programming',
+    definition_ru: 'Папка проекта под управлением Git. Хранит все файлы проекта и полную историю их изменений.',
+    definition_en: 'A project folder managed by Git. It stores all project files and the complete history of their changes.',
+    whyNeeded_ru: 'Репозиторий — это "машина времени" для проекта. Можно вернуться к любой прошлой версии и посмотреть, кто и что менял.',
+    whyNeeded_en: 'A repository is a "time machine" for a project. You can go back to any past version and see who changed what.',
+    commonMistake_ru: 'Случайно добавить в репозиторий секретные данные (.env файлы с паролями). Используй .gitignore чтобы исключить такие файлы.',
+    commonMistake_en: 'Accidentally adding secret data to the repository (.env files with passwords). Use .gitignore to exclude such files.',
+    example_ru: 'git clone https://github.com/user/repo.git',
+    example_en: 'git clone https://github.com/user/repo.git',
+    demoMode: 'console',
+    demo: {
+      steps: [
+        {
+          code: 'git init my-project',
+          comment_ru: 'Создаём новый репозиторий в папке my-project',
+          comment_en: 'Create a new repository in the my-project folder',
+          output: 'Initialized empty Git repository in my-project/.git/',
+        },
+        {
+          code: 'git clone https://github.com/user/repo.git',
+          comment_ru: 'Или скачиваем готовый репозиторий с GitHub',
+          comment_en: 'Or download an existing repository from GitHub',
+          output: 'Cloning into "repo"...\ndone.',
+        },
+      ],
+    },
+  },
+
+  {
+    id: 'basics-compiler',
+    term_ru: 'Компилятор',
+    term_en: 'Compiler',
+    category: 'Основы',
+    topicSlug: 'intro-to-programming',
+    definition_ru: 'Программа, переводящая код с языка высокого уровня (понятного человеку) в машинный код (понятный компьютеру).',
+    definition_en: 'A program that translates code from a high-level language (human-readable) into machine code (computer-readable).',
+    whyNeeded_ru: 'Компьютер понимает только нули и единицы. Компилятор переводит твой код в этот формат. В JavaScript роль компилятора выполняет браузер (движок V8).',
+    whyNeeded_en: 'A computer only understands zeros and ones. The compiler translates your code into this format. In JavaScript the browser (V8 engine) acts as the compiler.',
+    commonMistake_ru: 'Путать компилятор с интерпретатором. Компилятор переводит весь код сразу, интерпретатор — строку за строкой. JavaScript — интерпретируемый язык.',
+    commonMistake_en: 'Confusing compiler with interpreter. A compiler translates all code at once; an interpreter goes line by line. JavaScript is an interpreted language.',
+    example_ru: 'TypeScript → tsc → JavaScript → браузер',
+    example_en: 'TypeScript → tsc → JavaScript → browser',
+    demoMode: 'console',
+    demo: {
+      steps: [
+        {
+          code: '// TypeScript (высокоуровневый язык)\nconst greet = (name: string): string => {\n  return `Привет, ${name}!`\n}',
+          comment_ru: 'Пишем на TypeScript — понятно человеку',
+          comment_en: 'We write TypeScript — human-readable',
+          output: '',
+        },
+        {
+          code: '// JavaScript после компиляции tsc\nconst greet = (name) => {\n  return `Привет, ${name}!`\n}',
+          comment_ru: 'Компилятор tsc переводит в обычный JavaScript',
+          comment_en: 'Compiler tsc translates to plain JavaScript',
+          output: '',
+        },
+      ],
+    },
+  },
+
   // ─── HTML ─────────────────────────────────────────────────────────────────
 
   {
