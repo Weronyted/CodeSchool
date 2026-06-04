@@ -55,7 +55,7 @@ export function LessonComments({ slug }: Props) {
     const entry = {
       uid: user.uid,
       displayName: user.displayName ?? user.email?.split('@')[0] ?? 'Аноним',
-      photoURL: user.photoURL ?? null,
+      photoURL: user.photoURL ?? undefined,
       text: text.trim(),
       createdAt: Date.now(),
     }
@@ -69,7 +69,7 @@ export function LessonComments({ slug }: Props) {
 
   async function remove(commentId: string, authorUid: string) {
     if (!user) return
-    if (user.uid !== authorUid && !isTeacher) return
+    if (user.uid !== authorUid && !isTeacher()) return
     try {
       await deleteDoc(doc(db, 'lessonComments', slug, 'entries', commentId))
       setComments((prev) => prev.filter((c) => c.id !== commentId))
@@ -147,7 +147,7 @@ export function LessonComments({ slug }: Props) {
                     <span className="text-sm font-semibold text-gray-900 dark:text-white">{c.displayName}</span>
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-gray-400">{timeAgo(c.createdAt, lang)}</span>
-                      {user && (user.uid === c.uid || isTeacher) && (
+                      {user && (user.uid === c.uid || isTeacher()) && (
                         <button
                           onClick={() => remove(c.id, c.uid)}
                           className="text-gray-300 dark:text-gray-600 hover:text-red-500 dark:hover:text-red-400 transition-colors"

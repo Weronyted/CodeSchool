@@ -13,7 +13,7 @@ interface PublicUser {
   completedCount?: number
 }
 
-function getLevel(count: number, total: number, lang: 'ru' | 'en') {
+function getLevel(count: number, total: number) {
   const pct = (count / total) * 100
   if (pct >= 80) return { label: 'Senior', emoji: '🚀', color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-100 dark:bg-purple-900/30' }
   if (pct >= 40) return { label: 'Middle', emoji: '⚡', color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-100 dark:bg-blue-900/30' }
@@ -41,7 +41,7 @@ export default function PublicProfile() {
 
   const total = LESSON_SLUGS.length
   const completed = profile?.completedCount ?? 0
-  const level = getLevel(completed, total, lang)
+  const level = getLevel(completed, total)
   const pct = Math.round((completed / total) * 100)
 
   if (loading) {
