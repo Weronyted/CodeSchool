@@ -1040,7 +1040,7 @@ export const BILINGUAL_TERMS: BilingualGlossaryTerm[] = [
 
   {
     id: 'js-boolean',
-    term_ru: 'Булево (boolean)',
+    term_ru: 'Булевый (boolean)',
     term_en: 'Boolean',
     category: 'JS',
     topicSlug: 'intro-to-js',
