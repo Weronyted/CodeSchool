@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sun, Moon, Search, Menu, X, Code2, LayoutDashboard, BookMarked, User, LogOut, ShieldCheck, ClipboardList, Globe, School, FlaskConical } from 'lucide-react'
+import { Search, Menu, X, Code2, LayoutDashboard, BookMarked, User, LogOut, ShieldCheck, ClipboardList, Globe, School, FlaskConical } from 'lucide-react'
 import { useThemeStore } from '@/store/useThemeStore'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useRoleStore } from '@/store/useRoleStore'
@@ -19,7 +19,7 @@ interface NavbarProps {
 export function Navbar({ onSearchOpen, onSignInOpen }: NavbarProps) {
   const { t } = useTranslation()
   const location = useLocation()
-  const { theme, toggleTheme } = useThemeStore()
+  useThemeStore()
   const { user } = useAuthStore()
   const { isAdmin } = useRoleStore()
   const { toggleLanguage, language } = useLanguageStore()
@@ -87,12 +87,6 @@ export function Navbar({ onSearchOpen, onSignInOpen }: NavbarProps) {
             <button onClick={toggleLanguage} className="p-2 rounded-lg transition-colors" style={{ color: 'var(--muted)' }} title="Переключить язык">
               <motion.div key={language} initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} transition={{ duration: 0.2 }}>
                 <Globe size={18} />
-              </motion.div>
-            </button>
-
-            <button onClick={toggleTheme} className="p-2 rounded-lg transition-colors" style={{ color: 'var(--muted)' }} title="Тема">
-              <motion.div key={theme} initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} transition={{ duration: 0.2 }}>
-                {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
               </motion.div>
             </button>
 
