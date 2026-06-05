@@ -2,57 +2,178 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Design tokens ──────────────────────────────────────────────────────────── */
+:root {
+  --blue:    #4361EE;
+  --violet:  #7B2FBE;
+  --cyan:    #38BDF8;
+  --pink:    #F472B6;
+  --bg:      #060810;
+  --surface: rgba(255,255,255,0.035);
+  --border:  rgba(255,255,255,0.07);
+  --text:    #E8ECFF;
+  --muted:   rgba(232,236,255,0.4);
+}
+
 @layer base {
   * {
-    border-color: theme('colors.gray.200');
-  }
-  .dark * {
-    border-color: theme('colors.gray.700');
+    border-color: rgba(255,255,255,0.07);
   }
   body {
     @apply font-body antialiased;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
   }
 }
 
-/* Smooth scrolling */
+/* ── Smooth scrolling ───────────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
 }
 
-/* Background floating shapes — CSS animation starts instantly (no JS delay) */
+/* ── Ambient background glow ────────────────────────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 10% 15%, rgba(67,97,238,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 45% at 88% 75%, rgba(123,47,190,0.09) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 35% at 50% 95%, rgba(56,189,248,0.06) 0%, transparent 50%);
+}
+
+/* ── Scroll progress bar ────────────────────────────────────────────────────── */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #4361EE, #38BDF8);
+  z-index: 999;
+  width: 0%;
+  transition: width 0.1s linear;
+  border-radius: 0 2px 2px 0;
+}
+
+/* ── Keyframes ──────────────────────────────────────────────────────────────── */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50%       { transform: translateY(-18px); }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  @apply bg-transparent;
-}
-::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 dark:bg-slate-600 rounded-full;
-}
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-slate-400 dark:bg-slate-500;
+@keyframes sheen {
+  0%, 60% { left: -100%; }
+  80%      { left: 130%; }
+  100%     { left: 130%; }
 }
 
-/* CodeMirror customizations */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes badgeReveal {
+  0%   { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ── Marquee ────────────────────────────────────────────────────────────────── */
+.marquee-track {
+  animation: marquee-scroll 32s linear infinite;
+}
+
+/* ── Cursor blink ───────────────────────────────────────────────────────────── */
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* ── Badge reveal ───────────────────────────────────────────────────────────── */
+.animate-badge-reveal {
+  animation: badgeReveal 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+
+/* ── Primary button sheen ───────────────────────────────────────────────────── */
+.btn-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.btn-sheen::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.13), transparent);
+  animation: sheen 3.5s ease-in-out infinite;
+}
+
+/* ── Card spotlight (spotlight on mouse move via CSS vars) ──────────────────── */
+.card-spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    500px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(67,97,238,0.07),
+    transparent 55%
+  );
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.card-spotlight:hover::before {
+  opacity: 1;
+}
+
+/* ── Custom scrollbar ───────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.18);
+}
+
+/* ── CodeMirror ─────────────────────────────────────────────────────────────── */
 .cm-editor {
-  border-radius: 0.75rem;
+  border-radius: 0;
   overflow: hidden;
 }
 .cm-editor.cm-focused {
   outline: none;
 }
 .cm-scroller {
-  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace !important;
+  font-family: 'JetBrains Mono', monospace !important;
   font-size: 0.875rem !important;
   line-height: 1.6 !important;
 }
+
+/* ── Drag-scroll (no scrollbar) ─────────────────────────────────────────────── */
+.drag-scroll {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+}
+.drag-scroll:active { cursor: grabbing; }
+.drag-scroll::-webkit-scrollbar { display: none; }

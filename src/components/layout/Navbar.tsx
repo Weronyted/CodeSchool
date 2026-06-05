@@ -48,49 +48,49 @@ export function Navbar({ onSearchOpen, onSignInOpen }: NavbarProps) {
   }
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+    <nav className="sticky top-0 z-50 border-b" style={{ background: 'rgba(6,8,16,0.75)', backdropFilter: 'blur(20px)', borderColor: 'var(--border)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 font-heading font-semibold text-lg" style={{ color: '#3B5BDB' }}>
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#3B5BDB' }}>
-              <Code2 size={16} className="text-white" />
+          <Link to="/" className="flex items-center gap-2.5 font-heading font-bold text-[17px]" style={{ color: 'var(--text)' }}>
+            <div className="w-8 h-8 rounded-[9px] flex items-center justify-center text-white font-mono text-xs" style={{ background: 'var(--blue)', boxShadow: '0 0 18px rgba(67,97,238,0.4)' }}>
+              &lt;/&gt;
             </div>
             <span className="hidden sm:block">CodeSchool</span>
           </Link>
 
           {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-1">
-            {navLinks.map(({ href, label }) => (
-              <Link
-                key={href}
-                to={href}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  location.pathname.startsWith('/' + href.split('/')[1])
-                    ? 'text-white'
-                    : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
-                style={location.pathname.startsWith('/' + href.split('/')[1]) ? { backgroundColor: '#3B5BDB' } : {}}
-              >
-                {label}
-              </Link>
-            ))}
+          <div className="hidden md:flex items-center gap-0.5">
+            {navLinks.map(({ href, label }) => {
+              const isActive = location.pathname.startsWith('/' + href.split('/')[1])
+              return (
+                <Link
+                  key={href}
+                  to={href}
+                  className="px-3 py-2 rounded-lg text-sm font-medium transition-all"
+                  style={{ color: isActive ? 'var(--text)' : 'var(--muted)' }}
+                  onMouseEnter={e => { if (!isActive) (e.target as HTMLElement).style.color = 'var(--text)'; (e.target as HTMLElement).style.background = 'var(--surface)' }}
+                  onMouseLeave={e => { if (!isActive) (e.target as HTMLElement).style.color = 'var(--muted)'; (e.target as HTMLElement).style.background = '' }}
+                >
+                  {label}
+                </Link>
+              )
+            })}
           </div>
 
           {/* Right side */}
           <div className="flex items-center gap-1">
-            <button onClick={onSearchOpen} className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Поиск (Ctrl+K)">
+            <button onClick={onSearchOpen} className="p-2 rounded-lg transition-colors" style={{ color: 'var(--muted)' }} title="Поиск (Ctrl+K)">
               <Search size={18} />
             </button>
 
-            <button onClick={toggleLanguage} className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Переключить язык (L)">
+            <button onClick={toggleLanguage} className="p-2 rounded-lg transition-colors" style={{ color: 'var(--muted)' }} title="Переключить язык">
               <motion.div key={language} initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} transition={{ duration: 0.2 }}>
                 <Globe size={18} />
               </motion.div>
-              <span className="sr-only">{language === 'ru' ? 'EN' : 'RU'}</span>
             </button>
 
-            <button onClick={toggleTheme} className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Тема (T)">
+            <button onClick={toggleTheme} className="p-2 rounded-lg transition-colors" style={{ color: 'var(--muted)' }} title="Тема">
               <motion.div key={theme} initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} transition={{ duration: 0.2 }}>
                 {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
               </motion.div>
@@ -98,7 +98,7 @@ export function Navbar({ onSearchOpen, onSignInOpen }: NavbarProps) {
 
             {user ? (
               <div className="relative">
-                <button onClick={() => setUserMenuOpen(!userMenuOpen)} className="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <button onClick={() => setUserMenuOpen(!userMenuOpen)} className="flex items-center gap-2 p-1 rounded-lg transition-colors" style={{ background: userMenuOpen ? 'var(--surface)' : '' }}>
                   <UserAvatar user={user} size={32} />
                 </button>
                 <AnimatePresence>
@@ -107,21 +107,22 @@ export function Navbar({ onSearchOpen, onSignInOpen }: NavbarProps) {
                       initial={{ opacity: 0, y: -8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
-                      className="absolute right-0 mt-1 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden z-50"
+                      className="absolute right-0 mt-1 w-52 rounded-xl overflow-hidden z-50"
+                      style={{ background: '#0e1022', border: '1px solid var(--border)', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }}
                     >
-                      <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-700">
-                        <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{user.displayName}</p>
-                        <p className="text-xs text-slate-500 truncate">{user.email}</p>
+                      <div className="px-3 py-2.5" style={{ borderBottom: '1px solid var(--border)' }}>
+                        <p className="text-sm font-semibold truncate" style={{ color: 'var(--text)' }}>{user.displayName}</p>
+                        <p className="text-xs truncate" style={{ color: 'var(--muted)' }}>{user.email}</p>
                       </div>
-                      <Link to="/profile" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                      <Link to="/profile" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm transition-colors" style={{ color: 'var(--muted)' }} onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface)')} onMouseLeave={e => (e.currentTarget.style.background = '')}>
                         <User size={14} /> {t('nav.profile')}
                       </Link>
                       {isAdmin() && (
-                        <Link to="/admin" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" style={{ color: '#3B5BDB' }}>
+                        <Link to="/admin" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm transition-colors" style={{ color: '#6B8BFF' }} onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface)')} onMouseLeave={e => (e.currentTarget.style.background = '')}>
                           <ShieldCheck size={14} /> {t('nav.admin')}
                         </Link>
                       )}
-                      <button onClick={handleSignOut} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                      <button onClick={handleSignOut} className="w-full flex items-center gap-2 px-3 py-2.5 text-sm transition-colors" style={{ color: '#F472B6' }} onMouseEnter={e => (e.currentTarget.style.background = 'rgba(244,114,182,0.08)')} onMouseLeave={e => (e.currentTarget.style.background = '')}>
                         <LogOut size={14} /> {t('nav.signOut')}
                       </button>
                     </motion.div>
@@ -129,12 +130,15 @@ export function Navbar({ onSearchOpen, onSignInOpen }: NavbarProps) {
                 </AnimatePresence>
               </div>
             ) : (
-              <button onClick={onSignInOpen} className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-lg text-white text-sm font-medium transition-all hover:opacity-90 active:scale-[0.98] ml-1" style={{ backgroundColor: '#3B5BDB' }}>
+              <button onClick={onSignInOpen} className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-sm font-semibold transition-all btn-sheen ml-1" style={{ background: 'var(--blue)', boxShadow: '0 4px 20px rgba(67,97,238,0.35)' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 28px rgba(67,97,238,0.5)' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = ''; (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 20px rgba(67,97,238,0.35)' }}
+              >
                 {t('nav.signIn')}
               </button>
             )}
 
-            <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden p-2 rounded-lg transition-colors" style={{ color: 'var(--muted)' }}>
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
@@ -147,16 +151,17 @@ export function Navbar({ onSearchOpen, onSignInOpen }: NavbarProps) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 overflow-hidden"
+            className="md:hidden overflow-hidden"
+            style={{ background: 'rgba(6,8,16,0.95)', borderTop: '1px solid var(--border)' }}
           >
             <div className="px-4 py-4 space-y-1">
               {navLinks.map(({ href, label, icon: Icon }) => (
-                <Link key={href} to={href} onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <Link key={href} to={href} onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors" style={{ color: 'var(--muted)' }}>
                   <Icon size={16} /> {label}
                 </Link>
               ))}
               {!user && (
-                <button onClick={() => { onSignInOpen(); setMobileOpen(false) }} className="w-full mt-2 px-4 py-2.5 rounded-lg text-white text-sm font-medium" style={{ backgroundColor: '#3B5BDB' }}>
+                <button onClick={() => { onSignInOpen(); setMobileOpen(false) }} className="w-full mt-2 px-4 py-2.5 rounded-xl text-white text-sm font-semibold btn-sheen" style={{ background: 'var(--blue)' }}>
                   {t('nav.signIn')}
                 </button>
               )}

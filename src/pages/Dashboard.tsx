@@ -66,39 +66,39 @@ export default function Dashboard() {
   ])
 
   return (
-    <div className="min-h-screen bg-cream-50 dark:bg-gray-950">
+    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
       <div className="max-w-7xl mx-auto px-4 py-10">
 
         {/* Welcome card */}
         <motion.div
           className="rounded-3xl p-8 text-white mb-8 relative overflow-hidden"
-          style={{ background: 'linear-gradient(135deg, #3B5BDB, #7950F2)' }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          style={{ background: 'linear-gradient(135deg,#1a1f4e,#0f1035)', border: '1px solid rgba(107,139,255,0.2)' }}
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
         >
           <div className="relative z-10">
-            <h1 className="font-heading text-3xl font-extrabold mb-4">
+            <h1 className="font-heading text-3xl font-extrabold mb-4" style={{ color: 'var(--text)' }}>
               {t('dashboard.welcome', { name: user?.displayName ?? user?.email?.split('@')[0] ?? t('dashboard.student', 'Студент') })} 👋
             </h1>
             <div className="flex items-center gap-4 flex-wrap">
               <div>
-                <div className="text-4xl font-extrabold font-heading">{completedCount}/{totalCount}</div>
-                <div className="text-primary-200 text-sm">{t('dashboard.lessonsCompleted', 'Уроков пройдено')}</div>
+                <div className="text-4xl font-extrabold font-heading" style={{ color: 'var(--text)' }}>{completedCount}/{totalCount}</div>
+                <div className="text-sm" style={{ color: 'var(--muted)' }}>{t('dashboard.lessonsCompleted', 'Уроков пройдено')}</div>
               </div>
               {streak > 0 && (
                 <div>
-                  <div className="text-4xl font-extrabold font-heading">🔥 {streak}</div>
-                  <div className="text-primary-200 text-sm">{language === 'ru' ? 'Дней подряд' : 'Day streak'}</div>
+                  <div className="text-4xl font-extrabold font-heading" style={{ color: 'var(--text)' }}>🔥 {streak}</div>
+                  <div className="text-sm" style={{ color: 'var(--muted)' }}>{language === 'ru' ? 'Дней подряд' : 'Day streak'}</div>
                 </div>
               )}
               <div className="flex-1 max-w-xs">
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-primary-200">{t('dashboard.progress', 'Прогресс')}</span>
-                  <span className="font-bold">{overallPct}%</span>
+                  <span style={{ color: 'var(--muted)' }}>{t('dashboard.progress', 'Прогресс')}</span>
+                  <span className="font-bold" style={{ color: 'var(--text)' }}>{overallPct}%</span>
                 </div>
-                <div className="h-3 bg-primary-500/40 rounded-full overflow-hidden">
+                <div className="h-2.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.07)' }}>
                   <motion.div
-                    className="h-full bg-white rounded-full"
+                    className="h-full rounded-full"
+                    style={{ background: 'linear-gradient(90deg,#4361EE,#38BDF8)' }}
                     initial={{ width: 0 }}
                     animate={{ width: `${overallPct}%` }}
                     transition={{ duration: 1, ease: 'easeOut' }}
@@ -112,26 +112,23 @@ export default function Dashboard() {
 
         {/* Continue card */}
         {continueSlug && (
-          <motion.div
-            className="mb-6"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-          >
-            <Link
-              to={`/lessons/${continueSlug}`}
-              className="flex items-center gap-4 bg-white dark:bg-gray-800 border border-primary-200 dark:border-primary-700 rounded-2xl p-5 hover:border-primary-400 dark:hover:border-primary-500 hover:shadow-md transition-all group"
+          <motion.div className="mb-6" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+            <Link to={`/lessons/${continueSlug}`}
+              className="flex items-center gap-4 rounded-2xl p-5 transition-all group"
+              style={{ background: 'var(--surface)', border: '1px solid rgba(107,139,255,0.2)' }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(107,139,255,0.4)'; el.style.transform = 'translateY(-2px)' }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(107,139,255,0.2)'; el.style.transform = '' }}
             >
               <div className="text-4xl flex-shrink-0">{LESSON_META[continueSlug].icon}</div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-primary-500 dark:text-primary-400 uppercase tracking-wide mb-0.5">
+                <p className="font-mono text-xs uppercase tracking-wider mb-0.5" style={{ color: '#6B8BFF' }}>
                   {language === 'ru' ? '▶ Продолжить' : '▶ Continue'}
                 </p>
-                <p className="font-bold text-gray-900 dark:text-white truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                <p className="font-bold truncate transition-colors" style={{ color: 'var(--text)' }}>
                   {language === 'ru' ? LESSON_META[continueSlug].title : LESSON_META[continueSlug].title_en}
                 </p>
               </div>
-              <div className="text-primary-400 group-hover:translate-x-1 transition-transform text-xl">→</div>
+              <div className="text-xl transition-transform group-hover:translate-x-1" style={{ color: '#6B8BFF' }}>→</div>
             </Link>
           </motion.div>
         )}
@@ -140,10 +137,10 @@ export default function Dashboard() {
 
           {/* Lessons grid */}
           <div className="lg:col-span-2">
-            <h2 className="font-heading font-bold text-xl text-gray-900 dark:text-white mb-4">
+            <h2 className="font-heading font-bold text-xl mb-4" style={{ color: 'var(--text)' }}>
               {t('dashboard.yourLessons', 'Уроки')}
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {LESSON_SLUGS.map((slug, i) => {
                 const meta = LESSON_META[slug]
                 const p = progress[slug]
@@ -151,31 +148,28 @@ export default function Dashboard() {
                 const score = p?.quizScore ?? 0
 
                 return (
-                  <motion.div
-                    key={slug}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.04 }}
-                  >
-                    <Link
-                      to={`/lessons/${slug}`}
-                      className="flex items-start gap-3 bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-sm transition-all group"
+                  <motion.div key={slug} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
+                    <Link to={`/lessons/${slug}`}
+                      className="flex items-start gap-3 rounded-2xl p-4 transition-all group"
+                      style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+                      onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(107,139,255,0.25)'; el.style.transform = 'translateY(-2px)' }}
+                      onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'var(--border)'; el.style.transform = '' }}
                     >
                       <span className="text-2xl flex-shrink-0 mt-0.5">{meta.icon}</span>
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm text-gray-900 dark:text-white truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                        <p className="font-semibold text-sm truncate transition-colors" style={{ color: 'var(--text)' }}>
                           {language === 'en' ? meta.title_en : meta.title}
                         </p>
                         <div className="flex items-center gap-2 mt-1">
                           {done ? (
-                            <span className="text-xs text-green-600 dark:text-green-400 font-semibold">✅ {score}%</span>
+                            <span className="text-xs font-semibold" style={{ color: '#38BDF8' }}>✅ {score}%</span>
                           ) : (
-                            <span className="text-xs text-gray-400">{t('dashboard.notStarted', 'Не начат')}</span>
+                            <span className="text-xs" style={{ color: 'var(--muted)' }}>{t('dashboard.notStarted', 'Не начат')}</span>
                           )}
                         </div>
                         {done && (
-                          <div className="mt-1.5 h-1 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-                            <div className="h-full bg-green-500 rounded-full" style={{ width: `${score}%` }} />
+                          <div className="mt-1.5 h-1 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.07)' }}>
+                            <div className="h-full rounded-full" style={{ width: `${score}%`, background: 'linear-gradient(90deg,#4361EE,#38BDF8)' }} />
                           </div>
                         )}
                       </div>
@@ -189,27 +183,19 @@ export default function Dashboard() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Badges */}
-            <motion.div
-              className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
+            <motion.div className="rounded-2xl p-6" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+              initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
             >
-              <h3 className="font-heading font-bold text-gray-900 dark:text-white mb-4">
+              <h3 className="font-heading font-bold mb-4" style={{ color: 'var(--text)' }}>
                 🏅 {t('dashboard.badgesTitle', 'Достижения')}
               </h3>
               <div className="flex flex-wrap gap-3">
                 {BADGES.map((badge) => {
                   const earned = earnedBadges.has(badge.id)
                   return (
-                    <div
-                      key={badge.id}
-                      title={t(`badges.${badge.id}`, badge.id)}
-                      className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all ${
-                        earned
-                          ? 'bg-primary-100 dark:bg-primary-900/40 animate-badge-reveal'
-                          : 'bg-gray-100 dark:bg-gray-700 opacity-40 grayscale'
-                      }`}
+                    <div key={badge.id} title={t(`badges.${badge.id}`, badge.id)}
+                      className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all ${earned ? 'animate-badge-reveal' : 'opacity-30 grayscale'}`}
+                      style={earned ? { background: 'rgba(67,97,238,0.12)', border: '1px solid rgba(67,97,238,0.2)' } : { background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)' }}
                     >
                       {badge.emoji}
                     </div>
@@ -220,26 +206,20 @@ export default function Dashboard() {
 
             {/* Radar */}
             {completedCount > 0 && (
-              <motion.div
-                className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 }}
+              <motion.div className="rounded-2xl p-6" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+                initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}
               >
-                <h3 className="font-heading font-bold text-gray-900 dark:text-white mb-4">
+                <h3 className="font-heading font-bold mb-4" style={{ color: 'var(--text)' }}>
                   📊 {t('dashboard.skills', 'Навыки')}
                 </h3>
                 <ResponsiveContainer width="100%" height={220}>
                   <RadarChart data={radarData}>
-                    <PolarGrid stroke={isDark ? '#374151' : '#e5e7eb'} />
-                    <PolarAngleAxis
-                      dataKey="subject"
-                      tick={{ fontSize: 9, fill: isDark ? '#9ca3af' : '#6b7280' }}
-                    />
+                    <PolarGrid stroke="rgba(255,255,255,0.07)" />
+                    <PolarAngleAxis dataKey="subject" tick={{ fontSize: 9, fill: 'rgba(232,236,255,0.4)' }} />
                     <Radar
                       dataKey="score"
-                      stroke="#3B5BDB"
-                      fill="#3B5BDB"
+                      stroke="#4361EE"
+                      fill="#4361EE"
                       fillOpacity={0.25}
                     />
                   </RadarChart>
@@ -248,33 +228,27 @@ export default function Dashboard() {
             )}
 
             {/* Quick actions */}
-            <motion.div
-              className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700 space-y-3"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
+            <motion.div className="rounded-2xl p-6 space-y-2" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+              initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}
             >
-              <h3 className="font-heading font-bold text-gray-900 dark:text-white mb-2">
+              <h3 className="font-heading font-bold mb-3" style={{ color: 'var(--text)' }}>
                 {t('dashboard.quickActions', 'Быстрые действия')}
               </h3>
-              <Link
-                to="/lessons"
-                className="flex items-center gap-3 px-4 py-3 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 rounded-xl hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors font-medium text-sm"
-              >
-                📚 {t('dashboard.allLessons', 'Все уроки')}
-              </Link>
-              <Link
-                to="/glossary"
-                className="flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors font-medium text-sm"
-              >
-                📖 {t('dashboard.glossary', 'Словарь терминов')}
-              </Link>
-              <Link
-                to="/assignments"
-                className="flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors font-medium text-sm"
-              >
-                📝 {t('dashboard.assignments', 'Задания')}
-              </Link>
+              {[
+                { to: '/lessons', icon: '📚', label: t('dashboard.allLessons', 'Все уроки') },
+                { to: '/sandbox', icon: '🧪', label: language === 'ru' ? 'Песочница' : 'Sandbox' },
+                { to: '/glossary', icon: '📖', label: t('dashboard.glossary', 'Словарь терминов') },
+                { to: '/assignments', icon: '📝', label: t('dashboard.assignments', 'Задания') },
+              ].map(({ to, icon, label }) => (
+                <Link key={to} to={to}
+                  className="flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-all"
+                  style={{ color: 'var(--muted)', background: 'transparent' }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(67,97,238,0.08)'; el.style.color = 'var(--text)' }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'transparent'; el.style.color = 'var(--muted)' }}
+                >
+                  {icon} {label}
+                </Link>
+              ))}
             </motion.div>
           </div>
         </div>

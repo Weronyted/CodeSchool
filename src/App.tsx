@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Navbar } from '@/components/layout/Navbar'
@@ -65,6 +65,18 @@ export default function App() {
   useAuth()
   useKeyboard({ onSearchOpen: () => setSearchOpen(true) })
 
+  const updateProgress = useCallback(() => {
+    const el = document.getElementById('scroll-progress')
+    if (!el) return
+    const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
+    el.style.width = Math.min(pct, 100).toFixed(1) + '%'
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener('scroll', updateProgress, { passive: true })
+    return () => window.removeEventListener('scroll', updateProgress)
+  }, [updateProgress])
+
   useEffect(() => {
     const handler = () => setAuthOpen(true)
     window.addEventListener('open-auth-modal', handler)
@@ -72,7 +84,8 @@ export default function App() {
   }, [])
 
   return (
-    <div className="min-h-screen flex flex-col bg-cream-50 dark:bg-gray-950 font-body text-slate-900 dark:text-slate-100">
+    <div className="min-h-screen flex flex-col font-body" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
+      <div id="scroll-progress" />
       <Navbar onSearchOpen={() => setSearchOpen(true)} onSignInOpen={() => setAuthOpen(true)} />
 
       <motion.main
@@ -94,5 +107,6 @@ export default function App() {
       <ConfirmDialog />
       <SupportButton />
     </div>
+
   )
 }
