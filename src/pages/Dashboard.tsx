@@ -24,8 +24,7 @@ export default function Dashboard() {
   const progress = useProgressStore((s) => s.progress)
   const streak = useProgressStore((s) => s.streak)
   const { language } = useLanguageStore()
-  const { theme } = useThemeStore()
-  const isDark = theme === 'dark'
+  useThemeStore()
 
   const completedCount = Object.values(progress).filter((p) => p.completed).length
   const totalCount = LESSON_SLUGS.length

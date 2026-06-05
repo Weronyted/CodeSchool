@@ -81,9 +81,9 @@ function BentoCard({ children, className = '' }: { children: React.ReactNode; cl
 
 // ─── Main ──────────────────────────────────────────────────────────────────────
 export default function Landing() {
-  const { t } = useTranslation()
+  useTranslation()
   const { language } = useLanguageStore()
-  const { user } = useAuthStore()
+  useAuthStore()
   const navigate = useNavigate()
   const lang = language as 'ru' | 'en'
 
@@ -303,7 +303,9 @@ export default function Landing() {
                 <motion.div key={slug}
                   className="relative flex-shrink-0 w-[220px] rounded-[18px] p-5 cursor-pointer overflow-hidden"
                   style={{ background: 'var(--surface)', border: '1px solid var(--border)', transformStyle: 'preserve-3d' }}
-                  whileHover={{ y: -6, borderColor: 'rgba(107,139,255,0.3)', boxShadow: '0 16px 40px rgba(0,0,0,0.4)' } as Record<string, unknown>}
+                  whileHover={{ y: -6 }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(107,139,255,0.3)'; el.style.boxShadow = '0 16px 40px rgba(0,0,0,0.4)' }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'var(--border)'; el.style.boxShadow = '' }}
                   onClick={() => navigate(`/lessons/${slug}`)}
                 >
                   <div className="font-mono text-[10px] mb-2.5" style={{ color: 'rgba(107,139,255,0.7)' }}>{String(i + 1).padStart(2, '0')}</div>
