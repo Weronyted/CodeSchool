@@ -20,7 +20,7 @@ export interface BilingualGlossaryTerm {
   id: string
   term_ru: string
   term_en: string
-  category: 'HTML' | 'CSS' | 'JS' | 'Основы'
+  category: 'HTML' | 'CSS' | 'JS' | 'Основы' | 'React'
   topicSlug?: string
   definition_ru: string
   definition_en: string

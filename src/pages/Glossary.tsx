@@ -8,15 +8,16 @@ import { useLanguageStore } from '@/store/useLanguageStore'
 import TermModal from '@/components/glossary/TermModal'
 import type { BilingualGlossaryTerm } from '@/types/glossary'
 
-type Category = 'All' | 'Основы' | 'HTML' | 'CSS' | 'JS'
+type Category = 'All' | 'Основы' | 'HTML' | 'CSS' | 'JS' | 'React'
 
-const CATEGORIES: Category[] = ['All', 'Основы', 'HTML', 'CSS', 'JS']
+const CATEGORIES: Category[] = ['All', 'Основы', 'HTML', 'CSS', 'JS', 'React']
 
 const CATEGORY_BADGE: Record<string, string> = {
   'Основы': 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
   HTML: 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
   CSS: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
   JS: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300',
+  React: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300',
 }
 
 const CATEGORY_RING: Record<string, string> = {
@@ -24,6 +25,7 @@ const CATEGORY_RING: Record<string, string> = {
   HTML: 'hover:border-orange-400 dark:hover:border-orange-500',
   CSS: 'hover:border-blue-400 dark:hover:border-blue-500',
   JS: 'hover:border-yellow-400 dark:hover:border-yellow-500',
+  React: 'hover:border-cyan-400 dark:hover:border-cyan-500',
 }
 
 const container = {

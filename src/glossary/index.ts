@@ -138,4 +138,21 @@ export const GLOSSARY_TERMS: GlossaryTerm[] = [
   { term: 'createElement()', definition: 'Создаёт новый HTML-элемент в памяти: document.createElement("div").', category: 'DOM' },
   { term: 'appendChild()', definition: 'Добавляет элемент как последнего потомка другого элемента.', category: 'DOM' },
   { term: 'XSS', definition: 'Cross-Site Scripting — атака, при которой злоумышленник внедряет вредоносный код через innerHTML или другие уязвимости.', category: 'DOM' },
+
+  // React
+  { term: 'React', definition: 'JavaScript-библиотека для создания пользовательских интерфейсов через компонентный подход. Создана в Facebook в 2013 году.', category: 'React' },
+  { term: 'Компонент React', definition: 'Функция, возвращающая JSX. Строительный блок React-приложения. Имя начинается с заглавной буквы.', category: 'React' },
+  { term: 'JSX', definition: 'Синтаксическое расширение JavaScript для написания HTML-подобного кода в JS-файлах. Компилируется Babel в React.createElement().', category: 'React' },
+  { term: 'Props', definition: 'Данные, передаваемые от родительского компонента к дочернему. Только для чтения — дочерний компонент не может их изменить.', category: 'React' },
+  { term: 'State', definition: 'Внутреннее состояние компонента. При изменении state React автоматически перерисовывает компонент.', category: 'React' },
+  { term: 'useState', definition: 'React Hook для создания реактивного состояния. Возвращает [значение, функцию_обновления].', category: 'React' },
+  { term: 'useEffect', definition: 'React Hook для выполнения побочных эффектов: запросов к API, таймеров, подписок. Выполняется после рендера.', category: 'React' },
+  { term: 'Virtual DOM', definition: 'Копия DOM в памяти JavaScript. React сравнивает старый и новый Virtual DOM и обновляет в реальном DOM только изменившиеся части.', category: 'React' },
+  { term: 'Hook', definition: 'Функция React, имя которой начинается с use. Позволяет использовать state и другие возможности React в функциональных компонентах.', category: 'React' },
+  { term: 'key', definition: 'Специальный атрибут React для элементов списка. Помогает React отслеживать, какие элементы изменились, добавились или удалились.', category: 'React' },
+  { term: 'Ре-рендер', definition: 'Повторное выполнение функции компонента и обновление DOM при изменении state или props.', category: 'React' },
+  { term: 'Условный рендеринг', definition: 'Отображение разного JSX в зависимости от условия. Используются &&, тернарный оператор или if/else перед return.', category: 'React' },
+  { term: 'Контролируемый компонент', definition: 'Поле формы, значение которого управляется через state. onChange обновляет state, value={state} отображает текущее значение.', category: 'React' },
+  { term: 'ReactDOM', definition: 'Пакет для рендеринга React-компонентов в реальный DOM браузера. ReactDOM.createRoot(el).render(<App />)', category: 'React' },
+  { term: 'Fragment', definition: 'Пустой контейнер <> </> или <React.Fragment> для группировки элементов без лишнего DOM-узла.', category: 'React' },
 ]
