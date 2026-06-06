@@ -15,6 +15,7 @@ const CATEGORY_LABELS: Record<FilterCategory, { ru: string; en: string }> = {
   HTML:   { ru: 'HTML',   en: 'HTML' },
   CSS:    { ru: 'CSS',    en: 'CSS' },
   JS:     { ru: 'JS',     en: 'JS' },
+  REACT:  { ru: 'React',  en: 'React' },
 }
 
 export default function LessonsListPage() {
