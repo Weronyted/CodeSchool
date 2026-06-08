@@ -4,7 +4,8 @@ import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '@/services/firebase'
-import { submitAssignment } from '@/services/admin.service'
+import { submitAssignment as submitTextAssignment } from '@/services/admin.service'
+import { submitAssignment as submitQuizAssignment } from '@/services/submission.service'
 import { useAuthStore } from '@/store/useAuthStore'
 import type { Assignment } from '@/types/roles'
 import { CodeRunner } from '@/components/code/CodeRunner'
@@ -18,8 +19,10 @@ export default function TakeAssignment() {
   const [assignment, setAssignment] = useState<Assignment | null>(null)
   const [loading, setLoading] = useState(true)
   const [answer, setAnswer] = useState('')
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [quizScore, setQuizScore] = useState<{ score: number; maxScore: number } | null>(null)
 
   useEffect(() => {
     if (!id) return
@@ -28,10 +31,46 @@ export default function TakeAssignment() {
     }).finally(() => setLoading(false))
   }, [id])
 
-  const handleSubmit = async () => {
+  const isQuizWithQuestions =
+    assignment?.type === 'quiz' && assignment.questions && assignment.questions.length > 0
+
+  const allQuestionsAnswered =
+    isQuizWithQuestions &&
+    assignment!.questions!.every((q) => selectedAnswers[q.id] !== undefined)
+
+  const handleQuizSubmit = async () => {
+    if (!user || !id || !assignment?.questions) return
+    setSubmitting(true)
+
+    let score = 0
+    const maxScore = assignment.questions.reduce((sum, q) => sum + q.points, 0)
+
+    assignment.questions.forEach((q) => {
+      if (selectedAnswers[q.id] === q.correctAnswer) {
+        score += q.points
+      }
+    })
+
+    await submitQuizAssignment({
+      userId: user.uid,
+      displayName: user.displayName ?? user.email ?? 'Ученик',
+      assignmentId: id,
+      answers: selectedAnswers,
+      score,
+      maxScore,
+      percentage: Math.round((score / maxScore) * 100),
+      submittedAt: Date.now(),
+    })
+
+    setQuizScore({ score, maxScore })
+    setSubmitted(true)
+    setSubmitting(false)
+  }
+
+  const handleTextSubmit = async () => {
     if (!user || !id || !answer.trim()) return
     setSubmitting(true)
-    await submitAssignment(id, user.uid, answer)
+    await submitTextAssignment(id, user.uid, answer)
     setSubmitted(true)
     setSubmitting(false)
   }
@@ -68,11 +107,82 @@ export default function TakeAssignment() {
               <h2 className="font-heading font-bold text-xl text-green-800 dark:text-green-300 mb-2">
                 {t('assignments.submitted', 'Задание сдано!')}
               </h2>
-              <p className="text-green-700 dark:text-green-400">
-                {t('assignments.submittedDesc', 'Учитель проверит твоё задание.')}
-              </p>
+              {quizScore ? (
+                <div className="mt-4">
+                  <p className="text-4xl font-extrabold text-green-700 dark:text-green-400 mb-1">
+                    {quizScore.score} / {quizScore.maxScore}
+                  </p>
+                  <p className="text-green-600 dark:text-green-500 text-lg">
+                    {Math.round((quizScore.score / quizScore.maxScore) * 100)}%
+                  </p>
+                </div>
+              ) : (
+                <p className="text-green-700 dark:text-green-400">
+                  {t('assignments.submittedDesc', 'Учитель проверит твоё задание.')}
+                </p>
+              )}
             </motion.div>
+          ) : isQuizWithQuestions ? (
+            // ── Quiz with questions ──────────────────────────────────────────
+            <div className="space-y-5">
+              {assignment.questions!.map((q, idx) => (
+                <motion.div
+                  key={q.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                  className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700"
+                >
+                  <p className="font-semibold text-gray-900 dark:text-white mb-4">
+                    <span className="text-primary-500 mr-2">{idx + 1}.</span>
+                    {q.text}
+                  </p>
+                  <div className="space-y-2">
+                    {q.options?.map((option, optIdx) => {
+                      const isSelected = selectedAnswers[q.id] === String(optIdx)
+                      return (
+                        <button
+                          key={optIdx}
+                          onClick={() =>
+                            setSelectedAnswers((prev) => ({ ...prev, [q.id]: String(optIdx) }))
+                          }
+                          className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${
+                            isSelected
+                              ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
+                              : 'border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-primary-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                          }`}
+                        >
+                          <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full border mr-3 text-xs font-bold ${
+                            isSelected
+                              ? 'border-primary-500 bg-primary-500 text-white'
+                              : 'border-gray-300 dark:border-gray-600 text-gray-400'
+                          }`}>
+                            {String.fromCharCode(65 + optIdx)}
+                          </span>
+                          {option}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </motion.div>
+              ))}
+
+              <div className="text-sm text-gray-400 text-center">
+                Отвечено: {Object.keys(selectedAnswers).length} / {assignment.questions!.length}
+              </div>
+
+              <button
+                onClick={handleQuizSubmit}
+                disabled={submitting || !allQuestionsAnswered}
+                className="w-full py-4 bg-primary-600 text-white rounded-xl font-bold text-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+              >
+                {submitting
+                  ? t('assignments.submitting', 'Отправка...')
+                  : t('assignments.submit', 'Сдать задание')}
+              </button>
+            </div>
           ) : (
+            // ── Text or code answer ──────────────────────────────────────────
             <>
               {assignment.type === 'code' ? (
                 <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden mb-6">
@@ -102,7 +212,7 @@ export default function TakeAssignment() {
               )}
 
               <button
-                onClick={handleSubmit}
+                onClick={handleTextSubmit}
                 disabled={submitting || !answer.trim()}
                 className="w-full py-4 bg-primary-600 text-white rounded-xl font-bold text-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
               >

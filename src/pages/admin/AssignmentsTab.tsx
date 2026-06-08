@@ -4,6 +4,7 @@ import { getAssignments, createAssignment, deleteAssignment } from '@/services/a
 import { useAuthStore } from '@/store/useAuthStore'
 import { LESSON_SLUGS, LESSON_META } from '@/lessons'
 import type { Assignment } from '@/types/roles'
+import { PRESET_ASSIGNMENTS } from '@/data/presetAssignments'
 
 export default function AssignmentsTab() {
   const { t } = useTranslation()
@@ -11,6 +12,7 @@ export default function AssignmentsTab() {
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [loading, setLoading] = useState(true)
   const [creating, setCreating] = useState(false)
+  const [seedingIndex, setSeedingIndex] = useState<number | null>(null)
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -39,6 +41,22 @@ export default function AssignmentsTab() {
     setCreating(false)
   }
 
+  const handleSeedPreset = async (index: number) => {
+    if (!user) return
+    setSeedingIndex(index)
+    const preset = PRESET_ASSIGNMENTS[index]
+    const newAssignment = await createAssignment({
+      title: preset.title,
+      description: preset.description,
+      type: preset.type,
+      questions: preset.questions,
+      maxScore: preset.maxScore,
+      teacherId: user.uid,
+    })
+    setAssignments((prev) => [newAssignment, ...prev])
+    setSeedingIndex(null)
+  }
+
   const handleDelete = async (id: string) => {
     if (!confirm(t('admin.confirmDeleteAssignment', 'Удалить задание?'))) return
     await deleteAssignment(id)
@@ -47,6 +65,38 @@ export default function AssignmentsTab() {
 
   return (
     <div className="space-y-6">
+
+      {/* ── Готовые задания ─────────────────────────────────────────── */}
+      <div className="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-5 border border-blue-200 dark:border-blue-800">
+        <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-1">
+          ⚡ Готовые задания
+        </h3>
+        <p className="text-sm text-blue-700 dark:text-blue-400 mb-4">
+          Создай задание в один клик — вопросы уже написаны
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {PRESET_ASSIGNMENTS.map((preset, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleSeedPreset(idx)}
+              disabled={seedingIndex !== null}
+              className="flex flex-col items-start gap-1 px-4 py-3 bg-white dark:bg-gray-800 border border-blue-200 dark:border-blue-700 rounded-xl hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all disabled:opacity-50 text-left"
+            >
+              <span className="font-semibold text-gray-900 dark:text-white text-sm">
+                {seedingIndex === idx ? 'Создание...' : preset.title}
+              </span>
+              <span className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">
+                {preset.description}
+              </span>
+              <span className="text-xs text-blue-600 dark:text-blue-400 font-medium mt-1">
+                {preset.questions.length} вопросов · {preset.maxScore} баллов
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Новое задание вручную ────────────────────────────────────── */}
       <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-5 border border-gray-200 dark:border-gray-700">
         <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t('admin.newAssignment', 'Новое задание')}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
