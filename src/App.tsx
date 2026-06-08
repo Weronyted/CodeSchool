@@ -21,6 +21,7 @@ import AdminPanel from '@/pages/AdminPanel'
 import TakeAssignment from '@/pages/TakeAssignment'
 import NotFound from '@/pages/NotFound'
 import Sandbox from '@/pages/Sandbox'
+import RoadmapPage from '@/pages/RoadmapPage'
 import PublicProfile from '@/pages/PublicProfile'
 import StatsPage from '@/pages/StatsPage'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
@@ -39,6 +40,7 @@ function AppRoutes() {
         <Route path="/" element={<PageTransition><Landing /></PageTransition>} />
         <Route path="/dashboard" element={<ProtectedRoute><PageTransition><Dashboard /></PageTransition></ProtectedRoute>} />
         <Route path="/lessons" element={<ProtectedRoute><PageTransition><LessonsListPage /></PageTransition></ProtectedRoute>} />
+        <Route path="/roadmap" element={<ProtectedRoute><PageTransition><RoadmapPage /></PageTransition></ProtectedRoute>} />
         <Route path="/lessons/:slug" element={<ProtectedRoute><PageTransition><LessonPage /></PageTransition></ProtectedRoute>} />
         <Route path="/assignments" element={<ProtectedRoute><PageTransition><AssignmentsListPage /></PageTransition></ProtectedRoute>} />
         <Route path="/assignments/:id" element={<ProtectedRoute><PageTransition><TakeAssignment /></PageTransition></ProtectedRoute>} />

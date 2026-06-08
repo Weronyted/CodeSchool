@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
+import { Map } from 'lucide-react'
 import { useProgressStore } from '@/store/useProgressStore'
 import { useLanguageStore } from '@/store/useLanguageStore'
 import { LESSON_SLUGS, LESSON_META } from '@/lessons'
@@ -35,12 +36,26 @@ export default function LessonsListPage() {
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="font-mono text-[11px] tracking-[3px] uppercase mb-3" style={{ color: 'var(--cyan)' }}>// уроки</div>
-          <h1 className="font-heading text-4xl font-extrabold mb-2" style={{ color: 'var(--text)', letterSpacing: '-1.5px' }}>
-            {t('lessons.title')}
-          </h1>
-          <p style={{ color: 'var(--muted)' }}>
-            {t('lessons.subtitle', { count: LESSON_SLUGS.length })}
-          </p>
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <div>
+              <h1 className="font-heading text-4xl font-extrabold mb-2" style={{ color: 'var(--text)', letterSpacing: '-1.5px' }}>
+                {t('lessons.title')}
+              </h1>
+              <p style={{ color: 'var(--muted)' }}>
+                {t('lessons.subtitle', { count: LESSON_SLUGS.length })}
+              </p>
+            </div>
+            <Link
+              to="/roadmap"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all flex-shrink-0"
+              style={{ background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--muted)' }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.color = 'var(--text)'; el.style.borderColor = 'rgba(107,139,255,0.4)' }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.color = 'var(--muted)'; el.style.borderColor = 'var(--border)' }}
+            >
+              <Map size={15} />
+              {lang === 'en' ? 'View as Roadmap' : 'Карта тем'}
+            </Link>
+          </div>
         </motion.div>
 
         {/* Category filter */}
