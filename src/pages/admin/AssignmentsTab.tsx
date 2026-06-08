@@ -44,19 +44,25 @@ export default function AssignmentsTab() {
   const handleSeedPreset = async (index: number) => {
     if (!user) return
     setSeedingIndex(index)
-    const preset = PRESET_ASSIGNMENTS[index]
-    const newAssignment = await createAssignment({
-      title: preset.title,
-      description: preset.description,
-      type: preset.type,
-      questions: preset.questions,
-      maxScore: preset.maxScore,
-      starterHtml: preset.starterHtml,
-      starterCss: preset.starterCss,
-      teacherId: user.uid,
-    })
-    setAssignments((prev) => [newAssignment, ...prev])
-    setSeedingIndex(null)
+    try {
+      const preset = PRESET_ASSIGNMENTS[index]
+      const newAssignment = await createAssignment({
+        title: preset.title,
+        description: preset.description,
+        type: preset.type,
+        ...(preset.questions  ? { questions: preset.questions }   : {}),
+        ...(preset.maxScore   ? { maxScore:  preset.maxScore }     : {}),
+        ...(preset.starterHtml ? { starterHtml: preset.starterHtml } : {}),
+        ...(preset.starterCss  ? { starterCss:  preset.starterCss  } : {}),
+        teacherId: user.uid,
+      })
+      setAssignments((prev) => [newAssignment, ...prev])
+    } catch (err) {
+      console.error('Ошибка при создании задания:', err)
+      alert('Не удалось создать задание. Проверь консоль.')
+    } finally {
+      setSeedingIndex(null)
+    }
   }
 
   const handleDelete = async (id: string) => {

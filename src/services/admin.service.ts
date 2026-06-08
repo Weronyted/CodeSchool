@@ -46,8 +46,13 @@ export async function getAssignmentsForStudent(_studentId: string): Promise<Assi
   return snap.docs.map((d) => ({ id: d.id, ...d.data() } as Assignment))
 }
 
+function stripUndefined<T extends object>(obj: T): Partial<T> {
+  return Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== undefined)) as Partial<T>
+}
+
 export async function createAssignment(data: Partial<Assignment>): Promise<Assignment> {
-  const ref = await addDoc(collection(db, 'assignments'), { ...data, createdAt: Date.now(), published: true })
+  const clean = stripUndefined({ ...data, createdAt: Date.now(), published: true })
+  const ref = await addDoc(collection(db, 'assignments'), clean)
   return { id: ref.id, ...data } as Assignment
 }
 
