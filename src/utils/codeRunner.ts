@@ -31,7 +31,7 @@ export function buildHTMLPage(html: string, css?: string, js?: string): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; frame-src 'none';">
   <style>
-    body { font-family: sans-serif; margin: 16px; }
+    body { font-family: sans-serif; margin: 16px; background-color: #fff; color: #000; }
     ${safeCss}
   </style>
 </head>

@@ -21,6 +21,7 @@ import { CheatSheetDrawer } from '@/components/lesson/CheatSheetDrawer'
 import { HTMLStructureSVG } from '@/components/diagrams/HTMLStructureSVG'
 import { CSSBoxModelSVG } from '@/components/diagrams/CSSBoxModelSVG'
 import { DOMTreeSVG } from '@/components/diagrams/DOMTreeSVG'
+import { buildHTMLPage } from '@/utils/codeRunner'
 import type { MultipleChoiceRow } from '@/types/lesson'
 import type { Lesson, ContentBlock, BilingualKeyTerm, DidYouKnowItem, QuizQuestion, CodeLang } from '@/types/lesson'
 
@@ -207,13 +208,7 @@ function EditorTask({ lesson, lang }: { lesson: Lesson; lang: 'ru' | 'en' }) {
   const hints = lang === 'ru' ? task.hints_ru : task.hints_en
 
   function run() {
-    const html = codes.html ?? ''
-    const css  = codes.css  ?? ''
-    const js   = codes.javascript ?? ''
-    setPreview(
-      `<!DOCTYPE html><html><head><style>${css}</style></head>` +
-      `<body>${html}<script>${js}<\/script></body></html>`
-    )
+    setPreview(buildHTMLPage(codes.html ?? '', codes.css ?? '', codes.javascript ?? ''))
   }
 
   function nextHint() {
