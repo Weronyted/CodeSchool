@@ -39,42 +39,11 @@ export async function getAssignments(teacherId: string): Promise<Assignment[]> {
   return snap.docs.map((d) => ({ id: d.id, ...d.data() } as Assignment))
 }
 
-export async function getAssignmentsForStudent(studentId: string): Promise<Assignment[]> {
-  // 1. Find every class/classGroup this student is a member of
-  const memberSnap = await getDocs(
-    query(collectionGroup(db, 'members'), where('uid', '==', studentId))
+export async function getAssignmentsForStudent(_studentId: string): Promise<Assignment[]> {
+  const snap = await getDocs(
+    query(collection(db, 'assignments'), where('published', '==', true))
   )
-  if (memberSnap.empty) return []
-
-  // 2. Fetch each parent class doc to get its teacherId
-  const teacherIds = new Set<string>()
-  await Promise.all(
-    memberSnap.docs.map(async (memberDoc) => {
-      const classRef = memberDoc.ref.parent.parent
-      if (!classRef) return
-      const classDoc = await getDoc(classRef)
-      if (classDoc.exists()) {
-        const tid = classDoc.data().teacherId as string | undefined
-        if (tid) teacherIds.add(tid)
-      }
-    })
-  )
-  if (teacherIds.size === 0) return []
-
-  // 3. Get published assignments for those teachers (in-batches of 30)
-  const ids = [...teacherIds]
-  const results: Assignment[] = []
-  for (let i = 0; i < ids.length; i += 30) {
-    const snap = await getDocs(
-      query(
-        collection(db, 'assignments'),
-        where('teacherId', 'in', ids.slice(i, i + 30)),
-        where('published', '==', true),
-      )
-    )
-    snap.docs.forEach((d) => results.push({ id: d.id, ...d.data() } as Assignment))
-  }
-  return results
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() } as Assignment))
 }
 
 export async function createAssignment(data: Partial<Assignment>): Promise<Assignment> {
