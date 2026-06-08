@@ -126,7 +126,31 @@ export default function Sandbox() {
   }
 
   return (
-    <div className={`min-h-screen bg-gray-50 dark:bg-gray-950 ${fullscreen ? 'fixed inset-0 z-50' : ''}`}>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+
+      {/* Fullscreen preview overlay */}
+      {fullscreen && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-white dark:bg-gray-900">
+          <div className="flex items-center justify-between px-4 py-2.5 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shrink-0">
+            <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+              Preview
+            </span>
+            <button
+              onClick={() => setFullscreen(false)}
+              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+            >
+              <Minimize2 size={14} />
+            </button>
+          </div>
+          <iframe
+            srcDoc={preview}
+            title="sandbox-preview-fullscreen"
+            sandbox="allow-scripts"
+            className="w-full flex-1 border-0 bg-white"
+          />
+        </div>
+      )}
+
       <div className="max-w-7xl mx-auto px-4 py-6">
 
         {/* Header */}
@@ -169,7 +193,7 @@ export default function Sandbox() {
         </motion.div>
 
         {/* Editor + Preview */}
-        <div className={`grid gap-4 ${fullscreen ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}>
+        <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
 
           {/* Editor panel */}
           <motion.div
@@ -216,10 +240,10 @@ export default function Sandbox() {
                 Preview
               </span>
               <button
-                onClick={() => setFullscreen((f) => !f)}
+                onClick={() => setFullscreen(true)}
                 className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
               >
-                {fullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+                <Maximize2 size={14} />
               </button>
             </div>
             <iframe
