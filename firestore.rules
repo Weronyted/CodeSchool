@@ -95,17 +95,20 @@ service cloud.firestore {
 
     match /submissions/{submissionId} {
       allow get: if isAuth() && (
-        resource.data.studentId == request.auth.uid || isTeacherOrAbove()
+        resource.data.studentId == request.auth.uid
+        || resource.data.userId == request.auth.uid
+        || isTeacherOrAbove()
       );
 
-      // resource.data.studentId in list context: Firestore validates that the
-      // client query filters to studentId == request.auth.uid.
       allow list: if isAuth() && (
-        resource.data.studentId == request.auth.uid || isTeacherOrAbove()
+        resource.data.studentId == request.auth.uid
+        || resource.data.userId == request.auth.uid
+        || isTeacherOrAbove()
       );
 
       allow create: if isAuth()
-        && request.resource.data.studentId == request.auth.uid
+        && (request.resource.data.studentId == request.auth.uid
+            || request.resource.data.userId == request.auth.uid)
         && !request.resource.data.keys().hasAny(['grade', 'feedback', 'gradedBy', 'gradedAt']);
 
       // Teachers may only write grading fields — answers and studentId are immutable.

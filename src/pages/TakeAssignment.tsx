@@ -42,29 +42,36 @@ export default function TakeAssignment() {
     if (!user || !id || !assignment?.questions) return
     setSubmitting(true)
 
-    let score = 0
-    const maxScore = assignment.questions.reduce((sum, q) => sum + q.points, 0)
+    try {
+      let score = 0
+      const maxScore = assignment.questions.reduce((sum, q) => sum + q.points, 0)
 
-    assignment.questions.forEach((q) => {
-      if (selectedAnswers[q.id] === q.correctAnswer) {
-        score += q.points
-      }
-    })
+      assignment.questions.forEach((q) => {
+        if (selectedAnswers[q.id] === q.correctAnswer) {
+          score += q.points
+        }
+      })
 
-    await submitQuizAssignment({
-      userId: user.uid,
-      displayName: user.displayName ?? user.email ?? 'Ученик',
-      assignmentId: id,
-      answers: selectedAnswers,
-      score,
-      maxScore,
-      percentage: Math.round((score / maxScore) * 100),
-      submittedAt: Date.now(),
-    })
+      await submitQuizAssignment({
+        userId: user.uid,
+        studentId: user.uid,
+        displayName: user.displayName ?? user.email ?? 'Ученик',
+        assignmentId: id,
+        answers: selectedAnswers,
+        score,
+        maxScore,
+        percentage: Math.round((score / maxScore) * 100),
+        submittedAt: Date.now(),
+      } as any)
 
-    setQuizScore({ score, maxScore })
-    setSubmitted(true)
-    setSubmitting(false)
+      setQuizScore({ score, maxScore })
+      setSubmitted(true)
+    } catch (err) {
+      console.error('Ошибка при сдаче задания:', err)
+      alert('Не удалось отправить задание. Попробуй ещё раз.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const handleTextSubmit = async () => {
