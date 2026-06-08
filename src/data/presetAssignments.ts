@@ -3,9 +3,11 @@ import type { AssignmentQuestion } from '@/types/roles'
 export interface PresetAssignment {
   title: string
   description: string
-  type: 'quiz'
-  questions: AssignmentQuestion[]
-  maxScore: number
+  type: 'quiz' | 'code'
+  questions?: AssignmentQuestion[]
+  maxScore?: number
+  starterHtml?: string
+  starterCss?: string
 }
 
 export const PRESET_ASSIGNMENTS: PresetAssignment[] = [
@@ -215,5 +217,48 @@ export const PRESET_ASSIGNMENTS: PresetAssignment[] = [
         points: 1,
       },
     ],
+  },
+  {
+    title: 'ДЗ: Моя первая HTML-страница',
+    description:
+      'Домашнее задание по темам 1–7. Создай HTML-страницу «Обо мне»: заголовки, параграфы, списки, ссылки и правильная структура документа.',
+    type: 'code',
+    starterHtml: `<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Обо мне</title>
+</head>
+<body>
+
+  <!-- 1. Напиши заголовок h1 со своим именем -->
+
+  <!-- 2. Добавь параграф (p) — пару слов о себе -->
+
+  <!-- 3. Добавь заголовок h2 «Мои интересы» -->
+
+  <!-- 4. Создай список (ul) из 3-х своих увлечений -->
+
+  <!-- 5. Добавь заголовок h2 «Полезные ссылки» -->
+
+  <!-- 6. Создай список (ol) из 2-х ссылок (a href) на любые сайты -->
+
+</body>
+</html>`,
+    starterCss: `body {
+  background: white;
+  color: #222;
+  font-family: Arial, sans-serif;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+h1 { color: #4f46e5; }
+h2 { color: #374151; margin-top: 24px; }
+p  { line-height: 1.6; }
+li { margin-bottom: 6px; }
+a  { color: #4f46e5; }`,
   },
 ]

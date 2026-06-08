@@ -47,6 +47,8 @@ export interface Assignment {
   createdAt?: number
   questions?: AssignmentQuestion[]
   maxScore?: number
+  starterHtml?: string
+  starterCss?: string
 }
 
 export interface LessonQuizQuestion {

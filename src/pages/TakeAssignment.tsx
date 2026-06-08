@@ -198,10 +198,18 @@ export default function TakeAssignment() {
                       {t('assignments.writeCode', 'Напиши код')}
                     </h2>
                   </div>
-                  <CodeRunner
-                    initialJs={answer || '// Напиши свой код здесь\n'}
-                    mode="js"
-                  />
+                  {assignment.starterHtml != null ? (
+                    <CodeRunner
+                      initialHtml={assignment.starterHtml}
+                      initialCss={assignment.starterCss ?? ''}
+                      mode="html"
+                    />
+                  ) : (
+                    <CodeRunner
+                      initialJs={answer || '// Напиши свой код здесь\n'}
+                      mode="js"
+                    />
+                  )}
                 </div>
               ) : (
                 <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700 mb-6">
