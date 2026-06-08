@@ -55,7 +55,7 @@ export interface LessonData {
 
 import type { DemoStep } from '@/types/glossary'
 
-export type LessonCategory = 'BASICS' | 'HTML' | 'CSS' | 'JS'
+export type LessonCategory = 'BASICS' | 'HTML' | 'CSS' | 'JS' | 'REACT'
 export type CodeLang = 'html' | 'css' | 'javascript'
 export type SlideType =
   | 'title' | 'concept' | 'code' | 'analogy' | 'tip' | 'practice-cta'
