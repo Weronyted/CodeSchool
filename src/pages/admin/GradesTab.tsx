@@ -6,9 +6,14 @@ import { listAllUsers } from '@/services/role.service'
 
 interface Submission {
   id: string
-  studentId: string
+  studentId?: string  // text submissions
+  userId?: string     // quiz submissions
   assignmentId: string
-  answer?: string
+  answer?: string                    // text submissions
+  answers?: Record<string, string>   // quiz submissions
+  score?: number
+  maxScore?: number
+  percentage?: number
   submittedAt: number
   grade?: number
   feedback?: string
@@ -87,7 +92,7 @@ export default function GradesTab() {
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-gray-900 dark:text-white">
-                {studentNames[sub.studentId] ?? sub.studentId}
+                {studentNames[sub.userId ?? sub.studentId ?? ''] ?? sub.userId ?? sub.studentId ?? '—'}
               </p>
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
                 {assignmentTitles[sub.assignmentId] ?? sub.assignmentId}
@@ -95,6 +100,11 @@ export default function GradesTab() {
               <p className="text-xs text-gray-400 mt-0.5">
                 {new Date(sub.submittedAt).toLocaleDateString()}
               </p>
+              {sub.score != null && sub.maxScore != null && (
+                <span className="inline-block mt-2 text-sm font-bold text-blue-600 dark:text-blue-400">
+                  🎯 Результат теста: {sub.score} / {sub.maxScore} ({sub.percentage}%)
+                </span>
+              )}
               {sub.answer && (
                 <p className="mt-2 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 rounded-lg p-2 border border-gray-100 dark:border-gray-700 max-h-24 overflow-y-auto whitespace-pre-wrap">
                   {sub.answer}
