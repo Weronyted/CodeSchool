@@ -231,6 +231,7 @@ function MembersPanel({ classId }: { classId: string }) {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [adding, setAdding] = useState(false)
+  const [error, setError] = useState('')
   const { confirm } = useConfirmStore()
 
   useEffect(() => {
@@ -254,10 +255,13 @@ function MembersPanel({ classId }: { classId: string }) {
 
   const handleAdd = async (u: UserEntry) => {
     setAdding(true)
+    setError('')
     try {
       await addMemberToClass(classId, u)
       setMembers((prev) => [...prev, { uid: u.uid, displayName: u.displayName, email: u.email, role: 'student', joinedAt: Date.now() }])
       setSearch('')
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Не удалось добавить участника')
     } finally {
       setAdding(false)
     }
@@ -286,6 +290,11 @@ function MembersPanel({ classId }: { classId: string }) {
         <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
           Добавить участника
         </p>
+        {error && (
+          <div className="mb-2 px-3 py-2 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-sm text-red-600 dark:text-red-400">
+            {error}
+          </div>
+        )}
         <div className="flex gap-2">
           <input
             type="text"

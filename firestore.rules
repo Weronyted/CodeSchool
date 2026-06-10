@@ -133,7 +133,8 @@ service cloud.firestore {
           request.auth.uid == memberId || isTeacherOrAbove()
           || exists(/databases/$(database)/documents/classes/$(classId)/members/$(request.auth.uid))
         );
-        allow create: if isAuth() && request.auth.uid == memberId;
+        // A user may add themselves (join by code) OR a teacher/admin may add anyone.
+        allow create: if isAuth() && (request.auth.uid == memberId || isTeacherOrAbove());
         allow delete: if isAuth() && (request.auth.uid == memberId || isTeacherOrAbove());
       }
     }
@@ -149,7 +150,8 @@ service cloud.firestore {
           request.auth.uid == memberId || isTeacherOrAbove()
           || exists(/databases/$(database)/documents/classGroups/$(classId)/members/$(request.auth.uid))
         );
-        allow create: if isAuth() && request.auth.uid == memberId;
+        // A user may add themselves (join by code) OR a teacher/admin may add anyone.
+        allow create: if isAuth() && (request.auth.uid == memberId || isTeacherOrAbove());
         allow delete: if isAuth() && (request.auth.uid == memberId || isTeacherOrAbove());
       }
     }
