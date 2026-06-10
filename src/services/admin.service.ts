@@ -98,6 +98,23 @@ export async function deleteClass(id: string): Promise<void> {
   await deleteDoc(doc(db, 'classes', id))
 }
 
+export async function addMemberToClass(
+  classId: string,
+  member: { uid: string; displayName: string; email: string }
+): Promise<void> {
+  await setDoc(doc(db, 'classes', classId, 'members', member.uid), {
+    uid: member.uid,
+    displayName: member.displayName,
+    email: member.email,
+    role: 'student',
+    joinedAt: Date.now(),
+  })
+}
+
+export async function removeClassMember(classId: string, uid: string): Promise<void> {
+  await deleteDoc(doc(db, 'classes', classId, 'members', uid))
+}
+
 export async function getClassMembers(classId: string): Promise<ClassMember[]> {
   const snap = await getDocs(collection(db, 'classes', classId, 'members'))
   return snap.docs.map((d) => ({ uid: d.id, ...d.data() } as ClassMember))
