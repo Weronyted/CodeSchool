@@ -31,8 +31,9 @@ export async function ensureUserRole(uid: string, displayName: string, email: st
     }
     return existing.role
   }
-  // Unknown user — no auto-grant. Access denied until added explicitly.
-  return null
+  // New user: create a student record so they appear in the admin panel
+  await setDoc(doc(db, 'userRoles', uid), { role: 'student' as UserRole, displayName, email }, { merge: true })
+  return 'student'
 }
 
 export async function setUserRole(targetUid: string, role: UserRole, assignerUid: string): Promise<void> {
