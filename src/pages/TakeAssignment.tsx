@@ -19,6 +19,7 @@ export default function TakeAssignment() {
   const [assignment, setAssignment] = useState<Assignment | null>(null)
   const [loading, setLoading] = useState(true)
   const [answer, setAnswer] = useState('')
+  const [codeAnswer, setCodeAnswer] = useState({ html: '', css: '', js: '' })
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -77,9 +78,36 @@ export default function TakeAssignment() {
   const handleTextSubmit = async () => {
     if (!user || !id || !answer.trim()) return
     setSubmitting(true)
-    await submitTextAssignment(id, user.uid, answer)
+    await submitTextAssignment(id, user.uid, answer, {
+      displayName: user.displayName ?? user.email ?? 'Ученик',
+    })
     setSubmitted(true)
     setSubmitting(false)
+  }
+
+  const isHtmlCode = assignment?.type === 'code' && assignment.starterHtml != null
+  const hasCode = isHtmlCode
+    ? codeAnswer.html.trim().length > 0
+    : codeAnswer.js.trim().length > 0
+
+  const handleCodeSubmit = async () => {
+    if (!user || !id) return
+    setSubmitting(true)
+    try {
+      const combined = isHtmlCode
+        ? `<!-- HTML -->\n${codeAnswer.html}\n\n/* CSS */\n${codeAnswer.css}`
+        : codeAnswer.js
+      await submitTextAssignment(id, user.uid, combined, {
+        displayName: user.displayName ?? user.email ?? 'Ученик',
+        ...(isHtmlCode ? { answerHtml: codeAnswer.html, answerCss: codeAnswer.css } : {}),
+      })
+      setSubmitted(true)
+    } catch (err) {
+      console.error('Ошибка при сдаче задания:', err)
+      alert('Не удалось отправить задание. Попробуй ещё раз.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   if (loading) return <div className="min-h-screen flex items-center justify-center text-4xl animate-pulse">📚</div>
@@ -203,11 +231,13 @@ export default function TakeAssignment() {
                       initialHtml={assignment.starterHtml}
                       initialCss={assignment.starterCss ?? ''}
                       mode="html"
+                      onCodeChange={setCodeAnswer}
                     />
                   ) : (
                     <CodeRunner
                       initialJs={answer || '// Напиши свой код здесь\n'}
                       mode="js"
+                      onCodeChange={setCodeAnswer}
                     />
                   )}
                 </div>
@@ -226,13 +256,23 @@ export default function TakeAssignment() {
                 </div>
               )}
 
-              <button
-                onClick={handleTextSubmit}
-                disabled={submitting || !answer.trim()}
-                className="w-full py-4 bg-primary-600 text-white rounded-xl font-bold text-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
-              >
-                {submitting ? t('assignments.submitting', 'Отправка...') : t('assignments.submit', 'Сдать задание')}
-              </button>
+              {assignment.type === 'code' ? (
+                <button
+                  onClick={handleCodeSubmit}
+                  disabled={submitting || !hasCode}
+                  className="w-full py-4 bg-primary-600 text-white rounded-xl font-bold text-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+                >
+                  {submitting ? t('assignments.submitting', 'Отправка...') : t('assignments.submit', 'Сдать задание')}
+                </button>
+              ) : (
+                <button
+                  onClick={handleTextSubmit}
+                  disabled={submitting || !answer.trim()}
+                  className="w-full py-4 bg-primary-600 text-white rounded-xl font-bold text-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+                >
+                  {submitting ? t('assignments.submitting', 'Отправка...') : t('assignments.submit', 'Сдать задание')}
+                </button>
+              )}
             </>
           )}
         </motion.div>

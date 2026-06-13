@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Play, RotateCcw, AlertTriangle, Loader2 } from 'lucide-react'
 import { CodeEditor } from './CodeEditor'
@@ -11,13 +11,21 @@ interface CodeRunnerProps {
   initialCss?: string
   initialJs?: string
   mode?: 'html' | 'js'
+  /** Reports the current editor contents to the parent (used to capture submissions). */
+  onCodeChange?: (code: { html: string; css: string; js: string }) => void
 }
 
-export function CodeRunner({ initialHtml = '', initialCss = '', initialJs = '', mode = 'html' }: CodeRunnerProps) {
+export function CodeRunner({ initialHtml = '', initialCss = '', initialJs = '', mode = 'html', onCodeChange }: CodeRunnerProps) {
   const { t } = useTranslation()
   const [html, setHtml] = useState(initialHtml)
   const [css, setCss]   = useState(initialCss)
   const [js, setJs]     = useState(initialJs)
+
+  useEffect(() => {
+    onCodeChange?.({ html, css, js })
+  // onCodeChange is intentionally omitted — parent passes a stable setter
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [html, css, js])
   const [output, setOutput]   = useState<{ line: string; level: string }[]>([])
   const [error, setError]     = useState<string | null>(null)
   const [isRunning, setIsRunning] = useState(false)

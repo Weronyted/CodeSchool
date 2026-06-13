@@ -50,6 +50,7 @@ export default function AssignmentsTab() {
         title: preset.title,
         description: preset.description,
         type: preset.type,
+        ...(preset.lessonSlug ? { lessonSlug: preset.lessonSlug } : {}),
         ...(preset.questions  ? { questions: preset.questions }   : {}),
         ...(preset.maxScore   ? { maxScore:  preset.maxScore }     : {}),
         ...(preset.starterHtml ? { starterHtml: preset.starterHtml } : {}),

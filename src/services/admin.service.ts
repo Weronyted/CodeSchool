@@ -64,13 +64,21 @@ export async function deleteAssignment(id: string): Promise<void> {
   await deleteDoc(doc(db, 'assignments', id))
 }
 
-export async function submitAssignment(assignmentId: string, studentId: string, answer: string): Promise<void> {
-  await addDoc(collection(db, 'submissions'), {
+export async function submitAssignment(
+  assignmentId: string,
+  studentId: string,
+  answer: string,
+  extra?: { displayName?: string; answerHtml?: string; answerCss?: string },
+): Promise<void> {
+  await addDoc(collection(db, 'submissions'), stripUndefined({
     assignmentId,
     studentId,
     answer,
+    displayName: extra?.displayName,
+    answerHtml: extra?.answerHtml,
+    answerCss: extra?.answerCss,
     submittedAt: Date.now(),
-  })
+  }))
 }
 
 // ── Classes ──────────────────────────────────────────────────────────────────

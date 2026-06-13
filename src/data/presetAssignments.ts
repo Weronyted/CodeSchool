@@ -4,6 +4,7 @@ export interface PresetAssignment {
   title: string
   description: string
   type: 'quiz' | 'code'
+  lessonSlug?: string
   questions?: AssignmentQuestion[]
   maxScore?: number
   starterHtml?: string
@@ -288,5 +289,285 @@ h2 { color: #374151; margin-top: 24px; }
 p  { line-height: 1.6; }
 li { margin-bottom: 6px; }
 a  { color: #4f46e5; }`,
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // ДЗ — Урок 6: Списки (html-lists)
+  // ─────────────────────────────────────────────────────────────────────────────
+  {
+    title: 'Тест: Списки (Урок 6)',
+    description: 'Проверка темы «Списки»: маркированные ul, нумерованные ol, пункты li и вложенные списки.',
+    type: 'quiz',
+    lessonSlug: 'html-lists',
+    maxScore: 5,
+    questions: [
+      {
+        id: 'l6_q1',
+        text: 'Какой тег создаёт маркированный (с точками) список?',
+        type: 'multiple_choice',
+        options: ['<ol>', '<ul>', '<li>', '<list>'],
+        correctAnswer: '1',
+        points: 1,
+      },
+      {
+        id: 'l6_q2',
+        text: 'Каким тегом обозначается отдельный пункт списка?',
+        type: 'multiple_choice',
+        options: ['<ul>', '<li>', '<ol>', '<item>'],
+        correctAnswer: '1',
+        points: 1,
+      },
+      {
+        id: 'l6_q3',
+        text: 'Какой тег создаёт нумерованный список?',
+        type: 'multiple_choice',
+        options: ['<ol>', '<ul>', '<nl>', '<number>'],
+        correctAnswer: '0',
+        points: 1,
+      },
+      {
+        id: 'l6_q4',
+        text: 'Можно ли вложить один список внутрь пункта другого?',
+        type: 'multiple_choice',
+        options: [
+          'Нет, это запрещено',
+          'Да, вложенные списки допустимы',
+          'Только ol можно вкладывать',
+          'Только один уровень вложенности',
+        ],
+        correctAnswer: '1',
+        points: 1,
+      },
+      {
+        id: 'l6_q5',
+        text: 'Что делает атрибут type="A" у тега <ol>?',
+        type: 'multiple_choice',
+        options: [
+          'Делает маркеры квадратными',
+          'Нумерует пункты заглавными буквами A, B, C…',
+          'Убирает нумерацию',
+          'Меняет цвет текста',
+        ],
+        correctAnswer: '1',
+        points: 1,
+      },
+    ],
+  },
+  {
+    title: 'ДЗ (код): Списки (Урок 6)',
+    description: 'Создай страницу со списком покупок (ul) и пошаговым рецептом (ol). Закрепляем ul, ol и li.',
+    type: 'code',
+    lessonSlug: 'html-lists',
+    starterHtml: `<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Списки</title>
+</head>
+<body>
+
+  <h1>Список покупок</h1>
+  <!-- 1. Создай маркированный список (ul) из 4 продуктов (li) -->
+
+  <h2>Рецепт: как заварить чай</h2>
+  <!-- 2. Создай нумерованный список (ol) из 3 шагов (li) -->
+
+</body>
+</html>`,
+    starterCss: `body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #222; }
+h1 { color: #4f46e5; }
+h2 { color: #374151; margin-top: 24px; }
+li { margin-bottom: 6px; line-height: 1.6; }`,
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // ДЗ — Урок 7: Ссылки (html-links)
+  // ─────────────────────────────────────────────────────────────────────────────
+  {
+    title: 'Тест: Ссылки (Урок 7)',
+    description: 'Проверка темы «Ссылки»: тег <a>, атрибут href, target, email- и якорные ссылки.',
+    type: 'quiz',
+    lessonSlug: 'html-links',
+    maxScore: 5,
+    questions: [
+      {
+        id: 'l7_q1',
+        text: 'Какой тег создаёт ссылку?',
+        type: 'multiple_choice',
+        options: ['<link>', '<a>', '<href>', '<url>'],
+        correctAnswer: '1',
+        points: 1,
+      },
+      {
+        id: 'l7_q2',
+        text: 'Какой атрибут задаёт адрес, на который ведёт ссылка?',
+        type: 'multiple_choice',
+        options: ['src', 'href', 'target', 'link'],
+        correctAnswer: '1',
+        points: 1,
+      },
+      {
+        id: 'l7_q3',
+        text: 'Что делает target="_blank"?',
+        type: 'multiple_choice',
+        options: [
+          'Открывает ссылку в новой вкладке',
+          'Открывает в той же вкладке',
+          'Скачивает файл по ссылке',
+          'Делает ссылку неактивной',
+        ],
+        correctAnswer: '0',
+        points: 1,
+      },
+      {
+        id: 'l7_q4',
+        text: 'Как сделать ссылку, открывающую почтовый клиент?',
+        type: 'multiple_choice',
+        options: [
+          'href="email:name@mail.com"',
+          'href="mailto:name@mail.com"',
+          'src="mail:name@mail.com"',
+          'href="send:name@mail.com"',
+        ],
+        correctAnswer: '1',
+        points: 1,
+      },
+      {
+        id: 'l7_q5',
+        text: 'Что такое якорная (anchor) ссылка?',
+        type: 'multiple_choice',
+        options: [
+          'Ссылка на другой сайт',
+          'Ссылка на раздел внутри той же страницы через #id',
+          'Ссылка на скачивание файла',
+          'Ссылка на изображение',
+        ],
+        correctAnswer: '1',
+        points: 1,
+      },
+    ],
+  },
+  {
+    title: 'ДЗ (код): Ссылки (Урок 7)',
+    description: 'Создай страницу с разными типами ссылок: внешняя (в новой вкладке), email-ссылка и якорная ссылка внутри страницы.',
+    type: 'code',
+    lessonSlug: 'html-links',
+    starterHtml: `<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Ссылки</title>
+</head>
+<body>
+
+  <h1>Мои ссылки</h1>
+
+  <!-- 1. Ссылка на https://google.com, открывается в новой вкладке (target="_blank") -->
+
+  <!-- 2. Email-ссылка (mailto:) на любой адрес -->
+
+  <!-- 3. Якорная ссылка на раздел "contacts" внизу страницы (href="#contacts") -->
+
+  <h2 id="contacts">Контакты</h2>
+  <p>Сюда ведёт якорная ссылка.</p>
+
+</body>
+</html>`,
+    starterCss: `body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #222; }
+h1 { color: #4f46e5; }
+a  { color: #4f46e5; display: block; margin: 8px 0; }`,
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // ДЗ — Урок 8: Изображения и медиа (html-images-media)
+  // ─────────────────────────────────────────────────────────────────────────────
+  {
+    title: 'Тест: Изображения и медиа (Урок 8)',
+    description: 'Проверка темы «Изображения»: тег <img>, атрибуты src и alt, самозакрывающиеся теги и видео.',
+    type: 'quiz',
+    lessonSlug: 'html-images-media',
+    maxScore: 5,
+    questions: [
+      {
+        id: 'l8_q1',
+        text: 'Какой тег вставляет изображение на страницу?',
+        type: 'multiple_choice',
+        options: ['<img>', '<image>', '<picture>', '<src>'],
+        correctAnswer: '0',
+        points: 1,
+      },
+      {
+        id: 'l8_q2',
+        text: 'Какой атрибут задаёт путь к файлу изображения?',
+        type: 'multiple_choice',
+        options: ['href', 'alt', 'src', 'link'],
+        correctAnswer: '2',
+        points: 1,
+      },
+      {
+        id: 'l8_q3',
+        text: 'Зачем нужен атрибут alt у изображения?',
+        type: 'multiple_choice',
+        options: [
+          'Задаёт ширину картинки',
+          'Альтернативный текст, если картинка не загрузилась, и для доступности',
+          'Добавляет рамку вокруг картинки',
+          'Меняет формат изображения',
+        ],
+        correctAnswer: '1',
+        points: 1,
+      },
+      {
+        id: 'l8_q4',
+        text: 'Нужен ли тегу <img> закрывающий тег?',
+        type: 'multiple_choice',
+        options: [
+          'Да, обязательно </img>',
+          'Нет, это самозакрывающийся тег',
+          'Только в старом HTML4',
+          'Только если есть атрибут alt',
+        ],
+        correctAnswer: '1',
+        points: 1,
+      },
+      {
+        id: 'l8_q5',
+        text: 'Какой тег вставляет видео на страницу?',
+        type: 'multiple_choice',
+        options: ['<media>', '<movie>', '<video>', '<play>'],
+        correctAnswer: '2',
+        points: 1,
+      },
+    ],
+  },
+  {
+    title: 'ДЗ (код): Изображения (Урок 8)',
+    description: 'Создай галерею: вставь 2 изображения с правильным alt и подписями. Закрепляем тег <img>, src и alt.',
+    type: 'code',
+    lessonSlug: 'html-images-media',
+    starterHtml: `<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Галерея</title>
+</head>
+<body>
+
+  <h1>Моя галерея</h1>
+
+  <!-- 1. Вставь первое изображение через <img>. Используй ссылку:
+       https://picsum.photos/300/200
+       Обязательно добавь атрибут alt с описанием. -->
+
+  <!-- 2. Добавь под картинкой подпись в теге <p> -->
+
+  <!-- 3. Вставь второе изображение https://picsum.photos/300/201 со своим alt -->
+
+</body>
+</html>`,
+    starterCss: `body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #222; text-align: center; }
+h1 { color: #4f46e5; }
+img { border-radius: 12px; margin-top: 16px; max-width: 100%; }
+p  { color: #555; margin: 8px 0 24px; }`,
   },
 ]
