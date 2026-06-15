@@ -570,4 +570,60 @@ h1 { color: #4f46e5; }
 img { border-radius: 12px; margin-top: 16px; max-width: 100%; }
 p  { color: #555; margin: 8px 0 24px; }`,
   },
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // ДЗ — Уроки 9-10: Таблицы и Формы (html-tables + html-forms)
+  // ─────────────────────────────────────────────────────────────────────────────
+  {
+    title: 'ДЗ (код): Таблицы и формы (Уроки 9–10)',
+    description: 'Общее задание по темам «Таблицы» и «Формы». Свёрстай страницу «Запись на курс»: таблица с расписанием и форма регистрации.',
+    type: 'code',
+    lessonSlug: 'html-forms',
+    starterHtml: `<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Запись на курс</title>
+</head>
+<body>
+
+  <h1>Запись на курс</h1>
+
+  <h2>Расписание занятий</h2>
+  <!-- ЧАСТЬ 1 — ТАБЛИЦА (тема «Таблицы»)
+       Создай таблицу <table> с 3 столбцами: День, Время, Тема.
+       - В первой строке используй заголовки <th> внутри <tr>
+       - Добавь минимум 2 строки данных <tr> с ячейками <td> -->
+
+
+  <h2>Форма регистрации</h2>
+  <!-- ЧАСТЬ 2 — ФОРМА (тема «Формы»)
+       Внутри <form> добавь:
+       1. Текстовое поле для имени:  <label> + <input type="text">
+       2. Поле email:               <input type="email">
+       3. Выпадающий список курса:   <select> с 2-3 вариантами <option>
+       4. Чекбокс согласия:          <input type="checkbox"> + <label>
+       5. Кнопку отправки:           <button type="submit"> -->
+
+
+</body>
+</html>`,
+    starterCss: `body { font-family: Arial, sans-serif; max-width: 640px; margin: 0 auto; padding: 24px; color: #222; }
+h1 { color: #4f46e5; }
+h2 { color: #374151; margin-top: 28px; }
+
+table { border-collapse: collapse; width: 100%; margin-top: 12px; }
+th, td { border: 1px solid #d1d5db; padding: 8px 12px; text-align: left; }
+th { background: #eef2ff; color: #4f46e5; }
+
+form { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; max-width: 360px; }
+label { font-weight: 600; font-size: 14px; }
+input[type="text"], input[type="email"], select {
+  padding: 8px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px;
+}
+button {
+  padding: 10px; background: #4f46e5; color: white; border: none;
+  border-radius: 8px; font-weight: 600; cursor: pointer;
+}`,
+  },
 ]
