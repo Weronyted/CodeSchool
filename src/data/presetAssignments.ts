@@ -744,4 +744,69 @@ body {
 
 `,
   },
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // ДЗ — Уроки 16-17-18: Блочная модель + Размеры и единицы + Flexbox
+  // ─────────────────────────────────────────────────────────────────────────────
+  {
+    title: 'ДЗ (код): Box model, единицы и Flexbox (Уроки 16–18)',
+    description: 'Общее задание по темам «Блочная модель», «Размеры и единицы» и «Flexbox: основы». Свёрстай ряд из трёх карточек: расставь их через flexbox, задай отступы через box model и используй разные единицы (px, rem, %).',
+    type: 'code',
+    lessonSlug: 'css-flexbox-basics',
+    starterHtml: `<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Наши услуги</title>
+</head>
+<body>
+
+  <!-- Разметка готова — менять её не нужно, всё делается в CSS. -->
+
+  <h1>Наши услуги</h1>
+
+  <div class="cards">
+    <div class="card">
+      <h2>Дизайн</h2>
+      <p>Создаём красивые и удобные интерфейсы.</p>
+    </div>
+    <div class="card">
+      <h2>Вёрстка</h2>
+      <p>Превращаем макеты в живые страницы.</p>
+    </div>
+    <div class="card">
+      <h2>Поддержка</h2>
+      <p>Помогаем и обновляем ваш сайт.</p>
+    </div>
+  </div>
+
+</body>
+</html>`,
+    starterCss: `body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 24px; color: #222; }
+h1 { color: #4f46e5; text-align: center; }
+
+/* 1. FLEXBOX (тема «Flexbox: основы»)
+   Расставь карточки в ряд через flexbox.
+   Добавь .cards: display: flex; задай расстояние между карточками (gap)
+   и при желании justify-content / align-items. */
+.cards {
+  /* твой код: display: flex; gap: ...; */
+}
+
+/* 2. РАЗМЕРЫ И ЕДИНИЦЫ (тема «Размеры и единицы»)
+   Сделай так, чтобы каждая карточка занимала равную ширину.
+   Используй РАЗНЫЕ единицы: например width в % или flex: 1,
+   а внутренние отступы (padding) — в rem. */
+.card {
+  /* 3. БЛОЧНАЯ МОДЕЛЬ (тема «Блочная модель»)
+     Задай: padding (в rem), border (1px solid),
+     border-radius и margin при необходимости. */
+
+  /* твой код */
+}
+
+.card h2 { color: #374151; margin-top: 0; }
+.card p  { color: #6b7280; line-height: 1.5; }
+`,
+  },
 ]
