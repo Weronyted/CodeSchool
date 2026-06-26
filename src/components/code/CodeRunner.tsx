@@ -121,19 +121,19 @@ export function CodeRunner({ initialHtml = '', initialCss = '', initialJs = '', 
           )}
         </div>
 
-        <div className="bg-white dark:bg-slate-900">
+        <div className="bg-white dark:bg-slate-900 flex flex-col">
           <div className="px-3 py-1.5 text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
             {t('quiz.output')}
           </div>
           {mode === 'html' ? (
             <iframe
               ref={iframeRef}
-              className="w-full h-64 border-0"
+              className="w-full flex-1 min-h-[16rem] border-0"
               title="preview"
               sandbox="allow-scripts"
             />
           ) : (
-            <div className="p-4 min-h-24 font-mono text-sm">
+            <div className="p-4 flex-1 min-h-24 font-mono text-sm">
               {output.map((item, i) => (
                 <p key={i} className={levelColor[item.level] ?? levelColor.log}>{item.line}</p>
               ))}
