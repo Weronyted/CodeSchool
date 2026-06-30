@@ -809,4 +809,89 @@ h1 { color: #4f46e5; text-align: center; }
 .card p  { color: #6b7280; line-height: 1.5; }
 `,
   },
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // ДЗ — Уроки 19-20: Flexbox-практика + Позиционирование
+  // ─────────────────────────────────────────────────────────────────────────────
+  {
+    title: 'ДЗ (код): Flexbox-практика и позиционирование (Уроки 19–20)',
+    description: 'Общее задание по темам «Flexbox: практика» и «Позиционирование». Свёрстай витрину товаров: карточки в гибкой сетке (flex-wrap, gap), бейдж «-30%» через position: absolute и липкую шапку position: sticky.',
+    type: 'code',
+    lessonSlug: 'css-positioning',
+    starterHtml: `<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Магазин</title>
+</head>
+<body>
+
+  <!-- Разметка готова — менять её не нужно, всё делается в CSS. -->
+
+  <header class="topbar">🛍️ Мой магазин</header>
+
+  <main class="catalog">
+    <div class="product">
+      <span class="badge">-30%</span>
+      <h3>Кроссовки</h3>
+      <p>4 990 ₽</p>
+    </div>
+    <div class="product">
+      <h3>Рюкзак</h3>
+      <p>2 490 ₽</p>
+    </div>
+    <div class="product">
+      <span class="badge">-30%</span>
+      <h3>Куртка</h3>
+      <p>7 990 ₽</p>
+    </div>
+    <div class="product">
+      <h3>Кепка</h3>
+      <p>990 ₽</p>
+    </div>
+  </main>
+
+</body>
+</html>`,
+    starterCss: `* { box-sizing: border-box; }
+body { font-family: Arial, sans-serif; margin: 0; color: #222; background: #f3f4f6; }
+
+/* 1. ЛИПКАЯ ШАПКА (тема «Позиционирование»)
+   Сделай шапку прилипающей к верху при прокрутке:
+   position: sticky; top: 0; + фон, цвет, padding. */
+.topbar {
+  /* твой код: position: sticky; top: 0; ... */
+  background: #4f46e5;
+  color: white;
+  padding: 16px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* 2. FLEXBOX-ПРАКТИКА (тема «Flexbox: практика»)
+   Разложи карточки гибкой сеткой: display: flex; flex-wrap: wrap;
+   задай gap между ними и отступы вокруг. */
+.catalog {
+  /* твой код: display: flex; flex-wrap: wrap; gap: ...; padding: ...; */
+}
+
+/* 3. Карточка товара. ВАЖНО: задай position: relative —
+   это нужно, чтобы бейдж позиционировался относительно карточки. */
+.product {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  width: 200px;
+  text-align: center;
+}
+
+/* 4. БЕЙДЖ (тема «Позиционирование»)
+   Прижми бейдж «-30%» к правому верхнему углу карточки:
+   position: absolute; top / right; + фон, цвет, padding, скругление. */
+.badge {
+  /* твой код: position: absolute; top: 10px; right: 10px; ... */
+}
+`,
+  },
 ]
