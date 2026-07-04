@@ -894,4 +894,130 @@ body { font-family: Arial, sans-serif; margin: 0; color: #222; background: #f3f4
 }
 `,
   },
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // ДЗ — Уроки 22-23: Адаптивный дизайн + Псевдоклассы и анимации
+  // ─────────────────────────────────────────────────────────────────────────────
+  {
+    title: 'ДЗ (код): Адаптивность и анимации (Уроки 22–23)',
+    description: 'Общее задание по темам «Адаптивный дизайн» и «Псевдоклассы и анимации». Свёрстай промо-страницу: карточки перестраиваются в колонку на телефоне через @media, кнопка и карточки плавно реагируют на наведение (:hover + transition + transform), а бейдж «NEW» пульсирует через @keyframes.',
+    type: 'code',
+    lessonSlug: 'css-pseudo-animations',
+    starterHtml: `<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Промо-страница</title>
+</head>
+<body>
+
+  <!-- Разметка готова — менять её не нужно, всё делается в CSS. -->
+
+  <section class="hero">
+    <span class="badge">NEW</span>
+    <h1>Курс по вёрстке</h1>
+    <a href="#" class="btn">Записаться</a>
+  </section>
+
+  <main class="features">
+    <div class="card">
+      <h3>📱 Адаптивность</h3>
+      <p>Сайт красиво выглядит на любом экране.</p>
+    </div>
+    <div class="card">
+      <h3>✨ Анимации</h3>
+      <p>Плавные эффекты без единой строчки JS.</p>
+    </div>
+    <div class="card">
+      <h3>🚀 Практика</h3>
+      <p>Реальные проекты с первого урока.</p>
+    </div>
+  </main>
+
+</body>
+</html>`,
+    starterCss: `* { box-sizing: border-box; }
+body { font-family: Arial, sans-serif; margin: 0; color: #222; background: #f3f4f6; }
+
+.hero {
+  position: relative;
+  text-align: center;
+  padding: 60px 20px;
+  background: #4f46e5;
+  color: white;
+}
+.hero h1 { margin: 0 0 24px; }
+
+/* ─────────────────────────────────────────────────────────────
+   1. КНОПКА С ПЛАВНЫМ НАВЕДЕНИЕМ (тема «Псевдоклассы и анимации»)
+   Добавь transition, чтобы изменения были плавными,
+   и опиши :hover — кнопка должна чуть приподниматься.
+   Подсказка: transition: all 0.3s ease;
+              .btn:hover { transform: translateY(-3px); + другой фон } */
+.btn {
+  display: inline-block;
+  background: #22c55e;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  /* твой код: transition: ... */
+}
+/* твой код: .btn:hover { ... } */
+
+/* ─────────────────────────────────────────────────────────────
+   2. АНИМАЦИЯ ПУЛЬСАЦИИ (тема «Псевдоклассы и анимации»)
+   Опиши @keyframes pulse, где бейдж меняет размер (transform: scale),
+   и подключи его к .badge через свойство animation.
+   Подсказка:
+     @keyframes pulse {
+       0%, 100% { transform: scale(1); }
+       50%      { transform: scale(1.2); }
+     }
+     .badge { animation: pulse 1s ease-in-out infinite; } */
+.badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #ef4444;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: bold;
+  /* твой код: animation: ... */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3. КАРТОЧКИ (тема «Псевдоклассы и анимации»)
+   Добавь transition и :hover, чтобы карточка приподнималась
+   и появлялась тень при наведении. */
+.features {
+  display: flex;
+  gap: 20px;
+  padding: 40px;
+}
+.card {
+  flex: 1;
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  /* твой код: transition: ...; */
+}
+.card h3 { margin-top: 0; }
+/* твой код: .card:hover { transform: ...; box-shadow: ...; } */
+
+/* ─────────────────────────────────────────────────────────────
+   4. АДАПТИВНОСТЬ (тема «Адаптивный дизайн»)
+   На экранах уже 600px карточки должны стоять НЕ в ряд, а в колонку.
+   Заполни медиа-запрос: поменяй flex-direction у .features на column. */
+@media (max-width: 600px) {
+  .features {
+    /* твой код: flex-direction: column; */
+  }
+}
+`,
+  },
 ]
