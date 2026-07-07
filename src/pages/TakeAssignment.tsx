@@ -235,7 +235,7 @@ export default function TakeAssignment() {
                     />
                   ) : (
                     <CodeRunner
-                      initialJs={answer || '// Напиши свой код здесь\n'}
+                      initialJs={answer || assignment.starterJs || '// Напиши свой код здесь\n'}
                       mode="js"
                       onCodeChange={setCodeAnswer}
                     />

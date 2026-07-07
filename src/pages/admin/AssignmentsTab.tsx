@@ -55,6 +55,7 @@ export default function AssignmentsTab() {
         ...(preset.maxScore   ? { maxScore:  preset.maxScore }     : {}),
         ...(preset.starterHtml ? { starterHtml: preset.starterHtml } : {}),
         ...(preset.starterCss  ? { starterCss:  preset.starterCss  } : {}),
+        ...(preset.starterJs   ? { starterJs:   preset.starterJs   } : {}),
         teacherId: user.uid,
       })
       setAssignments((prev) => [newAssignment, ...prev])
@@ -100,7 +101,9 @@ export default function AssignmentsTab() {
               <span className="text-xs text-blue-600 dark:text-blue-400 font-medium mt-1">
                 {preset.type === 'quiz'
                   ? `${preset.questions!.length} вопросов · ${preset.maxScore} баллов`
-                  : '📝 Код — HTML/CSS'}
+                  : preset.starterJs
+                    ? '📝 Код — JavaScript'
+                    : '📝 Код — HTML/CSS'}
               </span>
             </button>
           ))}

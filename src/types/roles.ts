@@ -49,6 +49,7 @@ export interface Assignment {
   maxScore?: number
   starterHtml?: string
   starterCss?: string
+  starterJs?: string
 }
 
 export interface LessonQuizQuestion {
