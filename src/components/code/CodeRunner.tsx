@@ -26,6 +26,9 @@ export function CodeRunner({ initialHtml = '', initialCss = '', initialJs = '', 
   // onCodeChange is intentionally omitted — parent passes a stable setter
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [html, css, js])
+  // In html mode, show a JS editor only when the assignment ships starter JS
+  // (captured once at mount so it stays even if the student clears the code).
+  const [showHtmlJs] = useState(mode === 'html' && initialJs.trim().length > 0)
   const [output, setOutput]   = useState<{ line: string; level: string }[]>([])
   const [error, setError]     = useState<string | null>(null)
   const [isRunning, setIsRunning] = useState(false)
@@ -109,6 +112,12 @@ export function CodeRunner({ initialHtml = '', initialCss = '', initialJs = '', 
                 <>
                   <div className="px-3 py-1.5 text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 border-y border-slate-200 dark:border-slate-700">CSS</div>
                   <CodeEditor value={css} onChange={setCss} language="css" />
+                </>
+              )}
+              {showHtmlJs && (
+                <>
+                  <div className="px-3 py-1.5 text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 border-y border-slate-200 dark:border-slate-700">JavaScript</div>
+                  <CodeEditor value={js} onChange={setJs} language="javascript" />
                 </>
               )}
             </>

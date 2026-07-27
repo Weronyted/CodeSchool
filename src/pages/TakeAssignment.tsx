@@ -95,7 +95,8 @@ export default function TakeAssignment() {
     setSubmitting(true)
     try {
       const combined = isHtmlCode
-        ? `<!-- HTML -->\n${codeAnswer.html}\n\n/* CSS */\n${codeAnswer.css}`
+        ? `<!-- HTML -->\n${codeAnswer.html}\n\n/* CSS */\n${codeAnswer.css}` +
+          (codeAnswer.js.trim() ? `\n\n// JS\n${codeAnswer.js}` : '')
         : codeAnswer.js
       await submitTextAssignment(id, user.uid, combined, {
         displayName: user.displayName ?? user.email ?? 'Ученик',
@@ -230,6 +231,7 @@ export default function TakeAssignment() {
                     <CodeRunner
                       initialHtml={assignment.starterHtml}
                       initialCss={assignment.starterCss ?? ''}
+                      initialJs={assignment.starterJs ?? ''}
                       mode="html"
                       onCodeChange={setCodeAnswer}
                     />

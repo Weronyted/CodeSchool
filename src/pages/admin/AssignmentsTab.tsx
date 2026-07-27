@@ -101,9 +101,11 @@ export default function AssignmentsTab() {
               <span className="text-xs text-blue-600 dark:text-blue-400 font-medium mt-1">
                 {preset.type === 'quiz'
                   ? `${preset.questions!.length} вопросов · ${preset.maxScore} баллов`
-                  : preset.starterJs
-                    ? '📝 Код — JavaScript'
-                    : '📝 Код — HTML/CSS'}
+                  : preset.starterHtml && preset.starterJs
+                    ? '📝 Код — HTML/CSS/JS'
+                    : preset.starterJs
+                      ? '📝 Код — JavaScript'
+                      : '📝 Код — HTML/CSS'}
               </span>
             </button>
           ))}
