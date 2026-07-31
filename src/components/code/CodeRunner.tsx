@@ -29,9 +29,20 @@ export function CodeRunner({ initialHtml = '', initialCss = '', initialJs = '', 
   // In html mode, show a JS editor only when the assignment ships starter JS
   // (captured once at mount so it stays even if the student clears the code).
   const [showHtmlJs] = useState(mode === 'html' && initialJs.trim().length > 0)
+  // Which editor tab is open in html mode (HTML / CSS / JS), like the Sandbox page.
+  const [activeTab, setActiveTab] = useState<'html' | 'css' | 'js'>('html')
   const [output, setOutput]   = useState<{ line: string; level: string }[]>([])
   const [error, setError]     = useState<string | null>(null)
   const [isRunning, setIsRunning] = useState(false)
+
+  const htmlTabs = (showHtmlJs ? ['html', 'css', 'js'] : ['html', 'css']) as ('html' | 'css' | 'js')[]
+  const tabLabels: Record<'html' | 'css' | 'js', string> = { html: 'HTML', css: 'CSS', js: 'JS' }
+  const tabDot: Record<'html' | 'css' | 'js', string> = {
+    html: 'bg-orange-500', css: 'bg-blue-500', js: 'bg-yellow-500',
+  }
+  const tabFile: Record<'html' | 'css' | 'js', string> = {
+    html: 'index.html', css: 'styles.css', js: 'script.js',
+  }
 
   const iframeRef  = useRef<HTMLIFrameElement>(null)
   const cleanupRef = useRef<(() => void) | null>(null)
@@ -88,7 +99,7 @@ export function CodeRunner({ initialHtml = '', initialCss = '', initialJs = '', 
           <div className="w-3 h-3 rounded-full bg-yellow-400" />
           <div className="w-3 h-3 rounded-full bg-green-400" />
           <span className="ml-2 text-xs text-slate-500 dark:text-slate-400 font-mono">
-            {mode === 'html' ? 'index.html' : 'script.js'}
+            {mode === 'html' ? tabFile[activeTab] : 'script.js'}
           </span>
         </div>
         <div className="flex gap-2">
@@ -106,20 +117,27 @@ export function CodeRunner({ initialHtml = '', initialCss = '', initialJs = '', 
         <div className={mode === 'html' ? 'border-r border-slate-200 dark:border-slate-700' : ''}>
           {mode === 'html' && (
             <>
-              <div className="px-3 py-1.5 text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">HTML</div>
-              <CodeEditor value={html} onChange={setHtml} language="html" />
-              {css !== undefined && (
-                <>
-                  <div className="px-3 py-1.5 text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 border-y border-slate-200 dark:border-slate-700">CSS</div>
-                  <CodeEditor value={css} onChange={setCss} language="css" />
-                </>
-              )}
-              {showHtmlJs && (
-                <>
-                  <div className="px-3 py-1.5 text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 border-y border-slate-200 dark:border-slate-700">JavaScript</div>
-                  <CodeEditor value={js} onChange={setJs} language="javascript" />
-                </>
-              )}
+              {/* Tab bar — switch between HTML / CSS / JS, like the Sandbox page */}
+              <div className="flex items-center gap-1 px-3 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+                {htmlTabs.map((tab) => (
+                  <button
+                    key={tab}
+                    type="button"
+                    onClick={() => setActiveTab(tab)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                      activeTab === tab
+                        ? 'bg-white dark:bg-slate-700 shadow-sm text-slate-900 dark:text-white'
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                    }`}
+                  >
+                    <span className={`w-2 h-2 rounded-full ${tabDot[tab]}`} />
+                    {tabLabels[tab]}
+                  </button>
+                ))}
+              </div>
+              {activeTab === 'html' && <CodeEditor value={html} onChange={setHtml} language="html" minHeight="360px" />}
+              {activeTab === 'css'  && <CodeEditor value={css} onChange={setCss} language="css" minHeight="360px" />}
+              {activeTab === 'js'   && <CodeEditor value={js}  onChange={setJs}  language="javascript" minHeight="360px" />}
             </>
           )}
           {mode === 'js' && (

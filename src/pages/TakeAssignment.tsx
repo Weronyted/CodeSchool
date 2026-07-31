@@ -129,9 +129,25 @@ export default function TakeAssignment() {
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700 mb-6">
             <h1 className="font-heading text-2xl font-bold text-gray-900 dark:text-white mb-2">{assignment.title}</h1>
             {assignment.description && (
-              <p className="text-gray-600 dark:text-gray-400">{assignment.description}</p>
+              <p className="text-gray-600 dark:text-gray-400 whitespace-pre-line">{assignment.description}</p>
             )}
           </div>
+
+          {assignment.hints && assignment.hints.length > 0 && (
+            <div className="bg-amber-50 dark:bg-amber-900/20 rounded-2xl p-6 border border-amber-100 dark:border-amber-800 mb-6">
+              <h2 className="font-heading font-bold text-amber-800 dark:text-amber-300 mb-3 flex items-center gap-2">
+                💡 {t('assignments.hints', 'Подсказки по сложным моментам')}
+              </h2>
+              <ul className="space-y-2">
+                {assignment.hints.map((hint, idx) => (
+                  <li key={idx} className="flex gap-2.5 text-sm text-amber-900 dark:text-amber-200">
+                    <span className="flex-shrink-0 font-bold text-amber-500">{idx + 1}.</span>
+                    <span className="whitespace-pre-line">{hint}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {submitted ? (
             <motion.div

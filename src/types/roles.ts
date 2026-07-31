@@ -50,6 +50,7 @@ export interface Assignment {
   starterHtml?: string
   starterCss?: string
   starterJs?: string
+  hints?: string[]
 }
 
 export interface LessonQuizQuestion {

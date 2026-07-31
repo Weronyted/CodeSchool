@@ -56,6 +56,7 @@ export default function AssignmentsTab() {
         ...(preset.starterHtml ? { starterHtml: preset.starterHtml } : {}),
         ...(preset.starterCss  ? { starterCss:  preset.starterCss  } : {}),
         ...(preset.starterJs   ? { starterJs:   preset.starterJs   } : {}),
+        ...(preset.hints       ? { hints:       preset.hints       } : {}),
         teacherId: user.uid,
       })
       setAssignments((prev) => [newAssignment, ...prev])
