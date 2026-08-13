@@ -5,6 +5,8 @@ import { getAllProgress, getUserMeta, saveTopicProgress, saveUserMeta } from '@/
 import { useAuthStore } from '@/store/useAuthStore'
 import { useRoleStore } from '@/store/useRoleStore'
 import { useProgressStore } from '@/store/useProgressStore'
+import { useDevOpsStore } from '@/store/useDevOpsStore'
+import { getAllDevOpsProgress } from '@/services/devops.service'
 
 export function useAuth() {
   const { setUser, setLoading } = useAuthStore()
@@ -16,6 +18,7 @@ export function useAuth() {
     const unsub = onAuthChange(async (user) => {
       if (user && prevUidRef.current && prevUidRef.current !== user.uid) {
         clearProgress()
+        useDevOpsStore.getState().clear()
       }
       prevUidRef.current = user?.uid ?? null
 
@@ -65,8 +68,15 @@ export function useAuth() {
             }))
           }
         } catch { /* silent — local progress still available */ }
+
+        // DevOps course progress — separate subcollection, separate store.
+        try {
+          const devops = await getAllDevOpsProgress(user.uid)
+          if (Object.keys(devops).length > 0) useDevOpsStore.getState().mergeFromCloud(devops)
+        } catch { /* silent — local progress still available */ }
       } else {
         clearProgress()
+        useDevOpsStore.getState().clear()
         setRole(null)
       }
     })

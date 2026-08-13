@@ -1,0 +1,566 @@
+import type { DevOpsLesson } from '@/types/devops'
+
+export const devopsCapstone: DevOpsLesson = {
+  slug: 'devops-capstone',
+  moduleId: 'capstone',
+  order: 1,
+  icon: '🏁',
+  readTime: 25,
+
+  title_ru: 'Финальный проект: полный цикл',
+  title_en: 'Capstone: The Full Loop',
+  description_ru: 'Контейнеризуй, собери пайплайн, задеплой, поставь мониторинг и разбери инцидент.',
+  description_en: 'Containerize, build a pipeline, deploy, add monitoring and handle an incident.',
+
+  sections: [
+    { id: 'brief',     title_ru: 'Задание',                    title_en: 'The brief' },
+    { id: 'stack',     title_ru: 'Шаг 1. Контейнеризация',     title_en: 'Step 1. Containerization' },
+    { id: 'pipeline',  title_ru: 'Шаг 2. Пайплайн',            title_en: 'Step 2. The pipeline' },
+    { id: 'deploy',    title_ru: 'Шаг 3. Деплой',              title_en: 'Step 3. The deploy' },
+    { id: 'observe',   title_ru: 'Шаг 4. Наблюдаемость',       title_en: 'Step 4. Observability' },
+    { id: 'key-terms', title_ru: 'Чек-лист перед продом',      title_en: 'Pre-production checklist' },
+  ],
+
+  content: {
+    intro_ru:
+      'Ты прошёл весь курс: контейнеры, пайплайны, серверы, логи и мониторинг. Осталось собрать это в один рабочий цикл. Четыре задания ниже проведут тебя от «есть код в репозитории» до «релиз в проде, инцидент разобран, система стала устойчивее».',
+    intro_en:
+      'You have been through the whole course: containers, pipelines, servers, logs and monitoring. What remains is assembling it into one working loop. The four labs below take you from "there is code in a repository" to "the release is live, the incident is resolved and the system is more resilient".',
+
+    blocks: [
+      {
+        sectionId: 'brief',
+        heading_ru: 'Задание',
+        heading_en: 'The brief',
+        text_ru:
+          'Проект: интернет-магазин shop.example.com. Три сервиса — frontend на статике, backend на Node и Postgres. Сейчас всё запускается вручную на одном сервере, деплой делает разработчик через SSH, о падениях узнают из чата поддержки.\n\nЧто нужно получить:\n1. Все сервисы в контейнерах, данные — в томе.\n2. Пайплайн, который на каждый пуш проверяет код, а на тег собирает и выкатывает релиз.\n3. Деплой одной командой и откат одной командой.\n4. Мониторинг, который сообщает о проблеме раньше пользователей.\n\nЭто ровно тот минимум, с которого начинается нормальная эксплуатация.',
+        text_en:
+          'The project: an online shop at shop.example.com. Three services — a static frontend, a Node backend and Postgres. Right now everything is started by hand on one server, a developer deploys over SSH, and outages are discovered in the support chat.\n\nWhat you need to end up with:\n1. Every service in a container, data in a volume.\n2. A pipeline that checks the code on every push and builds and ships a release on a tag.\n3. A one-command deploy and a one-command rollback.\n4. Monitoring that reports a problem before users do.\n\nThat is exactly the minimum where sane operations begin.',
+      },
+      {
+        sectionId: 'stack',
+        heading_ru: 'Шаг 1. Контейнеризация',
+        heading_en: 'Step 1. Containerization',
+        text_ru:
+          'Frontend собирается multi-stage: Node собирает статику, nginx её отдаёт. Backend — обычный образ на alpine с непривилегированным пользователем. Postgres берётся готовый, с именованным томом и healthcheck.\n\nПроверь себя по трём пунктам: у каждого сервиса зафиксирована версия образа, у базы есть том, а порт базы наружу не проброшен.',
+        text_en:
+          'The frontend is built multi-stage: Node builds the static files, nginx serves them. The backend is a plain alpine image with an unprivileged user. Postgres comes ready-made, with a named volume and a healthcheck.\n\nCheck yourself on three points: every service pins its image version, the database has a volume, and the database port is not published outward.',
+        code: 'services:\n  web:\n    build: { context: ./web }\n    ports: ["80:80"]\n    depends_on: [api]\n\n  api:\n    build: { context: ./api }\n    env_file: [.env]\n    depends_on:\n      db: { condition: service_healthy }\n\n  db:\n    image: postgres:16-alpine\n    volumes: ["pgdata:/var/lib/postgresql/data"]\n    healthcheck:\n      test: ["CMD-SHELL", "pg_isready -U app"]\n      interval: 5s\n      retries: 5\n\nvolumes:\n  pgdata:',
+        codeLang: 'yaml',
+        codeCaption: 'compose.yaml',
+      },
+      {
+        sectionId: 'pipeline',
+        heading_ru: 'Шаг 2. Пайплайн',
+        heading_en: 'Step 2. The pipeline',
+        text_ru:
+          'Два workflow, а не один. На pull request — быстрые проверки: линтер, типы, тесты, параллельно. На тег `v*` — релизный: сборка образов, пуш в реестр, миграция, деплой, smoke-тесты, мониторинг.\n\nПочему разделены: проверки должны быть быстрыми и запускаться десятки раз в день, релиз — редко и с подтверждением. Смешивать их в одном файле значит либо замедлить проверки, либо ослабить релиз.',
+        text_en:
+          'Two workflows, not one. On a pull request — fast checks: lint, types and tests, in parallel. On a `v*` tag — the release one: build images, push to the registry, migrate, deploy, smoke-test, monitor.\n\nWhy split them: checks must be fast and run dozens of times a day, while a release is rare and gated. Mixing them in one file means either slowing the checks or weakening the release.',
+        code: 'name: Release\non:\n  push:\n    tags: ["v*"]\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: docker build -t ghcr.io/shop/api:${GITHUB_REF_NAME} ./api\n      - run: docker push ghcr.io/shop/api:${GITHUB_REF_NAME}\n\n  deploy:\n    needs: build\n    environment: production      # ручное подтверждение\n    runs-on: ubuntu-latest\n    steps:\n      - run: ssh deploy@$HOST "/srv/shop/deploy.sh ${GITHUB_REF_NAME}"',
+        codeLang: 'yaml',
+        codeCaption: '.github/workflows/release.yml',
+      },
+      {
+        sectionId: 'deploy',
+        heading_ru: 'Шаг 3. Деплой',
+        heading_en: 'Step 3. The deploy',
+        text_ru:
+          'Скрипт на сервере делает четыре вещи: подтягивает образ по тегу, выполняет миграции, пересоздаёт контейнеры, проверяет healthcheck. При неудачной проверке — сам откатывается на предыдущий тег.\n\nВажно: тег версии хранится в файле на сервере. Именно он позволяет ответить на вопрос «что сейчас в проде» и вернуться на шаг назад, не заглядывая в историю CI.',
+        text_en:
+          'The script on the server does four things: pulls the image by tag, runs migrations, re-creates the containers, checks the health endpoint. If the check fails, it rolls back to the previous tag on its own.\n\nImportant: the version tag is stored in a file on the server. That is what answers "what is in production right now" and lets you step back without digging through CI history.',
+      },
+      {
+        sectionId: 'observe',
+        heading_ru: 'Шаг 4. Наблюдаемость',
+        heading_en: 'Step 4. Observability',
+        text_ru:
+          'Минимальный набор, который закрывает 90% реальных ситуаций:\n\n• Внешний аптайм-монитор на `/readyz` раз в минуту.\n• Структурированные логи в JSON с request_id, ограниченные по размеру (`max-size` у драйвера логов).\n• Алерты: доля 5xx выше 5% пять минут, p99 выше 2 секунд, диск выше 85%.\n• Ссылка на инструкцию в каждом алерте.\n\nИ последнее, что отличает работающую систему от красивой схемы: проверь, что откат действительно работает. Не «должен работать», а выполни его на staging и засеки время.',
+        text_en:
+          'The minimum set that covers 90% of real situations:\n\n• An external uptime monitor hitting `/readyz` every minute.\n• Structured JSON logs with request_id, capped in size (`max-size` on the log driver).\n• Alerts: 5xx share above 5% for five minutes, p99 above 2 seconds, disk above 85%.\n• A runbook link in every alert.\n\nAnd the last thing separating a working system from a pretty diagram: verify that the rollback actually works. Not "should work" — run it on staging and time it.',
+      },
+    ],
+  },
+
+  keyTerms: [
+    {
+      term_ru: 'Один артефакт на все окружения', term_en: 'One artifact for every environment',
+      definition_ru: 'Образ собирается один раз и едет по окружениям без пересборки. Различаются только переменные.',
+      definition_en: 'The image is built once and travels across environments without a rebuild. Only variables differ.',
+    },
+    {
+      term_ru: 'Пайплайн проверок и релизный пайплайн', term_en: 'Check pipeline and release pipeline',
+      definition_ru: 'Два разных workflow: быстрый на каждый PR и редкий с подтверждением на тег.',
+      definition_en: 'Two different workflows: a fast one per PR and a rare, gated one per tag.',
+    },
+    {
+      term_ru: 'Проверенный откат', term_en: 'Verified rollback',
+      definition_ru: 'Откат, который команда реально выполняла и знает его длительность, а не предполагает, что он сработает.',
+      definition_en: 'A rollback the team has actually performed and timed, rather than assumed would work.',
+    },
+    {
+      term_ru: 'Runbook', term_en: 'Runbook',
+      definition_ru: 'Короткая инструкция, что делать при конкретном алерте. Ссылка на неё приходит вместе с уведомлением.',
+      definition_en: 'A short instruction for what to do about a specific alert. Its link arrives with the notification.',
+    },
+    {
+      term_ru: 'Постмортем', term_en: 'Postmortem',
+      definition_ru: 'Разбор инцидента без поиска виноватых, с фиксацией того, какое изменение системы не даст этому повториться.',
+      definition_en: 'A blameless incident review recording which system change prevents a recurrence.',
+    },
+  ],
+
+  didYouKnow: [
+    {
+      text_ru: 'Команды, которые регулярно тренируют откат, восстанавливаются в среднем в пять раз быстрее тех, кто делает это впервые во время аварии.',
+      text_en: 'Teams that rehearse rollbacks recover about five times faster than teams doing it for the first time during an outage.',
+    },
+    {
+      text_ru: 'Большинство инцидентов происходит не «вдруг», а сразу после изменения: деплоя, миграции или правки конфига. Поэтому первый вопрос дежурного — «что менялось за последний час?».',
+      text_en: 'Most incidents do not happen "out of nowhere" but right after a change: a deploy, a migration or a config edit. Hence the on-call\'s first question: "what changed in the last hour?".',
+    },
+    {
+      text_ru: 'Хороший постмортем заканчивается не списком виноватых, а списком изменений в системе — тестом, алертом или проверкой в пайплайне.',
+      text_en: 'A good postmortem ends not with a list of people but a list of system changes — a test, an alert or a pipeline check.',
+    },
+  ],
+
+  labs: [
+    {
+      id: 'cap-1-containers',
+      title_ru: 'Задание 1. Подними стек',
+      title_en: 'Lab 1. Bring the stack up',
+      brief_ru: 'Запусти три сервиса в правильном порядке, соблюдая зависимости, и корректно останови стек, не потеряв данные.',
+      brief_en: 'Start the three services in the right order, respecting dependencies, and stop the stack without losing data.',
+      task: {
+        kind: 'container-visualizer',
+        initial: [
+          { id: 'db',  name: 'shop-db-1',  image: 'postgres:16-alpine', state: 'absent', ports: 'внутр. 5432', restartPolicy: 'always' },
+          { id: 'api', name: 'shop-api-1', image: 'ghcr.io/shop/api:2.0.4', state: 'absent', ports: 'внутр. 3000', restartPolicy: 'always' },
+          { id: 'web', name: 'shop-web-1', image: 'ghcr.io/shop/web:2.0.4', state: 'absent', ports: '80→80', restartPolicy: 'always' },
+        ],
+        actions: [
+          {
+            id: 'up-db',
+            command: 'docker compose up -d db',
+            label_ru: 'База данных',
+            label_en: 'Database',
+            narration_ru: '# healthcheck pg_isready прошёл — база готова принимать соединения',
+            narration_en: '# the pg_isready healthcheck passed — the database is ready for connections',
+            effects: [
+              { at: 0,    containerId: 'db', state: 'creating' },
+              { at: 700,  containerId: 'db', state: 'running', note_ru: 'postgres стартует, том pgdata подключен', note_en: 'postgres booting, volume pgdata attached' },
+              { at: 2000, containerId: 'db', state: 'running', note_ru: 'healthcheck: healthy', note_en: 'healthcheck: healthy' },
+            ],
+          },
+          {
+            id: 'up-api',
+            command: 'docker compose up -d api',
+            label_ru: 'Backend',
+            label_en: 'Backend',
+            narration_ru: '# api подключился к db:5432 по внутреннему DNS',
+            narration_en: '# the api connected to db:5432 over the internal DNS',
+            effects: [
+              { at: 0,    containerId: 'api', state: 'creating' },
+              { at: 800,  containerId: 'api', state: 'running', note_ru: 'миграции применены, слушает 3000', note_en: 'migrations applied, listening on 3000' },
+            ],
+          },
+          {
+            id: 'up-web',
+            command: 'docker compose up -d web',
+            label_ru: 'Frontend',
+            label_en: 'Frontend',
+            narration_ru: '# nginx отдаёт статику и проксирует /api на backend',
+            narration_en: '# nginx serves the static files and proxies /api to the backend',
+            effects: [
+              { at: 0,   containerId: 'web', state: 'creating' },
+              { at: 600, containerId: 'web', state: 'running', note_ru: 'сайт доступен на порту 80', note_en: 'the site is available on port 80' },
+            ],
+          },
+          {
+            id: 'down',
+            command: 'docker compose down',
+            label_ru: 'Остановить стек (без -v)',
+            label_en: 'Stop the stack (no -v)',
+            narration_ru: '# контейнеры удалены, том pgdata остался — данные целы',
+            narration_en: '# containers removed, volume pgdata kept — the data is safe',
+            effects: [
+              { at: 0,    containerId: 'web', state: 'stopping' },
+              { at: 300,  containerId: 'api', state: 'stopping' },
+              { at: 600,  containerId: 'db',  state: 'stopping' },
+              { at: 1100, containerId: 'web', state: 'exited' },
+              { at: 1200, containerId: 'api', state: 'exited' },
+              { at: 1400, containerId: 'db',  state: 'exited', note_ru: 'том pgdata сохранён', note_en: 'volume pgdata preserved' },
+            ],
+          },
+        ],
+        quest: {
+          goal_ru: 'Подними стек снизу вверх: сначала база, затем backend, затем frontend. В конце останови стек командой без флага -v.',
+          goal_en: 'Bring the stack up bottom-first: database, then backend, then frontend. Finally stop the stack with the command that has no -v flag.',
+          requiredActionIds: ['up-db', 'up-api', 'up-web', 'down'],
+          ordered: true,
+        },
+      },
+    },
+    {
+      id: 'cap-2-pipeline',
+      title_ru: 'Задание 2. Спроектируй релизный пайплайн',
+      title_en: 'Lab 2. Design the release pipeline',
+      brief_ru: 'Полный релиз трёх сервисов с зависимостями и ручным подтверждением. Правильных порядков несколько — важно не нарушить зависимости.',
+      brief_en: 'A full three-service release with dependencies and a manual approval. Several orders are correct — what matters is not violating the dependencies.',
+      task: {
+        kind: 'pipeline-builder',
+        levels: [
+          {
+            level: 'advanced',
+            title_ru: 'Релиз по тегу',
+            title_en: 'Tag-triggered release',
+            goal_ru: 'Собери релизный пайплайн. Проверки идут до сборки, подтверждение — перед продом, миграция — перед backend, frontend — после backend, smoke — после обоих, мониторинг замыкает. Один этап в трее лишний.',
+            goal_en: 'Assemble the release pipeline. Checks come before the build, the approval before production, the migration before the backend, the frontend after the backend, smoke tests after both, and monitoring closes it. One stage in the tray does not belong.',
+            stages: [
+              { id: 'test',        kind: 'test',     label_ru: 'Тесты',              label_en: 'Tests',            command: 'npm test' },
+              { id: 'build-api',   kind: 'build',    service: 'backend',  label_ru: 'Сборка backend',  label_en: 'Build backend',  command: 'docker build ./api' },
+              { id: 'build-web',   kind: 'build',    service: 'frontend', label_ru: 'Сборка frontend', label_en: 'Build frontend', command: 'docker build ./web' },
+              { id: 'approve',     kind: 'approve',  label_ru: 'Подтверждение релиза', label_en: 'Release approval', command: 'environment: production' },
+              { id: 'migrate',     kind: 'migrate',  service: 'db',       label_ru: 'Миграция БД',     label_en: 'DB migration',   command: 'npm run migrate:up' },
+              { id: 'deploy-api',  kind: 'deploy',   service: 'backend',  label_ru: 'Деплой backend',  label_en: 'Deploy backend', command: './deploy.sh api' },
+              { id: 'deploy-web',  kind: 'deploy',   service: 'frontend', label_ru: 'Деплой frontend', label_en: 'Deploy frontend', command: './deploy.sh web' },
+              { id: 'smoke',       kind: 'test',     service: 'e2e',      label_ru: 'Smoke-тесты',     label_en: 'Smoke tests',    command: 'npm run test:smoke' },
+              { id: 'monitor',     kind: 'monitor',  label_ru: 'Мониторинг релиза', label_en: 'Release monitoring', command: 'watch error_rate p99' },
+              { id: 'cleanup',     kind: 'cleanup',  label_ru: 'Очистка старых образов', label_en: 'Prune old images', command: 'docker system prune' },
+            ],
+            rules: [
+              { id: 'c-req-test',    type: 'required', stageId: 'test',       message_ru: 'Релиз без тестов — это не релиз, а лотерея.', message_en: 'A release without tests is a lottery, not a release.' },
+              { id: 'c-req-bapi',    type: 'required', stageId: 'build-api',  message_ru: 'Backend нужно собрать.', message_en: 'The backend must be built.' },
+              { id: 'c-req-bweb',    type: 'required', stageId: 'build-web',  message_ru: 'Frontend нужно собрать.', message_en: 'The frontend must be built.' },
+              { id: 'c-req-appr',    type: 'required', stageId: 'approve',    message_ru: 'Выкат в прод требует подтверждения человека.', message_en: 'Shipping to production requires a human approval.' },
+              { id: 'c-req-migr',    type: 'required', stageId: 'migrate',    message_ru: 'Схема БД должна быть обновлена до нового кода.', message_en: 'The database schema must be updated before the new code.' },
+              { id: 'c-req-dapi',    type: 'required', stageId: 'deploy-api', message_ru: 'Backend нужно задеплоить.', message_en: 'The backend must be deployed.' },
+              { id: 'c-req-dweb',    type: 'required', stageId: 'deploy-web', message_ru: 'Frontend нужно задеплоить.', message_en: 'The frontend must be deployed.' },
+              { id: 'c-req-smoke',   type: 'required', stageId: 'smoke',      message_ru: 'После выката нужно проверить ключевые сценарии.', message_en: 'After shipping you must verify the key flows.' },
+              { id: 'c-req-mon',     type: 'required', stageId: 'monitor',    message_ru: 'Релиз без наблюдения — выкат вслепую.', message_en: 'A release without observation is shipping blind.' },
+              {
+                id: 'c-forbid-clean', type: 'forbidden', stageId: 'cleanup',
+                message_ru: 'Очистка образов — регулярная задача по расписанию, а не шаг релиза. Внутри пайплайна она может удалить образ, на который придётся откатываться.',
+                message_en: 'Image pruning is a scheduled maintenance job, not a release step. Inside the pipeline it can delete the very image you need to roll back to.',
+              },
+              { id: 'c-test-build',  type: 'before', stageId: 'test', otherStageId: 'build-api', message_ru: 'Сначала проверки, потом дорогая сборка образов — принцип fail fast.', message_en: 'Checks first, expensive image builds second — the fail-fast principle.' },
+              { id: 'c-appr-migr',   type: 'before', stageId: 'approve', otherStageId: 'migrate', message_ru: 'Миграция изменяет прод — она не должна выполняться до подтверждения релиза.', message_en: 'A migration changes production — it must not run before the release is approved.' },
+              { id: 'c-migr-dapi',   type: 'before', stageId: 'migrate', otherStageId: 'deploy-api', message_ru: 'Нельзя задеплоить backend раньше миграции: новый код обратится к отсутствующим колонкам.', message_en: 'The backend cannot ship before the migration: the new code would hit missing columns.' },
+              { id: 'c-dapi-dweb',   type: 'before', stageId: 'deploy-api', otherStageId: 'deploy-web', message_ru: 'Frontend вызывает новые эндпоинты — он не должен уехать раньше backend.', message_en: 'The frontend calls new endpoints — it must not ship before the backend.' },
+              { id: 'c-bapi-dapi',   type: 'before', stageId: 'build-api', otherStageId: 'deploy-api', message_ru: 'Собери backend прежде, чем его деплоить.', message_en: 'Build the backend before deploying it.' },
+              { id: 'c-bweb-dweb',   type: 'before', stageId: 'build-web', otherStageId: 'deploy-web', message_ru: 'Собери frontend прежде, чем его деплоить.', message_en: 'Build the frontend before deploying it.' },
+              { id: 'c-dweb-smoke',  type: 'before', stageId: 'deploy-web', otherStageId: 'smoke', message_ru: 'Smoke-тесты проверяют систему целиком — только после выката обоих сервисов.', message_en: 'Smoke tests exercise the whole system — only after both services are shipped.' },
+              { id: 'c-mon-last',    type: 'last',   stageId: 'monitor', message_ru: 'Мониторинг замыкает пайплайн: он наблюдает за итоговым состоянием релиза.', message_en: 'Monitoring closes the pipeline: it observes the final state of the release.' },
+              { id: 'c-test-first',  type: 'first',  stageId: 'test', message_ru: 'Самая дешёвая проверка идёт первой — она отсекает плохой код до всех остальных шагов.', message_en: 'The cheapest check goes first — it cuts off bad code before every other step.' },
+            ],
+            hint_ru: 'Сборки backend и frontend независимы между собой. Жёсткая цепочка: тесты → сборки → подтверждение → миграция → backend → frontend → smoke → мониторинг. Один этап здесь вообще не нужен.',
+            hint_en: 'The backend and frontend builds are independent of each other. The hard chain is: tests → builds → approval → migration → backend → frontend → smoke → monitoring. One stage does not belong here at all.',
+            explanation_ru: 'Это законченный релизный пайплайн: дешёвые проверки впереди, человек в контуре перед изменением прода, миграция строго до кода, который на неё рассчитывает, и наблюдение в конце. Очистка образов осталась в трее — она живёт в отдельной задаче по расписанию, потому что внутри релиза могла бы удалить образ, нужный для отката.',
+            explanation_en: 'This is a complete release pipeline: cheap checks up front, a human in the loop before production changes, the migration strictly before the code that depends on it, and observation at the end. Image pruning stayed in the tray — it belongs to a scheduled job, because inside a release it could delete the image you need for a rollback.',
+          },
+        ],
+      },
+    },
+    {
+      id: 'cap-3-deploy',
+      title_ru: 'Задание 3. Выкати релиз v2.1.0',
+      title_en: 'Lab 3. Ship release v2.1.0',
+      brief_ru: 'Тег поставлен, образы собраны. Проведи релиз на сервере: проверь текущую версию, выполни миграцию, выкати, убедись, что всё работает.',
+      brief_en: 'The tag is pushed and the images are built. Run the release on the server: check the current version, migrate, ship, and confirm it works.',
+      task: {
+        kind: 'terminal-simulator',
+        prompt: 'deploy@shop-prod:/srv/shop$',
+        motd_ru: [
+          '# Релиз v2.1.0 одобрен, образы в реестре.',
+          '# Проведи выкат по инструкции и проверь результат.',
+          '',
+        ],
+        motd_en: [
+          '# Release v2.1.0 is approved and the images are in the registry.',
+          '# Run the rollout per the runbook and verify the result.',
+          '',
+        ],
+        responses: [
+          {
+            match: 'cat \\.env\\.version',
+            regex: true,
+            output: ['IMAGE_TAG=2.0.4', '# сейчас в проде версия 2.0.4'],
+          },
+          {
+            match: 'docker compose ps',
+            output: [
+              'NAME          IMAGE                        STATUS      PORTS',
+              'shop-web-1    ghcr.io/shop/web:2.0.4       Up 3 days   0.0.0.0:80->80/tcp',
+              'shop-api-1    ghcr.io/shop/api:2.0.4       Up 3 days   3000/tcp',
+              'shop-db-1     postgres:16-alpine           Up 9 days   5432/tcp',
+            ],
+          },
+          {
+            match: 'docker compose pull',
+            delayMs: 1600,
+            output: [
+              'web Pulling  ghcr.io/shop/web:2.1.0 ... done',
+              'api Pulling  ghcr.io/shop/api:2.1.0 ... done',
+              'db  Pulling  postgres:16-alpine ... up to date',
+            ],
+            sets: ['pulled'],
+          },
+          {
+            match: 'docker compose run --rm api npm run migrate:up',
+            requires: 'pulled',
+            unless: ['Unable to find image ghcr.io/shop/api:2.1.0 locally — сначала docker compose pull'],
+            delayMs: 1500,
+            output: [
+              'Running migration 20260813_reports_index.ts ...',
+              'CREATE INDEX CONCURRENTLY idx_orders_created_at ON orders (created_at);',
+              'Migration complete. 1 applied.',
+            ],
+            sets: ['migrated'],
+          },
+          {
+            match: 'docker compose up -d',
+            requires: 'migrated',
+            unless: [
+              'Recreating shop-api-1 ... done',
+              '# ⚠ контейнеры пересозданы, но миграция не выполнена — новый код обратится к отсутствующему индексу',
+            ],
+            delayMs: 1700,
+            output: [
+              'Recreating shop-api-1 ... done',
+              'Recreating shop-web-1 ... done',
+              'shop-db-1 is up to date',
+            ],
+            sets: ['deployed'],
+          },
+          {
+            match: 'curl -s localhost:3000/readyz',
+            requires: 'deployed',
+            unless: ['{"status":"ok","version":"2.0.4"}'],
+            delayMs: 600,
+            output: ['{"status":"ok","version":"2.1.0","db":"ok","redis":"ok"}'],
+          },
+          {
+            match: 'curl -s -o /dev/null -w "%\\{http_code\\} %\\{time_total\\}s" localhost:3000/api/reports',
+            regex: true,
+            requires: 'deployed',
+            unless: ['404 0.008s'],
+            delayMs: 700,
+            output: ['200 0.114s', '# индекс работает: 114 мс вместо 9 секунд'],
+          },
+          {
+            match: 'docker compose logs --tail 5 api',
+            output: [
+              'shop-api-1  | 15:02:41 INFO  {"service":"shop-api","version":"2.1.0","msg":"listening on 3000"}',
+              'shop-api-1  | 15:02:44 INFO  {"request_id":"a41f-90cc","route":"GET /api/reports","duration_ms":114}',
+            ],
+          },
+          {
+            match: 'echo IMAGE_TAG=2\\.1\\.0 > \\.env\\.version',
+            regex: true,
+            output: ['# зафиксировано: в проде версия 2.1.0'],
+          },
+        ],
+        goals: [
+          { id: 'g1', description_ru: 'Узнай, какая версия сейчас в проде', description_en: 'Find out which version is live', pattern: '^cat \\.env\\.version$' },
+          { id: 'g2', description_ru: 'Скачай образы новой версии', description_en: 'Pull the new version images', pattern: '^docker compose pull$' },
+          { id: 'g3', description_ru: 'Выполни миграцию до пересоздания контейнеров', description_en: 'Run the migration before re-creating containers', pattern: '^docker compose run --rm api npm run migrate:up$' },
+          { id: 'g4', description_ru: 'Пересоздай контейнеры с новым образом', description_en: 'Re-create the containers with the new image', pattern: '^docker compose up -d$' },
+          { id: 'g5', description_ru: 'Проверь readiness-эндпоинт, а не только живость', description_en: 'Check the readiness endpoint, not just liveness', pattern: '^curl -s localhost:3000/readyz$' },
+          { id: 'g6', description_ru: 'Зафиксируй новую версию в файле', description_en: 'Record the new version in the file', pattern: '^echo IMAGE_TAG=2\\.1\\.0 > \\.env\\.version$' },
+        ],
+        suggestions: [
+          'cat .env.version',
+          'docker compose ps',
+          'docker compose pull',
+          'docker compose run --rm api npm run migrate:up',
+          'docker compose up -d',
+          'curl -s localhost:3000/readyz',
+          'docker compose logs --tail 5 api',
+          'echo IMAGE_TAG=2.1.0 > .env.version',
+        ],
+      },
+    },
+    {
+      id: 'cap-4-incident',
+      title_ru: 'Задание 4. Ночной инцидент',
+      title_en: 'Lab 4. A night incident',
+      brief_ru: 'Через шесть часов после релиза приходит алерт. Разбери логи, найди корневую причину и выбери действие дежурного.',
+      brief_en: 'Six hours after the release an alert fires. Read the logs, find the root cause and choose the on-call action.',
+      task: {
+        kind: 'incident-simulator',
+        scenarios: [
+          {
+            id: 'cap-inc',
+            level: 3,
+            title_ru: 'Алерт в 03:14',
+            title_en: 'Alert at 03:14',
+            context_ru: 'Релиз 2.1.0 выкачен в 15:02 и весь день работал штатно. В 03:14 сработал алерт: доля 5xx выше 5%. Ночью пользователей мало, деплоев не было. Дежурный открывает логи.',
+            context_en: 'Release 2.1.0 shipped at 15:02 and ran fine all day. At 03:14 an alert fired: the 5xx share is above 5%. There is little night traffic and there were no deploys. The on-call engineer opens the logs.',
+            logs: [
+              { ts: '03:00:04', level: 'info',  service: 'cron',     message_ru: 'запуск ночной задачи: экспорт отчётов за сутки', message_en: 'starting nightly job: daily report export' },
+              { ts: '03:00:07', level: 'info',  service: 'shop-api', message_ru: '{"route":"GET /api/reports","range":"24h","duration_ms":210}', message_en: '{"route":"GET /api/reports","range":"24h","duration_ms":210}' },
+              { ts: '03:02:18', level: 'warn',  service: 'postgres', message_ru: 'autovacuum: таблица orders заблокирована, ожидание 120 с', message_en: 'autovacuum: table orders is locked, waiting 120 s' },
+              { ts: '03:02:19', level: 'debug', service: 'shop-api', message_ru: 'экспорт выполняет запрос без LIMIT: SELECT * FROM orders (14.4M строк)', message_en: 'export runs a query without LIMIT: SELECT * FROM orders (14.4M rows)', rootCause: true },
+              { ts: '03:06:52', level: 'warn',  service: 'shop-api', message_ru: 'rss контейнера 2.9 ГБ (лимит 4 ГБ), growth +180 МБ/мин', message_en: 'container rss 2.9 GB (limit 4 GB), growth +180 MB/min' },
+              { ts: '03:11:31', level: 'warn',  service: 'shop-api', message_ru: 'pool: 20/20 соединений занято', message_en: 'pool: 20/20 connections in use' },
+              { ts: '03:13:58', level: 'error', service: 'shop-api', message_ru: 'pool timeout: не удалось получить соединение за 5000 мс', message_en: 'pool timeout: could not acquire a connection within 5000 ms', symptom: true },
+              { ts: '03:14:02', level: 'error', service: 'nginx',    message_ru: '502 Bad Gateway на /api/orders (доля 5xx 7.4%)', message_en: '502 Bad Gateway on /api/orders (5xx share 7.4%)', symptom: true },
+              { ts: '03:14:40', level: 'error', service: 'kernel',   message_ru: 'Out of memory: killed process 8102 (node), rss 3.9GB', message_en: 'Out of memory: killed process 8102 (node), rss 3.9GB', symptom: true },
+              { ts: '03:14:41', level: 'info',  service: 'docker',   message_ru: 'restart policy always: поднимаю shop-api-1', message_en: 'restart policy always: restarting shop-api-1' },
+            ],
+            causeQuestion_ru: 'Что стало корневой причиной?',
+            causeQuestion_en: 'What was the root cause?',
+            causes: [
+              {
+                id: 'cc-oom',
+                label_ru: 'Контейнеру не хватило памяти — нужно поднять лимит',
+                label_en: 'The container ran out of memory — raise the limit',
+                correct: false,
+                feedback_ru: 'Нет. OOM случился в 03:14, а рост памяти начался в 03:02 — сразу после запуска ночного экспорта. Память кончилась потому, что запрос без LIMIT грузит в неё всю таблицу.',
+                feedback_en: 'No. The OOM happened at 03:14 while memory growth started at 03:02 — right after the nightly export began. Memory ran out because a query without LIMIT loads the whole table into it.',
+              },
+              {
+                id: 'cc-export',
+                label_ru: 'Ночная задача экспорта выполняет SELECT без LIMIT и вытягивает всю таблицу в память',
+                label_en: 'The nightly export runs a SELECT without LIMIT and pulls the whole table into memory',
+                correct: true,
+                feedback_ru: 'Верно. Самая ранняя аномалия — DEBUG в 03:02. Дальше строгая цепочка: рост памяти → удержание соединений → исчерпанный пул → таймауты → 502 → OOM. Днём задача не запускалась, поэтому релиз шесть часов выглядел нормальным.',
+                feedback_en: 'Correct. The earliest anomaly is the DEBUG line at 03:02. Then a strict chain: memory growth → held connections → exhausted pool → timeouts → 502 → OOM. The job does not run during the day, which is why the release looked fine for six hours.',
+              },
+              {
+                id: 'cc-release',
+                label_ru: 'Виноват релиз 2.1.0 — надо откатиться на 2.0.4',
+                label_en: 'Release 2.1.0 is to blame — roll back to 2.0.4',
+                correct: false,
+                feedback_ru: 'Не совсем. Релиз шесть часов работал под дневной нагрузкой без единой ошибки. Триггер — ночная задача, которая запускается раз в сутки. Откат стоит рассмотреть как действие, но причина не в самом релизе.',
+                feedback_en: 'Not quite. The release ran for six hours under daytime load without a single error. The trigger is a job that runs once a day. A rollback may still be an action, but the cause is not the release itself.',
+              },
+              {
+                id: 'cc-vacuum',
+                label_ru: 'Autovacuum заблокировал таблицу orders',
+                label_en: 'Autovacuum locked the orders table',
+                correct: false,
+                feedback_ru: 'Нет, здесь перепутаны причина и следствие. Autovacuum сообщает, что не может получить доступ к таблице — потому что её уже читает долгий запрос экспорта.',
+                feedback_en: 'No, cause and effect are swapped here. Autovacuum reports that it cannot access the table — because the long export query is already reading it.',
+              },
+            ],
+            actionQuestion_ru: '03:15, сайт частично недоступен. Действие дежурного?',
+            actionQuestion_en: '03:15, the site is partly down. What does the on-call engineer do?',
+            actions: [
+              {
+                id: 'ca-stop-job',
+                label_ru: 'Остановить ночную задачу экспорта, дождаться освобождения пула и завести тикет на постраничный экспорт',
+                label_en: 'Stop the nightly export job, wait for the pool to drain and file a ticket for paginated export',
+                correct: true,
+                feedback_ru: 'Верно. Убираем источник нагрузки — система восстанавливается сама за минуту. Экспорт не критичен ночью и может подождать до исправления: постраничная выборка вместо загрузки всей таблицы в память.',
+                feedback_en: 'Correct. Remove the load source and the system recovers on its own within a minute. The export is not critical at night and can wait for the fix: paginated fetching instead of loading the whole table into memory.',
+              },
+              {
+                id: 'ca-rollback',
+                label_ru: 'Откатить релиз на 2.0.4',
+                label_en: 'Roll the release back to 2.0.4',
+                correct: false,
+                feedback_ru: 'Не поможет. Задача экспорта существовала и в 2.0.4 — просто таблица тогда была меньше. После отката ночной запрос запустится снова и приведёт к тому же результату.',
+                feedback_en: 'That will not help. The export job existed in 2.0.4 too — the table was simply smaller then. After a rollback the nightly query runs again with the same outcome.',
+              },
+              {
+                id: 'ca-restart',
+                label_ru: 'Перезапустить api и подождать',
+                label_en: 'Restart the api and wait',
+                correct: false,
+                feedback_ru: 'Нет. Docker уже перезапускает контейнер автоматически. Пока задача экспорта работает, каждый новый контейнер будет умирать так же.',
+                feedback_en: 'No. Docker already restarts the container automatically. While the export job runs, every new container dies the same way.',
+              },
+            ],
+            postmortem_ru: 'Корневая причина: задача ночного экспорта читает таблицу целиком одним запросом и держит результат в памяти. Что чинит систему, а не этот случай: постраничная выборка с курсором, лимит памяти и таймаут для фоновых задач, отдельный пул соединений для cron-задач (чтобы они не конкурировали с пользовательским трафиком) и алерт на рост rss, а не только на факт OOM.',
+            postmortem_en: 'Root cause: the nightly export reads the entire table in one query and keeps the result in memory. What fixes the system rather than this one case: cursor-based pagination, a memory limit and timeout for background jobs, a separate connection pool for cron jobs (so they do not compete with user traffic), and an alert on rss growth rather than only on the OOM itself.',
+          },
+        ],
+      },
+    },
+  ],
+
+  quiz: [
+    {
+      id: 'q1',
+      text_ru: 'Почему проверки на pull request и релиз по тегу разносят в два разных workflow?',
+      text_en: 'Why split PR checks and tag releases into two different workflows?',
+      options_ru: [
+        'GitHub не позволяет два триггера в одном файле',
+        'Проверки должны быть быстрыми и запускаться десятки раз в день, а релиз — редким и с подтверждением',
+        'Так дешевле по минутам',
+        'Иначе не работают секреты',
+      ],
+      options_en: [
+        'GitHub does not allow two triggers in one file',
+        'Checks must be fast and run dozens of times a day, while a release is rare and gated',
+        'It costs fewer minutes',
+        'Otherwise secrets do not work',
+      ],
+      correctIndex: 1,
+      explanation_ru: 'У них разная частота, разная длительность и разные требования к подтверждению. В одном файле пришлось бы жертвовать чем-то одним.',
+      explanation_en: 'They differ in frequency, duration and approval requirements. In one file you would have to sacrifice one of them.',
+    },
+    {
+      id: 'q2',
+      text_ru: 'Почему очистку старых образов не делают шагом релизного пайплайна?',
+      text_en: 'Why is pruning old images not a step of the release pipeline?',
+      options_ru: [
+        'Она слишком долгая',
+        'Она может удалить образ предыдущей версии — именно тот, на который придётся откатываться',
+        'Docker не разрешает prune в CI',
+        'Она требует прав root',
+      ],
+      options_en: [
+        'It takes too long',
+        'It can delete the previous version image — exactly the one you need to roll back to',
+        'Docker forbids prune in CI',
+        'It requires root',
+      ],
+      correctIndex: 1,
+      explanation_ru: 'Очистка — регулярная задача по расписанию, с сохранением нескольких последних версий. Внутри релиза она превращает откат в пересборку.',
+      explanation_en: 'Pruning is a scheduled maintenance job that keeps the last few versions. Inside a release it turns a rollback into a rebuild.',
+    },
+    {
+      id: 'q3',
+      text_ru: 'Релиз шесть часов работал нормально, а ночью начались 502. О чём это говорит в первую очередь?',
+      text_en: 'A release ran fine for six hours and then 502s started at night. What does that suggest first?',
+      options_ru: [
+        'Релиз точно ни при чём, ищи проблему в сети',
+        'Стоит искать событие, которое происходит именно ночью: задачу по расписанию, бэкап, ротацию логов',
+        'Всегда нужно откатывать релиз',
+        'Проблема в браузерах пользователей',
+      ],
+      options_en: [
+        'The release is definitely unrelated, look at the network',
+        'Look for something that happens specifically at night: a scheduled job, a backup, log rotation',
+        'You should always roll back the release',
+        'The problem is in users\' browsers',
+      ],
+      correctIndex: 1,
+      explanation_ru: 'Первый вопрос при инциденте — «что изменилось прямо перед этим». Ночью меняется не код, а набор запущенных задач.',
+      explanation_en: 'The first triage question is "what changed right before this". At night it is not the code that changes but the set of running jobs.',
+    },
+    {
+      id: 'q4',
+      text_ru: 'Хороший постмортем заканчивается…',
+      text_en: 'A good postmortem ends with…',
+      options_ru: [
+        'Списком тех, кто ошибся',
+        'Списком изменений в системе: тест, алерт, проверка в пайплайне или таймаут, из-за которых это не повторится',
+        'Решением больше не деплоить по пятницам',
+        'Подробным описанием симптомов',
+      ],
+      options_en: [
+        'A list of who made the mistake',
+        'A list of system changes: a test, an alert, a pipeline check or a timeout that prevents a recurrence',
+        'A decision to stop deploying on Fridays',
+        'A detailed description of the symptoms',
+      ],
+      correctIndex: 1,
+      explanation_ru: 'Человек ошибётся снова — это неизбежно. Меняют не людей, а систему, которая позволила ошибке дойти до продакшена.',
+      explanation_en: 'People will make mistakes again — that is inevitable. You change the system that let the mistake reach production, not the people.',
+    },
+  ],
+}

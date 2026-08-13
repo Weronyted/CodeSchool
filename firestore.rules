@@ -64,6 +64,11 @@ service cloud.firestore {
       allow read, write: if isAuth() && request.auth.uid == uid;
     }
 
+    // devops.service.ts writes to users/{uid}/devopsProgress/{lessonSlug}
+    match /users/{uid}/devopsProgress/{lessonSlug} {
+      allow read, write: if isAuth() && request.auth.uid == uid;
+    }
+
     match /users/{uid}/quizHistory/{historyId} {
       allow read: if isAuth() && request.auth.uid == uid;
       allow create: if isAuth() && request.auth.uid == uid;

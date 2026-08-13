@@ -22,6 +22,8 @@ import TakeAssignment from '@/pages/TakeAssignment'
 import NotFound from '@/pages/NotFound'
 import Sandbox from '@/pages/Sandbox'
 import RoadmapPage from '@/pages/RoadmapPage'
+import DevOpsCoursePage from '@/pages/DevOpsCoursePage'
+import DevOpsLessonPage from '@/pages/DevOpsLessonPage'
 import PublicProfile from '@/pages/PublicProfile'
 import StatsPage from '@/pages/StatsPage'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
@@ -42,6 +44,8 @@ function AppRoutes() {
         <Route path="/lessons" element={<ProtectedRoute><PageTransition><LessonsListPage /></PageTransition></ProtectedRoute>} />
         <Route path="/roadmap" element={<ProtectedRoute><PageTransition><RoadmapPage /></PageTransition></ProtectedRoute>} />
         <Route path="/lessons/:slug" element={<ProtectedRoute><PageTransition><LessonPage /></PageTransition></ProtectedRoute>} />
+        <Route path="/devops" element={<ProtectedRoute><PageTransition><DevOpsCoursePage /></PageTransition></ProtectedRoute>} />
+        <Route path="/devops/:slug" element={<ProtectedRoute><PageTransition><DevOpsLessonPage /></PageTransition></ProtectedRoute>} />
         <Route path="/assignments" element={<ProtectedRoute><PageTransition><AssignmentsListPage /></PageTransition></ProtectedRoute>} />
         <Route path="/assignments/:id" element={<ProtectedRoute><PageTransition><TakeAssignment /></PageTransition></ProtectedRoute>} />
         <Route path="/class/:classId" element={<ProtectedRoute><PageTransition><ClassPage /></PageTransition></ProtectedRoute>} />
